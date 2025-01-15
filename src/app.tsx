@@ -1,7 +1,7 @@
 import { defineComponent } from 'vue';
 import { RouterLink, RouterView } from 'vue-router';
-import styles from './app.module.css';
-import { createGrid } from './lib/game/_sudoku';
+import styles from '@/app.module.css';
+import { createGrid } from '@/lib/game';
 
 export const App = defineComponent({
 	setup() {
