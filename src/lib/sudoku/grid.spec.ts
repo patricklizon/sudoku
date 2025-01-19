@@ -7,12 +7,12 @@ import {
 	createEmptyGrid,
 	createEmptySubGrid,
 	fillDiagonalSubGrids,
-	fillEmptyGridFields,
-	readSubGridFields,
+	fillEmptyGridCells,
+	readSubGridCells,
 } from './grid';
 import type { Grid, GridFilled, GridRow } from './types';
 
-describe(readSubGridFields.name, () => {
+describe(readSubGridCells.name, () => {
 	type TestData = Record<'middle' | 'left' | 'right', GridRow>;
 
 	const top = {
@@ -136,7 +136,7 @@ describe(readSubGridFields.name, () => {
 		['bottom-right', 8, 7, bottom.right],
 		['bottom-right', 8, 8, bottom.right],
 	])('reads %s subgrid with coordinates (%d, %d)', (_, rowIdx, colIdx, expected) => {
-		const result = readSubGridFields(grid, rowIdx, colIdx);
+		const result = readSubGridCells(grid, rowIdx, colIdx);
 		expect(result).to.deep.equal(expected);
 	});
 
@@ -145,7 +145,7 @@ describe(readSubGridFields.name, () => {
 		[2, 9],
 		[-2, 10],
 	])('throws when reading with coordinates outside of range', (rowIdx, colIdx) => {
-		expect(() => readSubGridFields(grid, rowIdx, colIdx)).to.throw(ValueOutOfRangeError);
+		expect(() => readSubGridCells(grid, rowIdx, colIdx)).to.throw(ValueOutOfRangeError);
 	});
 });
 
@@ -181,14 +181,14 @@ describe(fillDiagonalSubGrids.name, () => {
 
 		fillDiagonalSubGrids(grid);
 
-		const topLeftSubGrid = readSubGridFields(grid, 0, 0);
+		const topLeftSubGrid = readSubGridCells(grid, 0, 0);
 
-		const middleSubGrid = readSubGridFields(
+		const middleSubGrid = readSubGridCells(
 			grid,
 			Math.floor(GRID_SIZE / 2),
 			Math.floor(GRID_SIZE / 2),
 		);
-		const bottomRightSubGrid = readSubGridFields(grid, GRID_SIZE - 1, GRID_SIZE - 1);
+		const bottomRightSubGrid = readSubGridCells(grid, GRID_SIZE - 1, GRID_SIZE - 1);
 
 		expect(topLeftSubGrid.every(Number.isInteger)).to.equal(true);
 		expect(middleSubGrid.every(Number.isInteger)).to.equal(true);
@@ -197,7 +197,7 @@ describe(fillDiagonalSubGrids.name, () => {
 	});
 });
 
-describe(fillEmptyGridFields.name, () => {
+describe(fillEmptyGridCells.name, () => {
 	test('fills only empty fields of grid', () => {
 		const left = [
 			[7, 6, 5, undefined, undefined, undefined, undefined, undefined, undefined],
@@ -223,7 +223,7 @@ describe(fillEmptyGridFields.name, () => {
 			[8, 3, 7, 9, 4, 2, 6, 1, 5],
 		].flat() as GridFilled;
 
-		fillEmptyGridFields(left, 0, 0);
+		fillEmptyGridCells(left, 0, 0);
 
 		expect(left).to.deep.equal(right);
 	});

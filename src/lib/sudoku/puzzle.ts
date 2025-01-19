@@ -1,6 +1,6 @@
 import { SUB_GRID_SIZE } from './constants';
 import { IncorrectGridError } from './errors';
-import { createEmptyGrid, fillDiagonalSubGrids, fillEmptyGridFields } from './grid';
+import { createEmptyGrid, fillDiagonalSubGrids, fillEmptyGridCells, readCell } from './grid';
 import type { PuzzleSolvable, PuzzleSolved } from './types';
 
 export function createSolvedPuzzle(): PuzzleSolved {
@@ -8,16 +8,16 @@ export function createSolvedPuzzle(): PuzzleSolved {
 
 	fillDiagonalSubGrids(grid);
 
-	if (fillEmptyGridFields(grid, 0, SUB_GRID_SIZE)) return grid;
+	if (fillEmptyGridCells(grid, 0, SUB_GRID_SIZE)) return grid;
 
 	throw new IncorrectGridError(grid);
 }
 
 export function createSolvablePuzzle(
 	p: PuzzleSolved,
-	difficulty: 'easy' | 'normal' | 'hard',
+	difficulty: 'easy' | 'normal' | 'hard' | 'expert',
 ): PuzzleSolvable {
-	return g;
+	return;
 }
 
 export function isValueValid(
@@ -25,4 +25,6 @@ export function isValueValid(
 	rowIdx: number,
 	colIdx: number,
 	value: number,
-): boolean {}
+): boolean {
+	return readCell(p, rowIdx, colIdx) === value;
+}

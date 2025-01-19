@@ -1,9 +1,9 @@
 import { createEmptyGrid } from './grid';
-import type { PuzzleSolved, EncodedGrid, Grid } from './types';
+import type { PuzzleSolved, EncodedGrid, PuzzleSolvable } from './types';
 
-export function decodeGrid(s: EncodedGrid): { solution: Grid; board: PuzzleSolved } {
+export function decodeGrid(s: EncodedGrid): { solution: PuzzleSolved; puzzle: PuzzleSolvable } {
 	const solution = createEmptyGrid();
-	const board = createEmptyGrid();
+	const puzzle = createEmptyGrid();
 
-	return { solution, board };
+	return { solution, puzzle };
 }

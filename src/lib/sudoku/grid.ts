@@ -1,7 +1,7 @@
 import { isDefined } from '@/lib/utils/is-defined';
 import { IncorrectGridError, ValueOutOfRangeError } from './errors';
 import { GRID_FIELDS_COUNT, GRID_SIZE, SUB_GRID_FIELDS_COUNT, SUB_GRID_SIZE } from './constants';
-import type { Grid, GridCol, GridField, GridFilled, GridRow, SubGrid } from './types';
+import type { Grid, GridCol, GridCell, GridFilled, GridRow, SubGrid } from './types';
 
 /**
  * Fills the diagonal sub-grids (3x3 blocks) of the given grid with random digits 1-9.
@@ -39,44 +39,44 @@ export function getRandomDigit(): number {
 	return Math.floor(Math.random() * GRID_SIZE) + 1;
 }
 
-export function fillEmptyGridFields(g: Grid, rowIdx: number, colIdx: number): g is GridFilled {
+export function fillEmptyGridCells(g: Grid, rowIdx: number, colIdx: number): g is GridFilled {
 	if (rowIdx >= GRID_SIZE) return true;
 
-	const fieldIdx = rowIdx * GRID_SIZE + colIdx;
+	const cellIdx = rowIdx * GRID_SIZE + colIdx;
 	const nextRowIdx = colIdx === GRID_SIZE - 1 ? rowIdx + 1 : rowIdx;
 	const nextColIdx = (colIdx + 1) % GRID_SIZE;
 
-	if (g[fieldIdx]) {
-		return fillEmptyGridFields(g, nextRowIdx, nextColIdx);
+	if (g[cellIdx]) {
+		return fillEmptyGridCells(g, nextRowIdx, nextColIdx);
 	}
 
 	for (let num = 1; num <= GRID_SIZE; num++) {
-		g[fieldIdx] = num;
+		g[cellIdx] = num;
 
-		if (isValueCorrectForFieldAtPosition(g, rowIdx, colIdx)) {
-			if (fillEmptyGridFields(g, nextRowIdx, nextColIdx)) return true;
+		if (isValueCorrectForCellAtPosition(g, rowIdx, colIdx)) {
+			if (fillEmptyGridCells(g, nextRowIdx, nextColIdx)) return true;
 		}
 	}
 
-	g[fieldIdx] = undefined;
+	g[cellIdx] = undefined;
 
 	return false;
 }
 
-export function isValueCorrectForFieldAtPosition(g: Grid, rowIdx: number, colIdx: number): boolean {
+export function isValueCorrectForCellAtPosition(g: Grid, rowIdx: number, colIdx: number): boolean {
 	const row = readRow(g, rowIdx);
 	if (hasDuplicates(row)) return false;
 
 	const col = readCol(g, colIdx);
 	if (hasDuplicates(col)) return false;
 
-	const boxValues = readSubGridFields(g, rowIdx, colIdx);
+	const boxValues = readSubGridCells(g, rowIdx, colIdx);
 	if (hasDuplicates(boxValues)) return false;
 
 	return true;
 }
 
-export function hasDuplicates(c: Readonly<GridField[]>): boolean {
+export function hasDuplicates(c: Readonly<GridCell[]>): boolean {
 	const numbers = c.filter(isDefined);
 	const set = new Set(numbers);
 	return set.size !== numbers.length;
@@ -92,6 +92,14 @@ function readRow(g: Grid, rowIdx: number): GridRow {
 	return g.slice(rowIdx * GRID_SIZE, (rowIdx + 1) * GRID_SIZE) as GridRow;
 }
 
+export function readCell<G extends Grid | GridFilled>(
+	g: G,
+	rowIdx: number,
+	colIdx: number,
+): G[number] {
+	return g[rowIdx * GRID_SIZE + colIdx];
+}
+
 /**
  * Reads all values from a sub-grid containing the specified coordinates.
  *
@@ -103,7 +111,7 @@ function readRow(g: Grid, rowIdx: number): GridRow {
  *
  * @example
  * ```txt
- * Example for coordinates (1,5) // -> field with value 9
+ * Example for coordinates (1,5) // -> cell with value 9
  *
  * |_, _, _|4, 5, 6|_, _, _|
  * |_, _, _|7, 8, 9|_, _, _|
@@ -112,7 +120,7 @@ function readRow(g: Grid, rowIdx: number): GridRow {
  * Returns: [4, 5, 6, 7, 8, 9, 1, 2, 3]
  * ```
  */
-export function readSubGridFields(g: Readonly<Grid>, rowIdx: number, colIdx: number): SubGrid {
+export function readSubGridCells(g: Readonly<Grid>, rowIdx: number, colIdx: number): SubGrid {
 	assertIsCoordinateWithinRange(rowIdx);
 	assertIsCoordinateWithinRange(colIdx);
 
