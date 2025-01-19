@@ -1,5 +1,5 @@
 import type { Option } from '@/lib/types/option';
-import { GRID_SIZE, SUB_GRID_FIELDS_COUNT, SUB_GRID_SIZE } from './grid';
+import { GRID_SIZE, SUB_GRID_CELLS_COUNT, SUB_GRID_SIZE } from './grid';
 
 const COLOR = {
 	blue: '\x1b[38;5;69m',
@@ -19,7 +19,7 @@ export function prettyDebug(
 	g: Option<number>[],
 	hilight?: Partial<{ rowIdx: number; colIdx: number }>,
 ): string {
-	const isSubGrid = g.length === SUB_GRID_FIELDS_COUNT;
+	const isSubGrid = g.length === SUB_GRID_CELLS_COUNT;
 	const breakAtIdx = isSubGrid ? SUB_GRID_SIZE : GRID_SIZE;
 
 	const formattedGrid = g

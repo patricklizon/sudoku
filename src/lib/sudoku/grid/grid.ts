@@ -1,6 +1,6 @@
 import { isDefined } from '@/lib/utils/is-defined';
 import { IncorrectGridError, ValueOutOfRangeError } from './errors';
-import { GRID_FIELDS_COUNT, GRID_SIZE, SUB_GRID_FIELDS_COUNT, SUB_GRID_SIZE } from './constants';
+import { GRID_CELLS_COUNT, GRID_SIZE, SUB_GRID_CELLS_COUNT, SUB_GRID_SIZE } from './constants';
 import type { Grid, GridCol, GridCell, GridFilled, GridRow, SubGrid } from './types';
 
 /**
@@ -84,7 +84,7 @@ export function hasDuplicates(c: Readonly<GridCell[]>): boolean {
 
 function readCol(g: Grid, colIdx: number): GridCol {
 	const result = [];
-	for (let idx = colIdx; idx < GRID_FIELDS_COUNT; idx += GRID_SIZE) result.push(g[idx]);
+	for (let idx = colIdx; idx < GRID_CELLS_COUNT; idx += GRID_SIZE) result.push(g[idx]);
 	return result as GridCol;
 }
 
@@ -155,7 +155,7 @@ export function assertIsCoordinateWithinRange(it: number): void {
  * @throws {IncorrectGridError} when created grid length does not match required size.
  */
 export function createEmptyGrid(): Grid {
-	const result = Array.from({ length: GRID_FIELDS_COUNT }, () => undefined) as Grid;
+	const result = Array.from({ length: GRID_CELLS_COUNT }, () => undefined) as Grid;
 	if (GRID_SIZE ** 2 !== result.length) {
 		throw new IncorrectGridError(result);
 	}
@@ -164,5 +164,5 @@ export function createEmptyGrid(): Grid {
 }
 
 export function createEmptySubGrid(): SubGrid {
-	return Array.from({ length: SUB_GRID_FIELDS_COUNT }, () => undefined) as SubGrid;
+	return Array.from({ length: SUB_GRID_CELLS_COUNT }, () => undefined) as SubGrid;
 }
