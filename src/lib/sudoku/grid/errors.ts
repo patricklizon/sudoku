@@ -1,4 +1,4 @@
-import { _prettyDebug } from './grid';
+import { prettyDebug } from '@/lib/sudoku/utils';
 import type { Grid } from './types';
 
 export class ValueOutOfRangeError extends Error {
@@ -11,6 +11,6 @@ export class ValueOutOfRangeError extends Error {
 
 export class IncorrectGridError extends Error {
 	constructor(grid: Grid) {
-		super(`Incorrect grid: ${_prettyDebug(grid)}`);
+		super(`Incorrect grid: ${prettyDebug(grid)}`);
 	}
 }

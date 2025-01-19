@@ -1,5 +1,5 @@
-import { GRID_SIZE, SUB_GRID_FIELDS_COUNT, SUB_GRID_SIZE } from './constants';
-import type { Grid, SubGrid } from './types';
+import type { Option } from '@/lib/types/option';
+import { GRID_SIZE, SUB_GRID_FIELDS_COUNT, SUB_GRID_SIZE } from './grid';
 
 const COLOR = {
 	blue: '\x1b[38;5;69m',
@@ -16,7 +16,7 @@ function colorLog(color: Exclude<keyof typeof COLOR, 'suffix'>, s: string): stri
  * Prints formatted grid.
  */
 export function prettyDebug(
-	g: Grid | SubGrid,
+	g: Option<number>[],
 	hilight?: Partial<{ rowIdx: number; colIdx: number }>,
 ): string {
 	const isSubGrid = g.length === SUB_GRID_FIELDS_COUNT;

@@ -1,6 +1,11 @@
-import { SUB_GRID_SIZE } from './constants';
-import { IncorrectGridError } from './errors';
-import { createEmptyGrid, fillDiagonalSubGrids, fillEmptyGridCells, readCell } from './grid';
+import {
+	IncorrectGridError,
+	SUB_GRID_SIZE,
+	createEmptyGrid,
+	fillDiagonalSubGrids,
+	fillEmptyGridCells,
+	readCell,
+} from '@/lib/sudoku/grid';
 import type { PuzzleSolvable, PuzzleSolved } from './types';
 
 export function createSolvedPuzzle(): PuzzleSolved {

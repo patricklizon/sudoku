@@ -1,3 +1,7 @@
-export { decodeGrid } from './decoder';
-export { encodeGrid } from './encoder';
-export { createSolvablePuzzle, createSolvedPuzzle } from './puzzle';
+export {
+	createSolvablePuzzle,
+	createSolvedPuzzle,
+	isValueValid,
+	decodePuzzle,
+	encodePuzzle as encodeGrid,
+} from './puzzle';
