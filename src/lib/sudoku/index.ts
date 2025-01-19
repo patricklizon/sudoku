@@ -3,5 +3,5 @@ export {
 	createSolvedPuzzle,
 	isValueValid,
 	decodePuzzle,
-	encodePuzzle as encodeGrid,
+	encodePuzzle,
 } from './puzzle';
