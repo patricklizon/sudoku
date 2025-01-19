@@ -43,27 +43,29 @@ export function _fillDiagonalSubGrids(g: Grid): void {
 }
 
 function _getRandomDigit(): number {
-	return Math.floor(Math.random() * 9) + 1;
+	return Math.floor(Math.random() * GRID_SIZE) + 1;
 }
 
 export function _fillEmptyGridFields(g: Grid, rowIdx: number, colIdx: number): boolean {
 	if (rowIdx >= GRID_SIZE) return true;
 
-	if (g[rowIdx][colIdx]) {
-		const nextRowIdx = colIdx === GRID_SIZE - 1 ? rowIdx + 1 : rowIdx;
-		const nextColIdx = (colIdx + 1) % GRID_SIZE;
+	const fieldIdx = rowIdx * GRID_SIZE + colIdx;
+	const nextRowIdx = colIdx === GRID_SIZE - 1 ? rowIdx + 1 : rowIdx;
+	const nextColIdx = (colIdx + 1) % GRID_SIZE;
+
+	if (g[fieldIdx]) {
 		return _fillEmptyGridFields(g, nextRowIdx, nextColIdx);
 	}
 
 	for (let num = 1; num <= GRID_SIZE; num++) {
-		g[rowIdx][colIdx] = num;
+		g[fieldIdx] = num;
 
-		if (_isFieldPositionCorrect(g, rowIdx, colIdx) && _fillEmptyGridFields(g, rowIdx, colIdx)) {
-			return true;
+		if (_isFieldPositionCorrect(g, rowIdx, colIdx)) {
+			if (_fillEmptyGridFields(g, nextRowIdx, nextColIdx)) return true;
 		}
 	}
 
-	g[position.rowIdx][position.colIdx] = undefined;
+	g[fieldIdx] = undefined;
 
 	return false;
 }
@@ -89,12 +91,12 @@ function _hasDuplicates(c: Readonly<GridField[]>): boolean {
 
 function _readCol(g: Grid, colIdx: number): GridCol {
 	const result = [];
-	for (let idx = colIdx; idx < colIdx + GRID_SIZE; idx++) result.push(g[idx]);
+	for (let idx = colIdx; idx < GRID_FIELDS_COUNT; idx += GRID_SIZE) result.push(g[idx]);
 	return result as GridCol;
 }
 
 function _readRow(g: Grid, rowIdx: number): GridRow {
-	return g.slice(rowIdx, rowIdx + GRID_SIZE) as GridRow;
+	return g.slice(rowIdx * GRID_SIZE, (rowIdx + 1) * GRID_SIZE) as GridRow;
 }
 
 /**
@@ -170,6 +172,7 @@ export function _prettyDebug(g: Grid | SubGrid): string {
 
 	const formattedGrid = g
 		.map((it, idx) => (idx > 0 && !(idx % breakAtIdx) ? `\n${it?.toString() ?? ' '}` : it))
+		.map((it) => it ?? '_')
 		.join(', ');
 
 	return `[\n${formattedGrid}\n]`;

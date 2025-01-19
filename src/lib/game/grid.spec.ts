@@ -1,15 +1,3 @@
-// [] -> pos: [r: 4, c: 5]
-// () -> init pos: [r: 3, c: 3]
-// ? -> start idx: (r * grid_size + start_col_pos)
-
-//  1 1 1, 0 0 0, 0 0 0,
-//  1 1 1, 0 0 0, 0 0 0,
-//  1 1 1, 0 0 0, 0 0 0,
-//
-//  0 0 0, (2) 2 2, 3 3 3,
-//  0 0 0, 2 2 [2], 3 3 3,
-//  0 0 0, 2 2 2, 3 3 3,
-// ...
 import { isNil } from '@/lib/utils/is-nil';
 import { describe, expect, test } from 'vitest';
 import { GRID_SIZE, SUB_GRID_SIZE } from './constants';
@@ -212,26 +200,33 @@ describe(_fillDiagonalSubGrids.name, () => {
 
 describe(_fillEmptyGridFields.name, () => {
 	test('fills only empty fields of grid', () => {
-		const grid = _createEmptyGrid();
+		const left = [
+			[7, 6, 5, undefined, undefined, undefined, undefined, undefined, undefined],
+			[3, 9, 1, undefined, undefined, undefined, undefined, undefined, undefined],
+			[2, 4, 8, undefined, undefined, undefined, undefined, undefined, undefined],
+			[undefined, undefined, undefined, 8, 7, 3, undefined, undefined, undefined],
+			[undefined, undefined, undefined, 2, 6, 4, undefined, undefined, undefined],
+			[undefined, undefined, undefined, 5, 1, 9, undefined, undefined, undefined],
+			[undefined, undefined, undefined, undefined, undefined, undefined, 9, 2, 8],
+			[undefined, undefined, undefined, undefined, undefined, undefined, 4, 7, 3],
+			[undefined, undefined, undefined, undefined, undefined, undefined, 6, 1, 5],
+		].flat() as Grid;
 
-		expect(grid.every(isNil)).to.equal(true);
+		const right = [
+			[7, 6, 5, 1, 2, 8, 3, 4, 9],
+			[3, 9, 1, 4, 5, 6, 2, 8, 7],
+			[2, 4, 8, 3, 9, 7, 1, 5, 6],
+			[1, 2, 6, 8, 7, 3, 5, 9, 4],
+			[5, 7, 9, 2, 6, 4, 8, 3, 1],
+			[4, 8, 3, 5, 1, 9, 7, 6, 2],
+			[6, 1, 4, 7, 3, 5, 9, 2, 8],
+			[9, 5, 2, 6, 8, 1, 4, 7, 3],
+			[8, 3, 7, 9, 4, 2, 6, 1, 5],
+		].flat();
 
-		_fillDiagonalSubGrids(grid);
+		_fillEmptyGridFields(left, 0, 0);
 
-		const partiallyFilledGrid = [...grid] as Grid;
-
-		expect(grid.some(Number.isInteger)).to.equal(true);
-
-		_fillEmptyGridFields(grid, 0, 0);
-
-		expect(grid.every(Number.isInteger)).to.equal(true);
-
-		// iterite through diagonal sub grids
-		for (let i = 0; i < SUB_GRID_SIZE; i++) {
-			expect(_readSubGridFields(grid, i, i)).to.deep.equal(
-				_readSubGridFields(partiallyFilledGrid, i, i),
-			);
-		}
+		expect(left).to.deep.equal(right);
 	});
 });
 
