@@ -119,7 +119,7 @@ export function readSubGridFields(g: Readonly<Grid>, rowIdx: number, colIdx: num
 	const subGridStartRowIdx = Math.floor(rowIdx / SUB_GRID_SIZE) * SUB_GRID_SIZE;
 	const subGridStartColIdx = Math.floor(colIdx / SUB_GRID_SIZE) * SUB_GRID_SIZE;
 
-	const result = _createEmptySubGrid();
+	const result = createEmptySubGrid();
 	let resultIdx = 0;
 
 	for (let rIdx = 0; rIdx < SUB_GRID_SIZE; rIdx++) {
@@ -146,7 +146,7 @@ export function assertIsCoordinateWithinRange(it: number): void {
  *
  * @throws {IncorrectGridError} when created grid length does not match required size.
  */
-export function _createEmptyGrid(): Grid {
+export function createEmptyGrid(): Grid {
 	const result = Array.from({ length: GRID_FIELDS_COUNT }, () => undefined) as Grid;
 	if (GRID_SIZE ** 2 !== result.length) {
 		throw new IncorrectGridError(result);
@@ -155,6 +155,6 @@ export function _createEmptyGrid(): Grid {
 	return result;
 }
 
-export function _createEmptySubGrid(): SubGrid {
+export function createEmptySubGrid(): SubGrid {
 	return Array.from({ length: SUB_GRID_FIELDS_COUNT }, () => undefined) as SubGrid;
 }

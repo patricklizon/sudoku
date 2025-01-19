@@ -4,8 +4,8 @@ import { GRID_SIZE, SUB_GRID_SIZE } from './constants';
 import { ValueOutOfRangeError } from './errors';
 import {
 	assertIsCoordinateWithinRange,
-	_createEmptyGrid,
-	_createEmptySubGrid,
+	createEmptyGrid,
+	createEmptySubGrid,
 	fillDiagonalSubGrids,
 	fillEmptyGridFields,
 	readSubGridFields,
@@ -149,8 +149,8 @@ describe(readSubGridFields.name, () => {
 	});
 });
 
-describe(_createEmptyGrid.name, () => {
-	const grid = _createEmptyGrid();
+describe(createEmptyGrid.name, () => {
+	const grid = createEmptyGrid();
 
 	test('grid has correct size', () => {
 		expect(grid).to.have.lengthOf(GRID_SIZE * GRID_SIZE);
@@ -161,8 +161,8 @@ describe(_createEmptyGrid.name, () => {
 	});
 });
 
-describe(_createEmptySubGrid.name, () => {
-	const grid = _createEmptySubGrid();
+describe(createEmptySubGrid.name, () => {
+	const grid = createEmptySubGrid();
 
 	test('grid has correct size', () => {
 		expect(grid).to.have.lengthOf(SUB_GRID_SIZE * SUB_GRID_SIZE);
@@ -175,7 +175,7 @@ describe(_createEmptySubGrid.name, () => {
 
 describe(fillDiagonalSubGrids.name, () => {
 	test('fills diagonal subgrids with random digits between 1 and 9', () => {
-		const grid = _createEmptyGrid();
+		const grid = createEmptyGrid();
 
 		expect(grid.every(isNil)).to.equal(true);
 

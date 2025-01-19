@@ -1,10 +1,10 @@
 import { SUB_GRID_SIZE } from './constants';
 import { IncorrectGridError } from './errors';
-import { _createEmptyGrid, fillDiagonalSubGrids, fillEmptyGridFields } from './grid';
+import { createEmptyGrid, fillDiagonalSubGrids, fillEmptyGridFields } from './grid';
 import type { PuzzleSolvable, PuzzleSolved } from './types';
 
 export function createSolvedPuzzle(): PuzzleSolved {
-	const grid = _createEmptyGrid();
+	const grid = createEmptyGrid();
 
 	fillDiagonalSubGrids(grid);
 
