@@ -3,17 +3,16 @@ import { describe, expect, test } from 'vitest';
 import { GRID_SIZE, SUB_GRID_SIZE } from './constants';
 import { ValueOutOfRangeError } from './errors';
 import {
-	_assertIsCoordinateWithinRange,
+	assertIsCoordinateWithinRange,
 	_createEmptyGrid,
 	_createEmptySubGrid,
-	_fillDiagonalSubGrids,
-	_fillEmptyGridFields,
-	_prettyDebug,
-	_readSubGridFields,
+	fillDiagonalSubGrids,
+	fillEmptyGridFields,
+	readSubGridFields,
 } from './grid';
-import type { Grid, GridRow } from './types';
+import type { Grid, GridFilled, GridRow } from './types';
 
-describe(_readSubGridFields.name, () => {
+describe(readSubGridFields.name, () => {
 	type TestData = Record<'middle' | 'left' | 'right', GridRow>;
 
 	const top = {
@@ -137,7 +136,7 @@ describe(_readSubGridFields.name, () => {
 		['bottom-right', 8, 7, bottom.right],
 		['bottom-right', 8, 8, bottom.right],
 	])('reads %s subgrid with coordinates (%d, %d)', (_, rowIdx, colIdx, expected) => {
-		const result = _readSubGridFields(grid, rowIdx, colIdx);
+		const result = readSubGridFields(grid, rowIdx, colIdx);
 		expect(result).to.deep.equal(expected);
 	});
 
@@ -146,7 +145,7 @@ describe(_readSubGridFields.name, () => {
 		[2, 9],
 		[-2, 10],
 	])('throws when reading with coordinates outside of range', (rowIdx, colIdx) => {
-		expect(() => _readSubGridFields(grid, rowIdx, colIdx)).to.throw(ValueOutOfRangeError);
+		expect(() => readSubGridFields(grid, rowIdx, colIdx)).to.throw(ValueOutOfRangeError);
 	});
 });
 
@@ -174,22 +173,22 @@ describe(_createEmptySubGrid.name, () => {
 	});
 });
 
-describe(_fillDiagonalSubGrids.name, () => {
+describe(fillDiagonalSubGrids.name, () => {
 	test('fills diagonal subgrids with random digits between 1 and 9', () => {
 		const grid = _createEmptyGrid();
 
 		expect(grid.every(isNil)).to.equal(true);
 
-		_fillDiagonalSubGrids(grid);
+		fillDiagonalSubGrids(grid);
 
-		const topLeftSubGrid = _readSubGridFields(grid, 0, 0);
+		const topLeftSubGrid = readSubGridFields(grid, 0, 0);
 
-		const middleSubGrid = _readSubGridFields(
+		const middleSubGrid = readSubGridFields(
 			grid,
 			Math.floor(GRID_SIZE / 2),
 			Math.floor(GRID_SIZE / 2),
 		);
-		const bottomRightSubGrid = _readSubGridFields(grid, GRID_SIZE - 1, GRID_SIZE - 1);
+		const bottomRightSubGrid = readSubGridFields(grid, GRID_SIZE - 1, GRID_SIZE - 1);
 
 		expect(topLeftSubGrid.every(Number.isInteger)).to.equal(true);
 		expect(middleSubGrid.every(Number.isInteger)).to.equal(true);
@@ -198,7 +197,7 @@ describe(_fillDiagonalSubGrids.name, () => {
 	});
 });
 
-describe(_fillEmptyGridFields.name, () => {
+describe(fillEmptyGridFields.name, () => {
 	test('fills only empty fields of grid', () => {
 		const left = [
 			[7, 6, 5, undefined, undefined, undefined, undefined, undefined, undefined],
@@ -222,24 +221,24 @@ describe(_fillEmptyGridFields.name, () => {
 			[6, 1, 4, 7, 3, 5, 9, 2, 8],
 			[9, 5, 2, 6, 8, 1, 4, 7, 3],
 			[8, 3, 7, 9, 4, 2, 6, 1, 5],
-		].flat();
+		].flat() as GridFilled;
 
-		_fillEmptyGridFields(left, 0, 0);
+		fillEmptyGridFields(left, 0, 0);
 
 		expect(left).to.deep.equal(right);
 	});
 });
 
-describe(_assertIsCoordinateWithinRange.name, () => {
+describe(assertIsCoordinateWithinRange.name, () => {
 	test.each<number>([-Infinity, -2, -1, 9, 11, Infinity])('throws when out of range', (value) => {
 		expect(() => {
-			_assertIsCoordinateWithinRange(value);
+			assertIsCoordinateWithinRange(value);
 		}).to.throw(ValueOutOfRangeError);
 	});
 
 	test.each<number>([0, 1, 2, 3, 4, 5, 6, 7, 8])('does nothing when within range', (value) => {
 		expect(() => {
-			_assertIsCoordinateWithinRange(value);
+			assertIsCoordinateWithinRange(value);
 		}).not.to.throw(ValueOutOfRangeError);
 	});
 });

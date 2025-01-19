@@ -1,17 +1,7 @@
 import { isDefined } from '@/lib/utils/is-defined';
 import { IncorrectGridError, ValueOutOfRangeError } from './errors';
 import { GRID_FIELDS_COUNT, GRID_SIZE, SUB_GRID_FIELDS_COUNT, SUB_GRID_SIZE } from './constants';
-import type { Grid, GridCol, GridField, GridRow, SubGrid } from './types';
-
-export function _createGrid(): Grid {
-	const grid = _createEmptyGrid();
-
-	_fillDiagonalSubGrids(grid);
-
-	if (_fillEmptyGridFields(grid, 0, SUB_GRID_SIZE)) return grid;
-
-	throw new IncorrectGridError(grid);
-}
+import type { Grid, GridCol, GridField, GridFilled, GridRow, SubGrid } from './types';
 
 /**
  * Fills the diagonal sub-grids (3x3 blocks) of the given grid with random digits 1-9.
@@ -25,16 +15,16 @@ export function _createGrid(): Grid {
  * |_, _, D|
  *````
  */
-export function _fillDiagonalSubGrids(g: Grid): void {
+export function fillDiagonalSubGrids(g: Grid): void {
 	const usedDigits = new Set<number>();
-	let nextDigit = _getRandomDigit();
+	let nextDigit = getRandomDigit();
 
 	for (let subGridStartIdx = 0; subGridStartIdx < GRID_SIZE; subGridStartIdx += SUB_GRID_SIZE) {
 		usedDigits.clear();
 
 		for (let rowIdx = 0; rowIdx < SUB_GRID_SIZE; rowIdx++) {
 			for (let colIdx = 0; colIdx < SUB_GRID_SIZE; colIdx++) {
-				while (usedDigits.has(nextDigit)) nextDigit = _getRandomDigit();
+				while (usedDigits.has(nextDigit)) nextDigit = getRandomDigit();
 				usedDigits.add(nextDigit);
 				g[subGridStartIdx * GRID_SIZE + rowIdx * GRID_SIZE + colIdx + subGridStartIdx] = nextDigit;
 			}
@@ -42,11 +32,14 @@ export function _fillDiagonalSubGrids(g: Grid): void {
 	}
 }
 
-function _getRandomDigit(): number {
+/**
+ * Returns digit within valid range.
+ */
+export function getRandomDigit(): number {
 	return Math.floor(Math.random() * GRID_SIZE) + 1;
 }
 
-export function _fillEmptyGridFields(g: Grid, rowIdx: number, colIdx: number): boolean {
+export function fillEmptyGridFields(g: Grid, rowIdx: number, colIdx: number): g is GridFilled {
 	if (rowIdx >= GRID_SIZE) return true;
 
 	const fieldIdx = rowIdx * GRID_SIZE + colIdx;
@@ -54,14 +47,14 @@ export function _fillEmptyGridFields(g: Grid, rowIdx: number, colIdx: number): b
 	const nextColIdx = (colIdx + 1) % GRID_SIZE;
 
 	if (g[fieldIdx]) {
-		return _fillEmptyGridFields(g, nextRowIdx, nextColIdx);
+		return fillEmptyGridFields(g, nextRowIdx, nextColIdx);
 	}
 
 	for (let num = 1; num <= GRID_SIZE; num++) {
 		g[fieldIdx] = num;
 
-		if (_isFieldPositionCorrect(g, rowIdx, colIdx)) {
-			if (_fillEmptyGridFields(g, nextRowIdx, nextColIdx)) return true;
+		if (isValueCorrectForFieldAtPosition(g, rowIdx, colIdx)) {
+			if (fillEmptyGridFields(g, nextRowIdx, nextColIdx)) return true;
 		}
 	}
 
@@ -70,32 +63,32 @@ export function _fillEmptyGridFields(g: Grid, rowIdx: number, colIdx: number): b
 	return false;
 }
 
-export function _isFieldPositionCorrect(g: Grid, rowIdx: number, colIdx: number): boolean {
-	const row = _readRow(g, rowIdx);
-	if (_hasDuplicates(row)) return false;
+export function isValueCorrectForFieldAtPosition(g: Grid, rowIdx: number, colIdx: number): boolean {
+	const row = readRow(g, rowIdx);
+	if (hasDuplicates(row)) return false;
 
-	const col = _readCol(g, colIdx);
-	if (_hasDuplicates(col)) return false;
+	const col = readCol(g, colIdx);
+	if (hasDuplicates(col)) return false;
 
-	const boxValues = _readSubGridFields(g, rowIdx, colIdx);
-	if (_hasDuplicates(boxValues)) return false;
+	const boxValues = readSubGridFields(g, rowIdx, colIdx);
+	if (hasDuplicates(boxValues)) return false;
 
 	return true;
 }
 
-function _hasDuplicates(c: Readonly<GridField[]>): boolean {
+export function hasDuplicates(c: Readonly<GridField[]>): boolean {
 	const numbers = c.filter(isDefined);
 	const set = new Set(numbers);
 	return set.size !== numbers.length;
 }
 
-function _readCol(g: Grid, colIdx: number): GridCol {
+function readCol(g: Grid, colIdx: number): GridCol {
 	const result = [];
 	for (let idx = colIdx; idx < GRID_FIELDS_COUNT; idx += GRID_SIZE) result.push(g[idx]);
 	return result as GridCol;
 }
 
-function _readRow(g: Grid, rowIdx: number): GridRow {
+function readRow(g: Grid, rowIdx: number): GridRow {
 	return g.slice(rowIdx * GRID_SIZE, (rowIdx + 1) * GRID_SIZE) as GridRow;
 }
 
@@ -119,9 +112,9 @@ function _readRow(g: Grid, rowIdx: number): GridRow {
  * Returns: [4, 5, 6, 7, 8, 9, 1, 2, 3]
  * ```
  */
-export function _readSubGridFields(g: Readonly<Grid>, rowIdx: number, colIdx: number): SubGrid {
-	_assertIsCoordinateWithinRange(rowIdx);
-	_assertIsCoordinateWithinRange(colIdx);
+export function readSubGridFields(g: Readonly<Grid>, rowIdx: number, colIdx: number): SubGrid {
+	assertIsCoordinateWithinRange(rowIdx);
+	assertIsCoordinateWithinRange(colIdx);
 
 	const subGridStartRowIdx = Math.floor(rowIdx / SUB_GRID_SIZE) * SUB_GRID_SIZE;
 	const subGridStartColIdx = Math.floor(colIdx / SUB_GRID_SIZE) * SUB_GRID_SIZE;
@@ -139,7 +132,10 @@ export function _readSubGridFields(g: Readonly<Grid>, rowIdx: number, colIdx: nu
 	return result;
 }
 
-export function _assertIsCoordinateWithinRange(it: number): void {
+/**
+ * @throw {ValueOutOfRangeError} when number is out of allowed range.
+ */
+export function assertIsCoordinateWithinRange(it: number): void {
 	const range: [number, number] = [0, GRID_SIZE - 1];
 	if (range[0] <= it && it <= range[1]) return;
 	throw new ValueOutOfRangeError(range, it);
@@ -148,7 +144,7 @@ export function _assertIsCoordinateWithinRange(it: number): void {
 /**
  * Creates an empty Sudoku grid.
  *
- * @throws {IncorrectGridError} when created grid length does not match required size
+ * @throws {IncorrectGridError} when created grid length does not match required size.
  */
 export function _createEmptyGrid(): Grid {
 	const result = Array.from({ length: GRID_FIELDS_COUNT }, () => undefined) as Grid;
@@ -161,19 +157,4 @@ export function _createEmptyGrid(): Grid {
 
 export function _createEmptySubGrid(): SubGrid {
 	return Array.from({ length: SUB_GRID_FIELDS_COUNT }, () => undefined) as SubGrid;
-}
-
-/**
- * Prints formatted grid.
- */
-export function _prettyDebug(g: Grid | SubGrid): string {
-	const isSubGrid = g.length === SUB_GRID_FIELDS_COUNT;
-	const breakAtIdx = isSubGrid ? SUB_GRID_SIZE : GRID_SIZE;
-
-	const formattedGrid = g
-		.map((it, idx) => (idx > 0 && !(idx % breakAtIdx) ? `\n${it?.toString() ?? ' '}` : it))
-		.map((it) => it ?? '_')
-		.join(', ');
-
-	return `[\n${formattedGrid}\n]`;
 }
