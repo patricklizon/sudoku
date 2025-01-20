@@ -1,6 +1,6 @@
 import { isNil } from '@/lib/utils/is-nil';
 import { describe, expect, test } from 'vitest';
-import { GRID_SIZE, SUB_GRID_SIZE } from './constants';
+import { GRID_SIZE, SUB_GRID_CELLS_COUNT, SUB_GRID_SIZE } from './constants';
 import { ValueOutOfRangeError } from './errors';
 import {
 	assertIsCoordinateWithinRange,
@@ -9,6 +9,7 @@ import {
 	fillDiagonalSubGrids,
 	fillEmptyGridCells,
 	readSubGridCells,
+	isValueCorrectForCellAtPosition,
 } from './grid';
 import type { Grid, GridFilled, GridRow } from './types';
 
@@ -236,9 +237,85 @@ describe(assertIsCoordinateWithinRange.name, () => {
 		}).to.throw(ValueOutOfRangeError);
 	});
 
-	test.each<number>([0, 1, 2, 3, 4, 5, 6, 7, 8])('does nothing when within range', (value) => {
-		expect(() => {
-			assertIsCoordinateWithinRange(value);
-		}).not.to.throw(ValueOutOfRangeError);
+	test.each<number>(Array.from({ length: GRID_SIZE }, (_, idx) => idx))(
+		'does nothing when within range',
+		(value) => {
+			expect(() => {
+				assertIsCoordinateWithinRange(value);
+			}).not.to.throw(ValueOutOfRangeError);
+		},
+	);
+});
+
+describe(isValueCorrectForCellAtPosition.name, () => {
+	const g = [
+		[7, 6, 5, undefined, undefined, undefined, undefined, undefined, undefined], // 1st sub-grid is filled correctly
+		[3, 9, 1, undefined, undefined, undefined, undefined, undefined, undefined], // 2nd and 3rd are empty, but not inferring with 1st
+		[2, 4, 8, undefined, undefined, undefined, undefined, undefined, undefined],
+		[1, 2, 6, 8, 4, 3, 5, 9, 4], // 4th sub-grid is filled correctly
+		[5, 7, 9, 2, 4, 4, 8, 1, 1], // 5th has duplicated 4 both in it's 2nd column and row
+		[4, 8, 3, 5, 1, 9, 7, 6, 2], // 6th has duplicated 1 in it's 2nd row
+		[undefined, undefined, undefined, undefined, undefined, undefined, 9, 2, 8], // 9th sub-grid has duplicated 9s
+		[undefined, undefined, undefined, undefined, undefined, undefined, 4, 7, 3], // 7th and 8th are empty, but not inferring with 9th
+		[undefined, undefined, undefined, undefined, undefined, undefined, 6, 1, 9],
+	].flat() as GridFilled;
+
+	type Coordinates = [row: number, col: number];
+
+	// 1st sub-grid
+	test.each(
+		Array.from({ length: SUB_GRID_CELLS_COUNT }, (_, idx): Coordinates => {
+			return [idx % SUB_GRID_SIZE, Math.floor(idx / SUB_GRID_SIZE)];
+		}),
+	)(`no interference, therefore (%d, %d) is marked as correctly placed`, (rowIdx, colIdx) => {
+		expect(isValueCorrectForCellAtPosition(g, rowIdx, colIdx)).to.equal(true);
 	});
+
+	// 1st row of 4th sub-grid
+	test.each([
+		[3, 0],
+		[3, 1],
+		[3, 2],
+	] satisfies Coordinates[])(
+		`duplicate value in other sub-grid's row, therefore (%d, %d) marked as incorrectly placed`,
+		(rowIdx, colIdx) => {
+			expect(isValueCorrectForCellAtPosition(g, rowIdx, colIdx)).to.equal(false);
+		},
+	);
+
+	// 3rd row of 4th sub-grid
+	test.each([
+		[5, 0],
+		[5, 1],
+		[5, 2],
+	] satisfies Coordinates[])(
+		`no interference, therefore (%d, %d) is marked as correctly placed`,
+		(rowIdx, colIdx) => {
+			expect(isValueCorrectForCellAtPosition(g, rowIdx, colIdx)).to.equal(true);
+		},
+	);
+
+	// entire 4th row
+	test.each(
+		Array.from({ length: GRID_SIZE }, (_, idx): Coordinates => {
+			return [4, idx];
+		}),
+	)(
+		`row has duplicated values which makes (%d, %d) marked as incorrectly placed`,
+		(rowIdx, colIdx) => {
+			expect(isValueCorrectForCellAtPosition(g, rowIdx, colIdx)).to.equal(false);
+		},
+	);
+
+	// 9th sub-grid
+	test.each(
+		Array.from({ length: SUB_GRID_CELLS_COUNT }, (_, idx): Coordinates => {
+			return [6 + (idx % SUB_GRID_SIZE), 6 + Math.floor(idx / SUB_GRID_SIZE)];
+		}),
+	)(
+		`sub-grid has duplicated value which makes (%d, %d) marked as incorrectly placed`,
+		(rowIdx, colIdx) => {
+			expect(isValueCorrectForCellAtPosition(g, rowIdx, colIdx)).to.equal(false);
+		},
+	);
 });
