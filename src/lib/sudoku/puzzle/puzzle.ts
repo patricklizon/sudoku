@@ -23,6 +23,7 @@ export function createSolvedPuzzle(): PuzzleSolved {
 
 	fillDiagonalSubGrids(grid);
 
+	// starting filling from 1st element of 2nd subgrid as diagonal values were fixed
 	if (fillEmptyGridCells(grid, 0, SUB_GRID_SIZE)) return grid;
 
 	throw new IncorrectGridError(grid);
