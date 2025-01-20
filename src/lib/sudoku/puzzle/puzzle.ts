@@ -6,21 +6,20 @@ import {
 	fillEmptyGridCells,
 	readCell,
 } from '@/lib/sudoku/grid';
-import type { PuzzleSolvable, PuzzleSolved } from './types';
+import type { PuzzleDifficulty, PuzzleSolvable, PuzzleSolved } from './types';
 
 /**
  * Creates a fully solved Sudoku puzzle.
- *
- * The function first fills the diagonal sub-grids because these can be filled
- * independently without violating Sudoku rules. This initial filling provides
- * anchor points that make the subsequent filling of remaining cells more efficient,
- * as it reduces the number of possible valid combinations for the rest of the grid.
  *
  * @throws {IncorrectGridError} when a valid solution cannot be generated
  */
 export function createSolvedPuzzle(): PuzzleSolved {
 	const grid = createEmptyGrid();
 
+	// fills the diagonal sub-grids because these can be filled
+	// independently without violating Sudoku rules. This initial filling provides
+	// anchor points that make the subsequent filling of remaining cells more efficient,
+	// as it reduces the number of possible valid combinations for the rest of the grid
 	fillDiagonalSubGrids(grid);
 
 	// starting filling from 1st element of 2nd subgrid as diagonal values were fixed
@@ -31,7 +30,7 @@ export function createSolvedPuzzle(): PuzzleSolved {
 
 export function createSolvablePuzzle(
 	p: PuzzleSolved,
-	difficulty: 'easy' | 'normal' | 'hard' | 'expert',
+	difficulty: PuzzleDifficulty,
 ): PuzzleSolvable {
 	return;
 }

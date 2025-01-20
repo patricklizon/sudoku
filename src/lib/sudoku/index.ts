@@ -1,3 +1,7 @@
+/**
+ * @module sudoku
+ */
+
 export {
 	createSolvablePuzzle,
 	createSolvedPuzzle,
