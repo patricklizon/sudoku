@@ -2,7 +2,6 @@ import { isDefined } from '@/lib/utils/is-defined';
 import { IncorrectGridError, ValueOutOfRangeError } from './errors';
 import { GRID_CELLS_COUNT, GRID_SIZE, SUB_GRID_CELLS_COUNT, SUB_GRID_SIZE } from './constants';
 import type { Grid, GridCol, GridCell, GridFilled, GridRow, SubGrid } from './types';
-import { prettyDebug } from '../utils';
 
 /**
  * Fills the diagonal sub-grids (3x3 blocks) of the given grid with random digits 1-9.
