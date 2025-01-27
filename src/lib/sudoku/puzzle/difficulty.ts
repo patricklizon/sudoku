@@ -45,12 +45,11 @@ export const TOTAL_GIVEN_CELLS_RANGE_BY_DIFFICULTY_LEVEL: Readonly<
 };
 
 /**
- * The positioning of the empty cells significantly affect the difficulty level if two
- * puzzles provide the givens in the same amount or in slight difference at the start of a
- * Sudoku game. The puzzle with the givens in clusters is graded in higher level that
- * that with the givens in scattered distribution. Based on the row and column
- * constraints, lower bound of given is regulated cells in each row and column for
- * each difficulty level.
+ * The positioning of empty cells significantly affects the difficulty level even when two
+ * puzzles have the same or similar number of given cells at the start of a Sudoku game.
+ * A puzzle with given cells clustered together is considered more difficult than one
+ * where given cells are scattered evenly. To manage this, minimum number of given cells
+ * that must appear in each row and column for each difficulty level is defined.
  */
 export const LOWER_BOUND_OF_GIVEN_CELLS_IN_ROW_AND_COLUMN_BY_DIFFICULTY_LEVEL: Readonly<
 	Record<PuzzleDifficultyLevel, number>

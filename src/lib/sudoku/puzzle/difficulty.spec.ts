@@ -15,7 +15,9 @@ test.each([
 });
 
 test('difficulty scales correctly', () => {
-	const keys = Object.keys(TOTAL_GIVEN_CELLS_RANGE_BY_DIFFICULTY_LEVEL).map(Number.parseInt);
+	const keys = Object.keys(TOTAL_GIVEN_CELLS_RANGE_BY_DIFFICULTY_LEVEL).map((it) => {
+		return Number.parseInt(it);
+	});
 	const easiestLevel = Math.min(...keys) as PuzzleDifficultyLevel;
 	const hardestLevel = Math.max(...keys) as PuzzleDifficultyLevel;
 
