@@ -1,4 +1,4 @@
-import { prettyDebug } from '@/lib/sudoku/utils';
+import { prettyDebug } from '@/lib/sudoku/grid/utils';
 import type { Grid } from './types';
 import type { Range } from '@/lib/types/range';
 

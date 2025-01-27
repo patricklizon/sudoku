@@ -1,23 +1,25 @@
 import {
 	GRID_CELLS_COUNT,
-	GRID_SIZE,
 	IncorrectGridError,
 	SUB_GRID_SIZE,
 	createEmptyGrid,
 	fillDiagonalSubGrids,
-	isValueCorrectForCellAtPosition,
+	isGridCellFilled,
+	readCoordinateByGridCellIndex,
 	readGridCell,
+	readAllowedGridCellCellValuesAtCoordinates,
+	readGridCol,
+	readGridRow,
 	type GridCellCoordinates,
 } from '@/lib/sudoku/grid';
+import { getRandomInt } from '@/lib/utils/get-random-number';
+import { suffleArray } from '@/lib/utils/shuffle-array';
+import type { Option } from '@/lib/types/option';
 import type { PuzzleDifficultyLevel, PuzzleSolved, PuzzleUnsolved } from './types';
 import {
 	LOWER_BOUND_OF_GIVEN_CELLS_IN_ROW_AND_COLUMN_BY_DIFFICULTY_LEVEL,
 	TOTAL_GIVEN_CELLS_RANGE_BY_DIFFICULTY_LEVEL,
 } from './difficulty';
-import { getRandomInt } from '@/lib/utils/get-random-number';
-import { suffleArray } from '@/lib/utils/shuffle-array';
-import { readCoordinateByGridIdx, readGridCol, readGridRow } from '../grid/grid';
-import type { Option } from '@/lib/types/option';
 
 /**
  * Creates a fully solved Sudoku puzzle.
@@ -34,40 +36,28 @@ export function createSolvedPuzzle(): Readonly<PuzzleSolved> {
 	// for the rest of the grid.
 	fillDiagonalSubGrids(grid);
 
-	// starting filling from 1st element of 2nd subgrid as diagonal values were filled
-	if (solvePuzzle(grid, 0, SUB_GRID_SIZE)) return grid;
+	if (fillPuzzle(grid, SUB_GRID_SIZE)) return grid;
 
 	throw new IncorrectGridError(grid);
 }
 
 /**
  * Mutatest passed puzzle.
- *
- * Recursively fills empty cells in a Sudoku grid.
- * Attempts to fill each empty cell with a valid number that satisfies Sudoku rules.
- * Uses backtracking - if a number doesn't work, tries the next number or backtracks to previous cells.
  */
-export function solvePuzzle(p: PuzzleUnsolved, rowIdx: number, colIdx: number): p is PuzzleSolved {
-	if (rowIdx >= GRID_SIZE) return true;
+export function fillPuzzle(p: PuzzleUnsolved, idx: number): p is PuzzleSolved {
+	if (p.every(isGridCellFilled)) return true;
 
-	const cellIdx = rowIdx * GRID_SIZE + colIdx;
-	const nextRowIdx = colIdx === GRID_SIZE - 1 ? rowIdx + 1 : rowIdx;
-	const nextColIdx = (colIdx + 1) % GRID_SIZE;
+	const cellCopy = p[idx];
+	const nextIdx = idx + 1;
+	if (isGridCellFilled(cellCopy)) return fillPuzzle(p, nextIdx);
 
-	if (p[cellIdx]) {
-		return solvePuzzle(p, nextRowIdx, nextColIdx);
+	const coordinates = readCoordinateByGridCellIndex(idx);
+	for (const v of readAllowedGridCellCellValuesAtCoordinates(p, coordinates)) {
+		p[idx] = v;
+		if (fillPuzzle(p, nextIdx)) return true;
 	}
 
-	for (let num = 1; num <= GRID_SIZE; num++) {
-		p[cellIdx] = num;
-
-		if (isValueCorrectForCellAtPosition(p, rowIdx, colIdx)) {
-			if (solvePuzzle(p, nextRowIdx, nextColIdx)) return true;
-		}
-	}
-
-	p[cellIdx] = undefined;
-
+	p[idx] = cellCopy;
 	return false;
 }
 
@@ -91,7 +81,7 @@ export function createUnsolvedPuzzle(
 	let stepsCount = GRID_CELLS_COUNT;
 	let coordinates: Option<GridCellCoordinates>;
 	for (const idx of traverseIdxs) {
-		coordinates = readCoordinateByGridIdx(idx);
+		coordinates = readCoordinateByGridCellIndex(idx);
 		savedDigit = pu[idx];
 		pu[idx] = undefined;
 
