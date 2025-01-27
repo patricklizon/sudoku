@@ -8,10 +8,14 @@ import type { Grid, GridFilled } from '@/lib/sudoku/grid';
  */
 export type EncodedPuzzleSolvable = Opaque<'encoded-puzzle-solvable', string>;
 
-/** Solved puzzle */
+/**
+ * Puzzle with all cells correctly filled.
+ */
 export type PuzzleSolved = GridFilled;
 
-/** Solvable puzzle */
-export type PuzzleSolvable = Grid;
+/**
+ * Puzzle with correctly filled cells and some empty cells.
+ */
+export type PuzzleUnsolved = Grid;
 
-export type PuzzleDifficulty = 'noob' | 'easy' | 'medium' | 'hard' | 'expert';
+export type PuzzleDifficultyLevel = Opaque<'difficulty-level', number>;

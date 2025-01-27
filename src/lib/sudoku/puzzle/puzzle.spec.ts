@@ -1,7 +1,45 @@
 import { describe, expect, test } from 'vitest';
-import { GRID_CELLS_COUNT, GRID_SIZE, isValueCorrectForCellAtPosition } from '@/lib/sudoku/grid';
-import { createSolvedPuzzle, isValueValid } from './puzzle';
+import {
+	GRID_CELLS_COUNT,
+	GRID_SIZE,
+	isValueCorrectForCellAtPosition,
+	type Grid,
+	type GridFilled,
+} from '@/lib/sudoku/grid';
+import { createSolvedPuzzle, isValueValid, solvePuzzle } from './puzzle';
 import type { PuzzleSolved } from './types';
+
+describe(solvePuzzle.name, () => {
+	test('fills only empty fields of grid', () => {
+		const left = [
+			[7, 6, 5, undefined, undefined, undefined, undefined, undefined, undefined],
+			[3, 9, 1, undefined, undefined, undefined, undefined, undefined, undefined],
+			[2, 4, 8, undefined, undefined, undefined, undefined, undefined, undefined],
+			[undefined, undefined, undefined, 8, 7, 3, undefined, undefined, undefined],
+			[undefined, undefined, undefined, 2, 6, 4, undefined, undefined, undefined],
+			[undefined, undefined, undefined, 5, 1, 9, undefined, undefined, undefined],
+			[undefined, undefined, undefined, undefined, undefined, undefined, 9, 2, 8],
+			[undefined, undefined, undefined, undefined, undefined, undefined, 4, 7, 3],
+			[undefined, undefined, undefined, undefined, undefined, undefined, 6, 1, 5],
+		].flat() as Grid;
+
+		const right = [
+			[7, 6, 5, 1, 2, 8, 3, 4, 9],
+			[3, 9, 1, 4, 5, 6, 2, 8, 7],
+			[2, 4, 8, 3, 9, 7, 1, 5, 6],
+			[1, 2, 6, 8, 7, 3, 5, 9, 4],
+			[5, 7, 9, 2, 6, 4, 8, 3, 1],
+			[4, 8, 3, 5, 1, 9, 7, 6, 2],
+			[6, 1, 4, 7, 3, 5, 9, 2, 8],
+			[9, 5, 2, 6, 8, 1, 4, 7, 3],
+			[8, 3, 7, 9, 4, 2, 6, 1, 5],
+		].flat() as GridFilled;
+
+		solvePuzzle(left, 0, 0);
+
+		expect(left).to.deep.equal(right);
+	});
+});
 
 describe(createSolvedPuzzle.name, () => {
 	test('generates correct puzzle', () => {

@@ -1,20 +1,26 @@
 import { test, expect } from 'vitest';
 import { GRID_CELLS_COUNT } from '@/lib/sudoku/grid';
-import { MINIMUM_REQUIRED_CELLS_COUNT_BY_DIFFICULTY } from './difficulty';
+import {
+	TOTAL_GIVEN_CELLS_RANGE_BY_DIFFICULTY_LEVEL,
+	LOWER_BOUND_OF_GIVEN_CELLS_IN_ROW_AND_COLUMN_BY_DIFFICULTY_LEVEL,
+	DifficultyLevel,
+} from './difficulty';
+import type { PuzzleDifficultyLevel } from './types';
 
-test.each<boolean>([
-	MINIMUM_REQUIRED_CELLS_COUNT_BY_DIFFICULTY.noob > MINIMUM_REQUIRED_CELLS_COUNT_BY_DIFFICULTY.easy,
-	MINIMUM_REQUIRED_CELLS_COUNT_BY_DIFFICULTY.easy >
-		MINIMUM_REQUIRED_CELLS_COUNT_BY_DIFFICULTY.medium,
-	MINIMUM_REQUIRED_CELLS_COUNT_BY_DIFFICULTY.medium >
-		MINIMUM_REQUIRED_CELLS_COUNT_BY_DIFFICULTY.hard,
-	MINIMUM_REQUIRED_CELLS_COUNT_BY_DIFFICULTY.hard >
-		MINIMUM_REQUIRED_CELLS_COUNT_BY_DIFFICULTY.expert,
-])('difficulty scales correctly', (b) => {
-	expect(b).to.equal(true);
+test.each([
+	TOTAL_GIVEN_CELLS_RANGE_BY_DIFFICULTY_LEVEL,
+	LOWER_BOUND_OF_GIVEN_CELLS_IN_ROW_AND_COLUMN_BY_DIFFICULTY_LEVEL,
+])('object with difficulty rating has correct keys', (o) => {
+	expect(Object.keys(DifficultyLevel)).to.deep.equal(Object.keys(o));
 });
 
-test('cells count is within correct range', () => {
-	expect(MINIMUM_REQUIRED_CELLS_COUNT_BY_DIFFICULTY.expert >= 17).to.equal(true);
-	expect(MINIMUM_REQUIRED_CELLS_COUNT_BY_DIFFICULTY.easy < GRID_CELLS_COUNT).to.equal(true);
+test('difficulty scales correctly', () => {
+	const keys = Object.keys(TOTAL_GIVEN_CELLS_RANGE_BY_DIFFICULTY_LEVEL).map(Number.parseInt);
+	const easiestLevel = Math.min(...keys) as PuzzleDifficultyLevel;
+	const hardestLevel = Math.max(...keys) as PuzzleDifficultyLevel;
+
+	expect(TOTAL_GIVEN_CELLS_RANGE_BY_DIFFICULTY_LEVEL[hardestLevel][0] >= 17).to.equal(true);
+	expect(TOTAL_GIVEN_CELLS_RANGE_BY_DIFFICULTY_LEVEL[easiestLevel][1] < GRID_CELLS_COUNT).to.equal(
+		true,
+	);
 });

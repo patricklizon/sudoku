@@ -6,8 +6,7 @@
 export {
 	createEmptyGrid,
 	fillDiagonalSubGrids,
-	fillEmptyGridCells,
-	readCell,
+	readGridCell,
 	isValueCorrectForCellAtPosition,
 } from './grid';
 export * from './constants';

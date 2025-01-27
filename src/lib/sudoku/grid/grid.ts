@@ -35,47 +35,15 @@ export function fillDiagonalSubGrids(g: Grid): void {
 /**
  * Returns digit within valid range.
  */
-export function getRandomDigit(): number {
+function getRandomDigit(): number {
 	return Math.floor(Math.random() * GRID_SIZE) + 1;
 }
 
-/**
- * Recursively fills empty cells in a Sudoku grid.
- * Attempts to fill each empty cell with a valid number that satisfies Sudoku rules.
- * Uses backtracking - if a number doesn't work, tries the next number or backtracks to previous cells.
- *
- * @returns Type predicate indicating if grid was successfully filled
- *
- */
-export function fillEmptyGridCells(g: Grid, rowIdx: number, colIdx: number): g is GridFilled {
-	if (rowIdx >= GRID_SIZE) return true;
-
-	const cellIdx = rowIdx * GRID_SIZE + colIdx;
-	const nextRowIdx = colIdx === GRID_SIZE - 1 ? rowIdx + 1 : rowIdx;
-	const nextColIdx = (colIdx + 1) % GRID_SIZE;
-
-	if (g[cellIdx]) {
-		return fillEmptyGridCells(g, nextRowIdx, nextColIdx);
-	}
-
-	for (let num = 1; num <= GRID_SIZE; num++) {
-		g[cellIdx] = num;
-
-		if (isValueCorrectForCellAtPosition(g, rowIdx, colIdx)) {
-			if (fillEmptyGridCells(g, nextRowIdx, nextColIdx)) return true;
-		}
-	}
-
-	g[cellIdx] = undefined;
-
-	return false;
-}
-
 export function isValueCorrectForCellAtPosition(g: Grid, rowIdx: number, colIdx: number): boolean {
-	const row = readRow(g, rowIdx);
+	const row = readGridRow(g, rowIdx);
 	if (hasDuplicates(row)) return false;
 
-	const col = readCol(g, colIdx);
+	const col = readGridCol(g, colIdx);
 	if (hasDuplicates(col)) return false;
 
 	const boxValues = readSubGridCells(g, rowIdx, colIdx);
@@ -90,17 +58,28 @@ export function hasDuplicates(c: Readonly<GridCell[]>): boolean {
 	return set.size !== numbers.length;
 }
 
-function readCol(g: Grid, colIdx: number): GridCol {
+export function readGridCol(g: Grid, colIdx: number): GridCol {
 	const result = [];
 	for (let idx = colIdx; idx < GRID_CELLS_COUNT; idx += GRID_SIZE) result.push(g[idx]);
 	return result as GridCol;
 }
 
-function readRow(g: Grid, rowIdx: number): GridRow {
+export function readGridRow(g: Grid, rowIdx: number): GridRow {
 	return g.slice(rowIdx * GRID_SIZE, (rowIdx + 1) * GRID_SIZE) as GridRow;
 }
 
-export function readCell<G extends Grid | GridFilled>(
+export function readCoordinateByGridIdx(idx: number): { rowIdx: number; colIdx: number } {
+	if (idx < 0 || GRID_CELLS_COUNT < idx) {
+		throw new ValueOutOfRangeError([0, GRID_CELLS_COUNT], idx);
+	}
+
+	return {
+		rowIdx: Math.floor(idx / GRID_SIZE),
+		colIdx: idx % GRID_SIZE,
+	};
+}
+
+export function readGridCell<G extends Grid | GridFilled>(
 	g: G,
 	rowIdx: number,
 	colIdx: number,
