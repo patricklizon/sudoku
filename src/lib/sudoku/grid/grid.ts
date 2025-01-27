@@ -1,4 +1,3 @@
-import { isDefined } from '@/lib/utils/is-defined';
 import { IncorrectGridError, ValueOutOfRangeError } from './errors';
 import {
 	CELL_ALLOWED_VALUES,
@@ -7,7 +6,16 @@ import {
 	SUB_GRID_CELLS_COUNT,
 	SUB_GRID_SIZE,
 } from './constants';
-import type { Grid, GridCol, GridCell, GridFilled, GridRow, SubGrid, GridCellEmpty } from './types';
+import type {
+	Grid,
+	GridCol,
+	GridCell,
+	GridFilled,
+	GridRow,
+	SubGrid,
+	GridCellEmpty,
+	GridCellFilled,
+} from './types';
 
 /**
  * Fills the diagonal sub-grids (3x3 blocks) of the given grid with random digits 1-9.
@@ -58,10 +66,9 @@ export function isValueCorrectForCellAtPosition(g: Grid, rowIdx: number, colIdx:
 	return true;
 }
 
-export function hasDuplicates(c: Readonly<GridCell[]>): boolean {
-	const numbers = c.filter(isDefined);
-	const set = new Set(numbers);
-	return set.size !== numbers.length;
+export function hasDuplicates(cells: Readonly<GridCell[]>): boolean {
+	const values = cells.filter(isGridCellFilled);
+	return new Set(values).size !== values.length;
 }
 
 export function readGridCol(g: Grid, colIdx: number): GridCol {
@@ -162,4 +169,12 @@ export function createEmptyGrid(): Grid {
 
 export function createEmptySubGrid(): SubGrid {
 	return Array.from({ length: SUB_GRID_CELLS_COUNT }, createEmptyCell) as SubGrid;
+}
+
+export function isGridCellEmpty(it: GridCell): it is GridCellEmpty {
+	return it instanceof Set && it.size === GRID_SIZE;
+}
+
+export function isGridCellFilled(it: GridCell): it is GridCellFilled {
+	return typeof it === 'number' && CELL_ALLOWED_VALUES.has(it);
 }

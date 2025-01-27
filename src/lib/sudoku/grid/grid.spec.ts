@@ -1,4 +1,3 @@
-import { isNil } from '@/lib/utils/is-nil';
 import { describe, expect, test } from 'vitest';
 import { CELL_ALLOWED_VALUES, GRID_SIZE, SUB_GRID_CELLS_COUNT, SUB_GRID_SIZE } from './constants';
 import { ValueOutOfRangeError } from './errors';
@@ -10,6 +9,8 @@ import {
 	readSubGridCells,
 	isValueCorrectForCellAtPosition,
 	createEmptyCell,
+	isGridCellEmpty,
+	isGridCellFilled,
 } from './grid';
 import type { Grid, GridFilled, GridRow } from './types';
 
@@ -185,23 +186,33 @@ describe(fillDiagonalSubGrids.name, () => {
 	test('fills diagonal subgrids with random digits between 1 and 9', () => {
 		const grid = createEmptyGrid();
 
-		expect(grid.every(isNil)).to.equal(true);
+		expect(grid.every(isGridCellEmpty)).to.equal(true);
 
 		fillDiagonalSubGrids(grid);
 
 		const topLeftSubGrid = readSubGridCells(grid, 0, 0);
+		const topMiddleSubGrid = readSubGridCells(grid, 0, SUB_GRID_SIZE);
+		const topRightSubGrid = readSubGridCells(grid, 0, SUB_GRID_SIZE * 2);
 
-		const middleSubGrid = readSubGridCells(
-			grid,
-			Math.floor(GRID_SIZE / 2),
-			Math.floor(GRID_SIZE / 2),
-		);
-		const bottomRightSubGrid = readSubGridCells(grid, GRID_SIZE - 1, GRID_SIZE - 1);
+		expect(topLeftSubGrid.every(isGridCellFilled)).to.equal(true);
+		expect(topMiddleSubGrid.every(isGridCellEmpty)).to.equal(true);
+		expect(topRightSubGrid.every(isGridCellEmpty)).to.equal(true);
 
-		expect(topLeftSubGrid.every(Number.isInteger)).to.equal(true);
-		expect(middleSubGrid.every(Number.isInteger)).to.equal(true);
-		expect(bottomRightSubGrid.every(Number.isInteger)).to.equal(true);
-		expect(grid.some(isNil)).to.equal(true);
+		const middleLeftSubGrid = readSubGridCells(grid, SUB_GRID_SIZE, 0);
+		const middleMiddleSubGrid = readSubGridCells(grid, SUB_GRID_SIZE, SUB_GRID_SIZE);
+		const middleRightSubGrid = readSubGridCells(grid, SUB_GRID_SIZE, SUB_GRID_SIZE * 2);
+
+		expect(middleLeftSubGrid.every(isGridCellEmpty)).to.equal(true);
+		expect(middleMiddleSubGrid.every(isGridCellFilled)).to.equal(true);
+		expect(middleRightSubGrid.every(isGridCellEmpty)).to.equal(true);
+
+		const bottomLeftSubGrid = readSubGridCells(grid, SUB_GRID_SIZE * 2, 0);
+		const bottomMiddleSubGrid = readSubGridCells(grid, SUB_GRID_SIZE * 2, SUB_GRID_SIZE);
+		const bottomRightSubGrid = readSubGridCells(grid, SUB_GRID_SIZE * 2, SUB_GRID_SIZE * 2);
+
+		expect(bottomLeftSubGrid.every(isGridCellEmpty)).to.equal(true);
+		expect(bottomMiddleSubGrid.every(isGridCellEmpty)).to.equal(true);
+		expect(bottomRightSubGrid.every(isGridCellFilled)).to.equal(true);
 	});
 });
 
@@ -223,16 +234,18 @@ describe(assertIsCoordinateWithinRange.name, () => {
 });
 
 describe(isValueCorrectForCellAtPosition.name, () => {
+	const _ = createEmptyCell();
+
 	const g = [
-		[7, 6, 5, undefined, undefined, undefined, undefined, undefined, undefined], // 1st sub-grid is filled correctly
-		[3, 9, 1, undefined, undefined, undefined, undefined, undefined, undefined], // 2nd and 3rd are empty, but not inferring with 1st
-		[2, 4, 8, undefined, undefined, undefined, undefined, undefined, undefined],
+		[7, 6, 5, _, _, _, _, _, _], // 1st sub-grid is filled correctly
+		[3, 9, 1, _, _, _, _, _, _], // 2nd and 3rd are empty, but not inferring with 1st
+		[2, 4, 8, _, _, _, _, _, _],
 		[1, 2, 6, 8, 4, 3, 5, 9, 4], // 4th sub-grid is filled correctly
 		[5, 7, 9, 2, 4, 4, 8, 1, 1], // 5th has duplicated 4 both in it's 2nd column and row
 		[4, 8, 3, 5, 1, 9, 7, 6, 2], // 6th has duplicated 1 in it's 2nd row
-		[undefined, undefined, undefined, undefined, undefined, undefined, 9, 2, 8], // 9th sub-grid has duplicated 9s
-		[undefined, undefined, undefined, undefined, undefined, undefined, 4, 7, 3], // 7th and 8th are empty, but not inferring with 9th
-		[undefined, undefined, undefined, undefined, undefined, undefined, 6, 1, 9],
+		[_, _, _, _, _, _, 9, 2, 8], // 9th sub-grid has duplicated 9s
+		[_, _, _, _, _, _, 4, 7, 3], // 7th and 8th are empty, but not inferring with 9th
+		[_, _, _, _, _, _, 6, 1, 9],
 	].flat() as GridFilled;
 
 	type Coordinates = [row: number, col: number];
@@ -298,6 +311,6 @@ describe(isValueCorrectForCellAtPosition.name, () => {
 describe(createEmptyCell.name, () => {
 	test('creates allowed values accepted by cell', () => {
 		const result = createEmptyCell();
-		expect(CELL_ALLOWED_VALUES.map((num) => result.has(num)));
+		CELL_ALLOWED_VALUES.forEach((value) => result.has(value));
 	});
 });
