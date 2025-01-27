@@ -1,6 +1,6 @@
 import { isNil } from '@/lib/utils/is-nil';
 import { describe, expect, test } from 'vitest';
-import { GRID_SIZE, SUB_GRID_CELLS_COUNT, SUB_GRID_SIZE } from './constants';
+import { CELL_ALLOWED_VALUES, GRID_SIZE, SUB_GRID_CELLS_COUNT, SUB_GRID_SIZE } from './constants';
 import { ValueOutOfRangeError } from './errors';
 import {
 	assertIsCoordinateWithinRange,
@@ -9,6 +9,7 @@ import {
 	fillDiagonalSubGrids,
 	readSubGridCells,
 	isValueCorrectForCellAtPosition,
+	createEmptyCell,
 } from './grid';
 import type { Grid, GridFilled, GridRow } from './types';
 
@@ -157,19 +158,26 @@ describe(createEmptyGrid.name, () => {
 	});
 
 	test('grid has correct values', () => {
-		expect(grid.every(isNil)).to.equal(true);
+		const emptyCell = createEmptyCell();
+		grid.forEach((cell) => {
+			expect(cell instanceof Set).to.equal(true);
+			expect(cell).to.deep.equal(emptyCell);
+		});
 	});
 });
 
 describe(createEmptySubGrid.name, () => {
 	const grid = createEmptySubGrid();
+	const emptyCell = createEmptyCell();
 
 	test('grid has correct size', () => {
 		expect(grid).to.have.lengthOf(SUB_GRID_SIZE * SUB_GRID_SIZE);
 	});
 
 	test('grid has correct values', () => {
-		expect(grid.every(isNil)).to.equal(true);
+		grid.forEach((cell) => {
+			expect(cell).to.deep.equal(emptyCell);
+		});
 	});
 });
 
@@ -285,4 +293,11 @@ describe(isValueCorrectForCellAtPosition.name, () => {
 			expect(isValueCorrectForCellAtPosition(g, rowIdx, colIdx)).to.equal(false);
 		},
 	);
+});
+
+describe(createEmptyCell.name, () => {
+	test('creates allowed values accepted by cell', () => {
+		const result = createEmptyCell();
+		expect(CELL_ALLOWED_VALUES.map((num) => result.has(num)));
+	});
 });

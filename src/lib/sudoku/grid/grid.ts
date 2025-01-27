@@ -1,7 +1,13 @@
 import { isDefined } from '@/lib/utils/is-defined';
 import { IncorrectGridError, ValueOutOfRangeError } from './errors';
-import { GRID_CELLS_COUNT, GRID_SIZE, SUB_GRID_CELLS_COUNT, SUB_GRID_SIZE } from './constants';
-import type { Grid, GridCol, GridCell, GridFilled, GridRow, SubGrid } from './types';
+import {
+	CELL_ALLOWED_VALUES,
+	GRID_CELLS_COUNT,
+	GRID_SIZE,
+	SUB_GRID_CELLS_COUNT,
+	SUB_GRID_SIZE,
+} from './constants';
+import type { Grid, GridCol, GridCell, GridFilled, GridRow, SubGrid, GridCellEmpty } from './types';
 
 /**
  * Fills the diagonal sub-grids (3x3 blocks) of the given grid with random digits 1-9.
@@ -136,13 +142,17 @@ export function assertIsCoordinateWithinRange(it: number): void {
 	throw new ValueOutOfRangeError(range, it);
 }
 
+export function createEmptyCell(): GridCellEmpty {
+	return new Set(CELL_ALLOWED_VALUES);
+}
+
 /**
  * Creates an empty Sudoku grid.
  *
  * @throws {IncorrectGridError} when created grid length does not match required size.
  */
 export function createEmptyGrid(): Grid {
-	const result = Array.from({ length: GRID_CELLS_COUNT }, () => undefined) as Grid;
+	const result = Array.from({ length: GRID_CELLS_COUNT }, createEmptyCell) as Grid;
 	if (GRID_SIZE ** 2 !== result.length) {
 		throw new IncorrectGridError(result);
 	}
@@ -151,5 +161,5 @@ export function createEmptyGrid(): Grid {
 }
 
 export function createEmptySubGrid(): SubGrid {
-	return Array.from({ length: SUB_GRID_CELLS_COUNT }, () => undefined) as SubGrid;
+	return Array.from({ length: SUB_GRID_CELLS_COUNT }, createEmptyCell) as SubGrid;
 }
