@@ -1,5 +1,5 @@
-import type { Option } from '@/lib/types/option';
-import { GRID_SIZE, SUB_GRID_CELLS_COUNT, SUB_GRID_SIZE } from './grid';
+import { GRID_SIZE, SUB_GRID_CELLS_COUNT, SUB_GRID_SIZE, type GridCell } from '.';
+import { isGridCellFilled } from './grid';
 
 const COLOR = {
 	blue: '\x1b[38;5;69m',
@@ -16,7 +16,7 @@ function colorLog(color: Exclude<keyof typeof COLOR, 'suffix'>, s: string): stri
  * Prints formatted grid.
  */
 export function prettyDebug(
-	g: Option<number>[],
+	g: GridCell[],
 	hilight?: Partial<{ rowIdx: number; colIdx: number }>,
 ): string {
 	const isSubGrid = g.length === SUB_GRID_CELLS_COUNT;
@@ -27,7 +27,7 @@ export function prettyDebug(
 			const currentRow = Math.floor(idx / breakAtIdx);
 			const currentCol = idx % breakAtIdx;
 
-			let value = it?.toString() ?? '_';
+			let value = isGridCellFilled(it) ? it.toString() : '_';
 
 			if (hilight?.rowIdx === currentRow && hilight.colIdx === currentCol) {
 				value = colorLog('orange', value);

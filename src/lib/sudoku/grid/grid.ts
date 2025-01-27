@@ -15,7 +15,9 @@ import type {
 	SubGrid,
 	GridCellEmpty,
 	GridCellFilled,
+	GridCellCoordinates,
 } from './types';
+import type { Range } from '@/lib/types/range';
 
 /**
  * Fills the diagonal sub-grids (3x3 blocks) of the given grid with random digits 1-9.
@@ -121,8 +123,8 @@ export function readGridCell<G extends Grid | GridFilled>(
  * ```
  */
 export function readSubGridCells(g: Readonly<Grid>, rowIdx: number, colIdx: number): SubGrid {
-	assertIsCoordinateWithinRange(rowIdx);
-	assertIsCoordinateWithinRange(colIdx);
+	assertCoordinateIsWithinRange(rowIdx);
+	assertCoordinateIsWithinRange(colIdx);
 
 	const subGridStartRowIdx = Math.floor(rowIdx / SUB_GRID_SIZE) * SUB_GRID_SIZE;
 	const subGridStartColIdx = Math.floor(colIdx / SUB_GRID_SIZE) * SUB_GRID_SIZE;
@@ -141,9 +143,9 @@ export function readSubGridCells(g: Readonly<Grid>, rowIdx: number, colIdx: numb
 }
 
 /**
- * @throw {ValueOutOfRangeError} when number is out of allowed range.
+ * @throws {ValueOutOfRangeError} when number is out of allowed range.
  */
-export function assertIsCoordinateWithinRange(it: number): void {
+export function assertCoordinateIsWithinRange(it: number): void {
 	const range: [start: number, end: number] = [0, GRID_SIZE - 1];
 	if (range[0] <= it && it <= range[1]) return;
 	throw new ValueOutOfRangeError(range, it);
@@ -177,4 +179,23 @@ export function isGridCellEmpty(it: GridCell): it is GridCellEmpty {
 
 export function isGridCellFilled(it: GridCell): it is GridCellFilled {
 	return typeof it === 'number' && CELL_ALLOWED_VALUES.has(it);
+}
+
+/**
+ * @throws {ValueOutOfRangeError} when number is out of allowed range.
+ */
+export function assertIndexIsWithinRange(idx: number) {
+	const range = [0, GRID_CELLS_COUNT - 1] satisfies Range<number>;
+	if (idx < range[0] || range[1] < idx) {
+		throw new ValueOutOfRangeError(range, idx);
+	}
+}
+
+export function indexToCoordinates(idx: number): GridCellCoordinates {
+	assertIndexIsWithinRange(idx);
+
+	return {
+		rowIdx: Math.floor(idx / GRID_SIZE),
+		colIdx: idx % GRID_SIZE,
+	};
 }

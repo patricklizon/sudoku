@@ -1,8 +1,15 @@
 import { describe, expect, test } from 'vitest';
-import { CELL_ALLOWED_VALUES, GRID_SIZE, SUB_GRID_CELLS_COUNT, SUB_GRID_SIZE } from './constants';
+import {
+	CELL_ALLOWED_VALUES,
+	GRID_CELLS_COUNT,
+	GRID_SIZE,
+	SUB_GRID_CELLS_COUNT,
+	SUB_GRID_SIZE,
+} from './constants';
 import { ValueOutOfRangeError } from './errors';
 import {
-	assertIsCoordinateWithinRange,
+	assertCoordinateIsWithinRange,
+	assertIndexIsWithinRange,
 	createEmptyGrid,
 	createEmptySubGrid,
 	fillDiagonalSubGrids,
@@ -11,8 +18,9 @@ import {
 	createEmptyCell,
 	isGridCellEmpty,
 	isGridCellFilled,
+	indexToCoordinates,
 } from './grid';
-import type { Grid, GridFilled, GridRow } from './types';
+import type { Grid, GridCellCoordinates, GridFilled, GridRow } from './types';
 
 describe(readSubGridCells.name, () => {
 	type TestData = Record<'middle' | 'left' | 'right', GridRow>;
@@ -216,10 +224,10 @@ describe(fillDiagonalSubGrids.name, () => {
 	});
 });
 
-describe(assertIsCoordinateWithinRange.name, () => {
+describe.each([])(assertCoordinateIsWithinRange.name, () => {
 	test.each<number>([-Infinity, -2, -1, 9, 11, Infinity])('throws when out of range', (value) => {
 		expect(() => {
-			assertIsCoordinateWithinRange(value);
+			assertCoordinateIsWithinRange(value);
 		}).to.throw(ValueOutOfRangeError);
 	});
 
@@ -227,7 +235,27 @@ describe(assertIsCoordinateWithinRange.name, () => {
 		'does nothing when within range',
 		(value) => {
 			expect(() => {
-				assertIsCoordinateWithinRange(value);
+				assertCoordinateIsWithinRange(value);
+			}).not.to.throw(ValueOutOfRangeError);
+		},
+	);
+});
+
+describe(assertIndexIsWithinRange.name, () => {
+	test.each<number>([-Infinity, -2, -1, GRID_CELLS_COUNT, Infinity])(
+		'throws when out of range',
+		(value) => {
+			expect(() => {
+				assertIndexIsWithinRange(value);
+			}).to.throw(ValueOutOfRangeError);
+		},
+	);
+
+	test.each<number>(Array.from({ length: GRID_CELLS_COUNT }, (_, idx) => idx))(
+		'does nothing when within range',
+		(value) => {
+			expect(() => {
+				assertIndexIsWithinRange(value);
 			}).not.to.throw(ValueOutOfRangeError);
 		},
 	);
@@ -312,5 +340,19 @@ describe(createEmptyCell.name, () => {
 	test('creates allowed values accepted by cell', () => {
 		const result = createEmptyCell();
 		CELL_ALLOWED_VALUES.forEach((value) => result.has(value));
+	});
+});
+
+describe(indexToCoordinates.name, () => {
+	test.each([-1, GRID_CELLS_COUNT])('throws when index is out of range', (idx) => {
+		expect(() => indexToCoordinates(idx)).to.throw(ValueOutOfRangeError);
+	});
+
+	test.each<[idx: number, coordinates: GridCellCoordinates]>([
+		[0, { colIdx: 0, rowIdx: 0 }],
+		[1, { colIdx: 1, rowIdx: 0 }],
+		[4 * GRID_SIZE + 3, { colIdx: 3, rowIdx: 4 }],
+	])('translate index (%d) to grid coordinate (%d,%d)', (idx, coordinates) => {
+		expect(indexToCoordinates(idx)).and.to.deep.equal(coordinates);
 	});
 });
