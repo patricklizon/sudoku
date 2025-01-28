@@ -175,6 +175,7 @@ describe(readSubGridCells.name, () => {
 		['bottom-right', 8, 8, bottom.right],
 	])('reads %s subgrid with coordinates (%d, %d)', (_, rowIdx, colIdx, expected) => {
 		const result = readSubGridCells(grid, { rowIdx, colIdx });
+
 		expect(result).to.deep.equal(expected);
 	});
 
@@ -219,6 +220,8 @@ describe(createEmptySubGrid.name, () => {
 
 describe(fillDiagonalSubGrids.name, () => {
 	test('fills diagonal subgrids with random digits between 1 and 9', () => {
+		expect.assertions(10);
+
 		const grid = createEmptyGrid();
 
 		expect(grid.every(isGridCellEmpty)).to.equal(true);

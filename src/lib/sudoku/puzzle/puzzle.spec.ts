@@ -88,6 +88,7 @@ describe.each<PuzzleDifficultyLevel>(Object.values(DifficultyLevel))(
 
 		test(`creates correct amount of holes for given difficulty level (${level + ''})`, () => {
 			const left = puzzle.filter(isGridCellFilled);
+
 			expect(left)
 				.to.have.length.of.at.least(TOTAL_GIVEN_CELLS_RANGE_BY_DIFFICULTY_LEVEL[level][0])
 				.and.at.most(TOTAL_GIVEN_CELLS_RANGE_BY_DIFFICULTY_LEVEL[level][1]);

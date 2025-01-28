@@ -5,7 +5,10 @@ import type { Nil } from '@/lib/types/option';
 export type GridCellFilled = number;
 export type GridCellEmpty = Nil;
 export type GridCell = GridCellFilled | GridCellEmpty;
-export type GridCellCoordinates = { rowIdx: number; colIdx: number };
+export interface GridCellCoordinates {
+	rowIdx: number;
+	colIdx: number;
+}
 
 export type Grid<T extends GridCell = GridCell> = FixedSizeCollection<T, typeof GRID_CELLS_COUNT>;
 export type GridFilled = Grid<number>;

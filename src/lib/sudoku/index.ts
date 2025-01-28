@@ -2,10 +2,4 @@
  * @module sudoku
  */
 
-export {
-	createSolvablePuzzle,
-	createSolvedPuzzle,
-	isValueValid,
-	decodePuzzle,
-	encodePuzzle,
-} from './puzzle';
+export { createSolvedPuzzle, isValueValid, decodePuzzle, encodePuzzle } from './puzzle';

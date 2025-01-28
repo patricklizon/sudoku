@@ -3,7 +3,7 @@ import type { PuzzleSolved, PuzzleUnsolved, EncodedPuzzleSolvable } from './type
 /**
  * Decodes an encoded puzzle string into its solution and initial puzzle state
  */
-export function decodePuzzle(s: EncodedPuzzleSolvable): {
+export function decodePuzzle(_s: EncodedPuzzleSolvable): {
 	solution: PuzzleSolved;
 	puzzle: PuzzleUnsolved;
 } {

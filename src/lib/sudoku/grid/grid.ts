@@ -85,7 +85,7 @@ export function isGridCellValueCorrectAtCoordinates(g: Grid, c: GridCellCoordina
 	return true;
 }
 
-export function hasDuplicates(cells: Readonly<GridCell[]>): boolean {
+export function hasDuplicates(cells: readonly GridCell[]): boolean {
 	const values = cells.filter(isGridCellFilled);
 	return new Set(values).size !== values.length;
 }

@@ -1,12 +1,8 @@
 import { defineComponent } from 'vue';
 import { RouterLink, RouterView } from 'vue-router';
-import styles from '@/app.module.css';
-import { createGrid } from '@/lib/game';
+import styles from './app.module.css';
 
 export const App = defineComponent({
-	setup() {
-		console.log(createGrid());
-	},
 	render() {
 		return (
 			<>
@@ -20,8 +16,6 @@ export const App = defineComponent({
 					/>
 
 					<div class={styles.wrapper}>
-						{/* <HelloWorld msg="You did it!" /> */}
-
 						<nav>
 							<RouterLink to="/">Home</RouterLink>
 							<RouterLink to="/about">About</RouterLink>
