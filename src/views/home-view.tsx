@@ -1,7 +1,7 @@
 import { defineComponent } from 'vue';
 
 export const HomeView = defineComponent({
-	setup() {
+	render() {
 		return <main>hello universe</main>;
 	},
 });
