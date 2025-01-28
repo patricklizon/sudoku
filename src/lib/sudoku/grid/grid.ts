@@ -22,6 +22,28 @@ import type {
 } from './types';
 
 /**
+ * Mutatest passed grid.
+ *
+ * Recursively fills entire grid.
+ */
+export function fillEmptyGridCells(g: Grid, idx: number): g is GridFilled {
+	if (g.every(isGridCellFilled)) return true;
+
+	const cellCopy = g[idx];
+	const nextIdx = idx + 1;
+	if (isGridCellFilled(cellCopy)) return fillEmptyGridCells(g, nextIdx);
+
+	const coordinates = readCoordinateByGridCellIndex(idx);
+	for (const v of readAllowedGridCellCellValuesAtCoordinates(g, coordinates)) {
+		g[idx] = v;
+		if (fillEmptyGridCells(g, nextIdx)) return true;
+	}
+
+	g[idx] = cellCopy;
+	return false;
+}
+
+/**
  * Fills the diagonal sub-grids (3x3 blocks) of the given grid with random digits 1-9.
  * Only fills the diagonal blocks from top-left to bottom-right.
  *

@@ -4,16 +4,16 @@
  */
 
 export {
-	readCoordinateByGridCellIndex,
 	createEmptyCell,
 	createEmptyGrid,
 	fillDiagonalSubGrids,
-	readGridCell,
-	isGridCellValueCorrectAtCoordinates,
+	fillEmptyGridCells,
+	indexToCoordinates,
 	isGridCellEmpty,
 	isGridCellFilled,
-	indexToCoordinates,
-	readAllowedGridCellCellValuesAtCoordinates,
+	isGridCellValueCorrectAtCoordinates,
+	readCoordinateByGridCellIndex,
+	readGridCell,
 	readGridCol,
 	readGridRow,
 } from './grid';

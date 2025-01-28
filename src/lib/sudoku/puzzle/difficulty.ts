@@ -9,6 +9,13 @@
 
 import type { Range } from '@/lib/types/range';
 import type { PuzzleDifficultyLevel } from './types';
+import {
+	punchHolesRandomly,
+	punchHolesJumpingByOneCell,
+	punchHolesLeftToRightThenTopToBottom,
+	wanderingAlongS,
+	type HolePunchingFn,
+} from './hole-punching';
 
 export const DifficultyLevel = {
 	/** extreamly easy */
@@ -60,3 +67,11 @@ export const LOWER_BOUND_OF_GIVEN_CELLS_IN_ROW_AND_COLUMN_BY_DIFFICULTY_LEVEL: R
 	[DifficultyLevel[4]]: 2,
 	[DifficultyLevel[5]]: 0,
 };
+
+export const holePunchingStrategyByDifficultyLevel = {
+	[DifficultyLevel[1]]: punchHolesRandomly,
+	[DifficultyLevel[2]]: punchHolesRandomly,
+	[DifficultyLevel[3]]: punchHolesJumpingByOneCell,
+	[DifficultyLevel[4]]: wanderingAlongS,
+	[DifficultyLevel[5]]: punchHolesLeftToRightThenTopToBottom,
+} satisfies Record<PuzzleDifficultyLevel, HolePunchingFn>;

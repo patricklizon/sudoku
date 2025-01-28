@@ -5,4 +5,4 @@
 
 export { decodePuzzle } from './decoder';
 export { encodePuzzle } from './encoder';
-export { createSolvedPuzzle, isValueValid } from './puzzle';
+export { createPuzzleSolution, isValueValid } from './puzzle';

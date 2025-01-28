@@ -20,6 +20,7 @@ import {
 	isGridCellFilled,
 	indexToCoordinates,
 	readAllowedGridCellCellValuesAtCoordinates,
+	fillEmptyGridCells,
 } from './grid';
 import type { Grid, GridCellCoordinates, GridFilled, GridRow } from './types';
 
@@ -47,6 +48,41 @@ describe(isGridCellFilled.name, () => {
 
 	test.each([-1, 10])('returns false when cell has illegal value', (value) => {
 		expect(isGridCellFilled(value)).to.equal(false);
+	});
+});
+
+describe(fillEmptyGridCells.name, () => {
+	test('fills only empty fields of grid producing solution', () => {
+		const _ = createEmptyCell();
+		const left = structuredClone(
+			[
+				[7, 6, 5, _, _, _, _, _, _],
+				[3, 9, 1, _, _, _, _, _, _],
+				[2, 4, 8, _, _, _, _, _, _],
+				[_, _, _, 8, 7, 3, _, _, _],
+				[_, _, _, 2, 6, 4, _, _, _],
+				[_, _, _, 5, 1, 9, _, _, _],
+				[_, _, _, _, _, _, 9, 2, 8],
+				[_, _, _, _, _, _, 4, 7, 3],
+				[_, _, _, _, _, _, 6, 1, 5],
+			].flat(),
+		) as Grid;
+
+		const right = [
+			[7, 6, 5, 1, 2, 8, 3, 4, 9],
+			[3, 9, 1, 4, 5, 6, 2, 8, 7],
+			[2, 4, 8, 3, 9, 7, 1, 5, 6],
+			[1, 2, 6, 8, 7, 3, 5, 9, 4],
+			[5, 7, 9, 2, 6, 4, 8, 3, 1],
+			[4, 8, 3, 5, 1, 9, 7, 6, 2],
+			[6, 1, 4, 7, 3, 5, 9, 2, 8],
+			[9, 5, 2, 6, 8, 1, 4, 7, 3],
+			[8, 3, 7, 9, 4, 2, 6, 1, 5],
+		].flat() as GridFilled;
+
+		fillEmptyGridCells(left, 0);
+
+		expect(left).to.deep.equal(right);
 	});
 });
 
@@ -407,7 +443,7 @@ describe(readAllowedGridCellCellValuesAtCoordinates.name, () => {
 		[{ rowIdx: 0, colIdx: 0 }, new Set()],
 		[{ rowIdx: 0, colIdx: 1 }, new Set()],
 		[{ rowIdx: 2, colIdx: 7 }, new Set([3, 5, 6])],
-	])('returns ponentially correct values at given coordinate', (coordinates, expected) => {
+	])('returns potentially correct values at given coordinate', (coordinates, expected) => {
 		expect(readAllowedGridCellCellValuesAtCoordinates(g, coordinates)).to.deep.equal(expected);
 	});
 });
