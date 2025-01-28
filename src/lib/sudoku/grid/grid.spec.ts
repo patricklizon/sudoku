@@ -1,5 +1,11 @@
 import { describe, expect, test } from 'vitest';
-import { GRID_CELLS_COUNT, GRID_SIZE, SUB_GRID_CELLS_COUNT, SUB_GRID_SIZE } from './constants';
+import {
+	CELL_ALLOWED_VALUES,
+	GRID_CELLS_COUNT,
+	GRID_SIZE,
+	SUB_GRID_CELLS_COUNT,
+	SUB_GRID_SIZE,
+} from './constants';
 import { ValueOutOfRangeError } from './errors';
 import {
 	assertCoordinateIsWithinRange,
@@ -16,6 +22,33 @@ import {
 	readAllowedGridCellCellValuesAtCoordinates,
 } from './grid';
 import type { Grid, GridCellCoordinates, GridFilled, GridRow } from './types';
+
+describe(isGridCellEmpty.name, () => {
+	test('returns true when cell is empty', () => {
+		expect(isGridCellEmpty(undefined)).to.equal(true);
+	});
+
+	test('returns false when cell has value', () => {
+		expect(isGridCellEmpty(2)).to.equal(false);
+	});
+});
+
+describe(isGridCellFilled.name, () => {
+	test.each(Array.from(CELL_ALLOWED_VALUES))(
+		'returns true when cell has allowed value',
+		(value) => {
+			expect(isGridCellFilled(value)).to.equal(true);
+		},
+	);
+
+	test('returns false when cell does not have value', () => {
+		expect(isGridCellFilled(undefined)).to.equal(false);
+	});
+
+	test.each([-1, 10])('returns false when cell has illegal value', (value) => {
+		expect(isGridCellFilled(value)).to.equal(false);
+	});
+});
 
 describe(readSubGridCells.name, () => {
 	type TestData = Record<'middle' | 'left' | 'right', GridRow>;

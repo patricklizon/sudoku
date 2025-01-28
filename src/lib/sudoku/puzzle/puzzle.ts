@@ -11,9 +11,10 @@ import {
 	readGridCol,
 	readGridRow,
 	type GridCellCoordinates,
+	type GridCell,
 } from '@/lib/sudoku/grid';
 import { getRandomInt } from '@/lib/utils/get-random-number';
-import { suffleArray } from '@/lib/utils/shuffle-array';
+import { toSuffledArray } from '@/lib/utils/to-shuffled-array';
 import type { Option } from '@/lib/types/option';
 import type { PuzzleDifficultyLevel, PuzzleSolved, PuzzleUnsolved } from './types';
 import {
@@ -67,46 +68,45 @@ export function fillPuzzle(p: PuzzleUnsolved, idx: number): p is PuzzleSolved {
 export function createUnsolvedPuzzle(
 	p: Readonly<PuzzleSolved>,
 	pdl: PuzzleDifficultyLevel,
-): Readonly<PuzzleUnsolved> {
-	const pu = structuredClone<PuzzleUnsolved>(p);
+): PuzzleUnsolved {
+	const puzzle = structuredClone<PuzzleUnsolved>(p);
 	const [low, high] = TOTAL_GIVEN_CELLS_RANGE_BY_DIFFICULTY_LEVEL[pdl];
 	const minimumHintsCount = low + getRandomInt(high - low);
 	const minimumHintsInRowAndColumnCount =
 		LOWER_BOUND_OF_GIVEN_CELLS_IN_ROW_AND_COLUMN_BY_DIFFICULTY_LEVEL[pdl];
 
-	/** Collection of indexes to remove */
-	const traverseIdxs = suffleArray(Array.from({ length: GRID_CELLS_COUNT }, (_, idx) => idx));
+	const traverseIdxs = toSuffledArray(Array.from({ length: GRID_CELLS_COUNT }, (_, idx) => idx));
 
-	let savedDigit: Option<number>;
-	let stepsCount = GRID_CELLS_COUNT;
+	let cellCopy: GridCell;
+	let stepsCount = traverseIdxs.length;
 	let coordinates: Option<GridCellCoordinates>;
 	for (const idx of traverseIdxs) {
 		coordinates = readCoordinateByGridCellIndex(idx);
-		savedDigit = pu[idx];
-		pu[idx] = undefined;
+		cellCopy = puzzle[idx];
+		puzzle[idx] = undefined;
 
 		if (
-			readGridRow(pu, coordinates.rowIdx).length >= minimumHintsCount &&
-			readGridCol(pu, coordinates.rowIdx).length >= minimumHintsCount &&
-			hasUniqueSolution(pu)
+			readGridRow(puzzle, coordinates).filter(isGridCellFilled).length >=
+				minimumHintsInRowAndColumnCount &&
+			readGridCol(puzzle, coordinates).filter(isGridCellFilled).length >=
+				minimumHintsInRowAndColumnCount
+			// TODO: implement check for unique solution
+			// hasUniqueSolution(puzzle)
 		) {
 			stepsCount--;
+			puzzle[idx] = undefined;
 
 			if (stepsCount <= minimumHintsCount) {
-				return pu;
+				return puzzle;
 			}
 
 			continue;
 		} else {
-			pu[idx] = savedDigit;
+			puzzle[idx] = cellCopy;
 		}
 	}
-}
 
-export function hasUniqueSolution(p: Readonly<PuzzleUnsolved>): boolean {
-	const copyP = structuredClone(p);
-
-	return false;
+	return puzzle;
 }
 
 export function isValueValid(

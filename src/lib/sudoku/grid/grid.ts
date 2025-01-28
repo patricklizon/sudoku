@@ -1,5 +1,6 @@
 import type { Range } from '@/lib/types/range';
 import { isNil } from '@/lib/utils/is-nil';
+import { isDefined } from '@/lib/utils/is-defined';
 import { IncorrectGridError, ValueOutOfRangeError } from './errors';
 import {
 	CELL_ALLOWED_VALUES,
@@ -190,11 +191,11 @@ export function createEmptySubGrid(): SubGrid {
 }
 
 export function isGridCellEmpty(it: GridCell): it is GridCellEmpty {
-	return !isGridCellFilled(it);
+	return isNil(it);
 }
 
 export function isGridCellFilled(it: GridCell): it is GridCellFilled {
-	return typeof it === 'number' && CELL_ALLOWED_VALUES.has(it);
+	return isDefined(it) && CELL_ALLOWED_VALUES.has(it);
 }
 
 /**
