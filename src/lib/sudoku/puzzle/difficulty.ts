@@ -8,39 +8,42 @@
  */
 
 import type { Range } from '@/lib/types/range';
-import type { PuzzleDifficultyLevel } from './types';
+import type { DifficultyLevelName, DifficultyLevelScore } from './types';
 import {
-	punchHolesRandomly,
-	punchHolesJumpingByOneCell,
-	punchHolesLeftToRightThenTopToBottom,
-	wanderingAlongS,
-	type HolePunchingFn,
-} from './hole-punching';
+	removeCellsRandomly,
+	removeCellsJumpingByOneCell,
+	removeCellsLeftToRightThenTopToBottom,
+	removeCellsWanderingAlongS,
+	type CellRemovingFn,
+} from './cell-removing';
 
-export const DifficultyLevel = {
-	/** extreamly easy */
-	[1]: 1 as PuzzleDifficultyLevel,
-	/** easy */
-	[2]: 2 as PuzzleDifficultyLevel,
-	/** medium */
-	[3]: 3 as PuzzleDifficultyLevel,
-	/** difficult */
-	[4]: 4 as PuzzleDifficultyLevel,
-	/** evil */
-	[5]: 5 as PuzzleDifficultyLevel,
+export const DIFFICULTY_LEVEL = {
+	[1]: 1 as DifficultyLevelScore,
+	[2]: 2 as DifficultyLevelScore,
+	[3]: 3 as DifficultyLevelScore,
+	[4]: 4 as DifficultyLevelScore,
+	[5]: 5 as DifficultyLevelScore,
 } as const;
+
+export const DIFFICULTY_LEVEL_BY_NAME = {
+	'extremely-easy': 1,
+	easy: 2,
+	medium: 3,
+	difficult: 4,
+	evil: 5,
+} as const satisfies Record<DifficultyLevelName, number>;
 
 /**
  * The more empty cells provided at the start of a Sudoku game,
  * the higher level the puzzle graded in.
  */
-export const TOTAL_GIVEN_CELLS_RANGE_BY_DIFFICULTY_LEVEL: Readonly<
-	Record<PuzzleDifficultyLevel, Readonly<Range<number>>>
+export const TOTAL_GIVEN_CELLS_RANGE_BY_LEVEL: Readonly<
+	Record<DifficultyLevelScore, Readonly<Range<number>>>
 > = {
-	[DifficultyLevel[1]]: [50, 80],
-	[DifficultyLevel[2]]: [36, 49],
-	[DifficultyLevel[3]]: [32, 35],
-	[DifficultyLevel[4]]: [28, 31],
+	[DIFFICULTY_LEVEL[1]]: [50, 80],
+	[DIFFICULTY_LEVEL[2]]: [36, 49],
+	[DIFFICULTY_LEVEL[3]]: [32, 35],
+	[DIFFICULTY_LEVEL[4]]: [28, 31],
 	/**
 	 * Even though theory makes it possible to create unique sudoku with only 17 filled cells,
 	 * generating one with less than 22 given cells is non-trivial.
@@ -48,7 +51,7 @@ export const TOTAL_GIVEN_CELLS_RANGE_BY_DIFFICULTY_LEVEL: Readonly<
 	 * @see https://www.technologyreview.com/2012/01/06/188520/mathematicians-solve-minimum-sudoku-problem/
 	 * @see https://zhangroup.aporc.org/images/files/Paper_3485.pdf
 	 */
-	[DifficultyLevel[5]]: [23, 27],
+	[DIFFICULTY_LEVEL[5]]: [23, 27],
 };
 
 /**
@@ -58,20 +61,23 @@ export const TOTAL_GIVEN_CELLS_RANGE_BY_DIFFICULTY_LEVEL: Readonly<
  * where given cells are scattered evenly. To manage this, minimum number of given cells
  * that must appear in each row and column for each difficulty level is defined.
  */
-export const LOWER_BOUND_OF_GIVEN_CELLS_IN_ROW_AND_COLUMN_BY_DIFFICULTY_LEVEL: Readonly<
-	Record<PuzzleDifficultyLevel, number>
+export const MINIMUM_GIVEN_CELLS_COUNT_IN_LINE_BY_LEVEL: Readonly<
+	Record<DifficultyLevelScore, number>
 > = {
-	[DifficultyLevel[1]]: 5,
-	[DifficultyLevel[2]]: 4,
-	[DifficultyLevel[3]]: 3,
-	[DifficultyLevel[4]]: 2,
-	[DifficultyLevel[5]]: 0,
+	[DIFFICULTY_LEVEL[1]]: 5,
+	[DIFFICULTY_LEVEL[2]]: 4,
+	[DIFFICULTY_LEVEL[3]]: 3,
+	[DIFFICULTY_LEVEL[4]]: 2,
+	[DIFFICULTY_LEVEL[5]]: 0,
 };
 
-export const holePunchingStrategyByDifficultyLevel = {
-	[DifficultyLevel[1]]: punchHolesRandomly,
-	[DifficultyLevel[2]]: punchHolesRandomly,
-	[DifficultyLevel[3]]: punchHolesJumpingByOneCell,
-	[DifficultyLevel[4]]: wanderingAlongS,
-	[DifficultyLevel[5]]: punchHolesLeftToRightThenTopToBottom,
-} satisfies Record<PuzzleDifficultyLevel, HolePunchingFn>;
+export const CELL_REMOVING_STRATEGY_BY_DIFFICULTY_LEVEL: Record<
+	DifficultyLevelScore,
+	CellRemovingFn
+> = {
+	[DIFFICULTY_LEVEL[1]]: removeCellsRandomly,
+	[DIFFICULTY_LEVEL[2]]: removeCellsRandomly,
+	[DIFFICULTY_LEVEL[3]]: removeCellsJumpingByOneCell,
+	[DIFFICULTY_LEVEL[4]]: removeCellsWanderingAlongS,
+	[DIFFICULTY_LEVEL[5]]: removeCellsLeftToRightThenTopToBottom,
+};

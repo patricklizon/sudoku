@@ -21,12 +21,12 @@ import type { Puzzle } from './types';
 /**
  * Mutates passed puzzle.
  */
-export type HolePunchingFn = (
+export type CellRemovingFn = (
 	puzzle: Puzzle,
 	config: { minimumGivenCells: { row: number; col: number; total: number } },
 ) => void;
 
-export const punchHolesRandomly: HolePunchingFn = (puzzle, config) => {
+export const removeCellsRandomly: CellRemovingFn = (puzzle, config) => {
 	const idxs = toShuffledArray(Array.from({ length: GRID_CELLS_COUNT }, (_, idx) => idx));
 
 	let cellCopy: GridCell;
@@ -57,8 +57,8 @@ export const punchHolesRandomly: HolePunchingFn = (puzzle, config) => {
 	}
 };
 
-export const punchHolesJumpingByOneCell: HolePunchingFn = (puzzle, config) => {};
+export const removeCellsJumpingByOneCell: CellRemovingFn = (puzzle, config) => {};
 
-export const wanderingAlongS: HolePunchingFn = (puzzle, config) => {};
+export const removeCellsWanderingAlongS: CellRemovingFn = (puzzle, config) => {};
 
-export const punchHolesLeftToRightThenTopToBottom: HolePunchingFn = (puzzle, config) => {};
+export const removeCellsLeftToRightThenTopToBottom: CellRemovingFn = (puzzle, config) => {};

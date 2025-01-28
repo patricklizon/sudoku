@@ -9,11 +9,11 @@ import {
 	type GridCellCoordinates,
 } from '@/lib/sudoku/grid';
 import { createPuzzleSolution, isValueValid, createPuzzle } from './puzzle';
-import type { PuzzleDifficultyLevel, PuzzleSolution } from './types';
+import type { DifficultyLevelScore, PuzzleSolution } from './types';
 import {
-	DifficultyLevel,
-	LOWER_BOUND_OF_GIVEN_CELLS_IN_ROW_AND_COLUMN_BY_DIFFICULTY_LEVEL,
-	TOTAL_GIVEN_CELLS_RANGE_BY_DIFFICULTY_LEVEL,
+	DIFFICULTY_LEVEL,
+	MINIMUM_GIVEN_CELLS_COUNT_IN_LINE_BY_LEVEL,
+	TOTAL_GIVEN_CELLS_RANGE_BY_LEVEL,
 } from './difficulty';
 
 describe(createPuzzleSolution.name, () => {
@@ -31,7 +31,7 @@ describe(createPuzzleSolution.name, () => {
 	});
 });
 
-describe.each<PuzzleDifficultyLevel>(Object.values(DifficultyLevel))(createPuzzle.name, (level) => {
+describe.each<DifficultyLevelScore>(Object.values(DIFFICULTY_LEVEL))(createPuzzle.name, (level) => {
 	const p = structuredClone(
 		[
 			[7, 6, 5, 1, 2, 8, 3, 4, 9],
@@ -47,19 +47,18 @@ describe.each<PuzzleDifficultyLevel>(Object.values(DifficultyLevel))(createPuzzl
 	) as PuzzleSolution;
 	const puzzle = createPuzzle(p, level);
 
-	test(`creates correct amount of holes for given difficulty level (${level + ''})`, () => {
+	test(`creates correct amount of holes for given difficulty level (${level.toString()})`, () => {
 		const left = puzzle.filter(isGridCellFilled);
 
 		expect(left)
-			.to.have.length.of.at.least(TOTAL_GIVEN_CELLS_RANGE_BY_DIFFICULTY_LEVEL[level][0])
-			.and.at.most(TOTAL_GIVEN_CELLS_RANGE_BY_DIFFICULTY_LEVEL[level][1]);
+			.to.have.length.of.at.least(TOTAL_GIVEN_CELLS_RANGE_BY_LEVEL[level]![0])
+			.and.at.most(TOTAL_GIVEN_CELLS_RANGE_BY_LEVEL[level]![1]);
 	});
 
 	test.each(Array.from({ length: GRID_SIZE }, (_, idx) => idx))(
-		`removes correct amount of elements from rows and cols for given difficulty level (${level + ''})`,
+		`removes correct amount of elements from rows and cols for given difficulty level (${level.toString()})`,
 		(idx) => {
-			const cellsFilledCount =
-				LOWER_BOUND_OF_GIVEN_CELLS_IN_ROW_AND_COLUMN_BY_DIFFICULTY_LEVEL[level];
+			const cellsFilledCount = MINIMUM_GIVEN_CELLS_COUNT_IN_LINE_BY_LEVEL[level]!;
 
 			expect(
 				readGridRow(puzzle, { colIdx: 0, rowIdx: idx }).filter(isGridCellFilled),

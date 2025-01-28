@@ -7,12 +7,13 @@ import {
 	readGridCell,
 	fillEmptyGridCells,
 } from '../grid';
-import type { PuzzleDifficultyLevel, PuzzleSolution, Puzzle } from './types';
+import type { DifficultyLevelScore, PuzzleSolution, Puzzle } from './types';
 import {
-	holePunchingStrategyByDifficultyLevel,
-	LOWER_BOUND_OF_GIVEN_CELLS_IN_ROW_AND_COLUMN_BY_DIFFICULTY_LEVEL,
-	TOTAL_GIVEN_CELLS_RANGE_BY_DIFFICULTY_LEVEL,
+	CELL_REMOVING_STRATEGY_BY_DIFFICULTY_LEVEL,
+	MINIMUM_GIVEN_CELLS_COUNT_IN_LINE_BY_LEVEL,
+	TOTAL_GIVEN_CELLS_RANGE_BY_LEVEL,
 } from './difficulty';
+import { isNil } from '@/lib/utils/is-nil';
 
 /**
  * Creates a fully solved Sudoku puzzle.
@@ -39,15 +40,35 @@ export function createPuzzleSolution(): Readonly<PuzzleSolution> {
  */
 export function createPuzzle(
 	p: Readonly<PuzzleSolution>,
-	difficulty: PuzzleDifficultyLevel,
+	difficulty: DifficultyLevelScore,
 ): Puzzle {
 	const puzzle = structuredClone<Puzzle>(p);
-	const [low, high] = TOTAL_GIVEN_CELLS_RANGE_BY_DIFFICULTY_LEVEL[difficulty];
+	const totalCellsRange = TOTAL_GIVEN_CELLS_RANGE_BY_LEVEL[difficulty];
+	if (isNil(totalCellsRange)) {
+		throw new Error(
+			`Total given cells range is not defined for difficulty level: ${difficulty.toString()}`,
+		);
+	}
 
-	holePunchingStrategyByDifficultyLevel[difficulty](puzzle, {
+	const callback = CELL_REMOVING_STRATEGY_BY_DIFFICULTY_LEVEL[difficulty];
+	if (isNil(callback)) {
+		throw new Error(
+			`Hole punching function is not defined for difficulty level: '${difficulty.toString()}'`,
+		);
+	}
+
+	const minimumCellsInLineCount = MINIMUM_GIVEN_CELLS_COUNT_IN_LINE_BY_LEVEL[difficulty];
+	if (isNil(minimumCellsInLineCount)) {
+		throw new Error(
+			`Minimum given cells in line count is not defined for difficulty level: ${difficulty.toString()}`,
+		);
+	}
+
+	const [low, high] = totalCellsRange;
+	callback(puzzle, {
 		minimumGivenCells: {
-			col: LOWER_BOUND_OF_GIVEN_CELLS_IN_ROW_AND_COLUMN_BY_DIFFICULTY_LEVEL[difficulty],
-			row: LOWER_BOUND_OF_GIVEN_CELLS_IN_ROW_AND_COLUMN_BY_DIFFICULTY_LEVEL[difficulty],
+			col: minimumCellsInLineCount,
+			row: minimumCellsInLineCount,
 			total: low + getRandomInt(high - low),
 		},
 	});

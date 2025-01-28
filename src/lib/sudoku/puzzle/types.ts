@@ -6,7 +6,7 @@ import type { Grid, GridFilled } from '../grid';
  * Numbers represent fixed values, letters encoded valid
  * @example `1A3HH6...94A5`
  */
-export type EncodedPuzzleSolvable = Opaque<'encoded-puzzle-solvable', string>;
+export type EncodedPuzzle = Opaque<'encoded-puzzle', string>;
 
 /**
  * Puzzle with all cells correctly filled.
@@ -18,4 +18,6 @@ export type PuzzleSolution = GridFilled;
  */
 export type Puzzle = Grid;
 
-export type PuzzleDifficultyLevel = Opaque<'difficulty-level', number>;
+export type DifficultyLevelScore = Opaque<'difficulty-level', number>;
+
+export type DifficultyLevelName = 'extremely-easy' | 'easy' | 'medium' | 'difficult' | 'evil';
