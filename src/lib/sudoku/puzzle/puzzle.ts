@@ -6,13 +6,13 @@ import {
 	fillDiagonalSubGrids,
 	readGridCell,
 	fillEmptyGridCells,
-} from '../grid';
-import type { DifficultyLevelScore, PuzzleSolution, Puzzle } from './types';
+} from '@/lib/sudoku/grid';
+import type { DifficultyLevelScore, PuzzleSolution, Puzzle } from '@/lib/sudoku/puzzle/types';
 import {
 	CELL_REMOVING_STRATEGY_BY_DIFFICULTY_LEVEL,
 	MINIMUM_GIVEN_CELLS_COUNT_IN_LINE_BY_LEVEL,
 	TOTAL_GIVEN_CELLS_RANGE_BY_LEVEL,
-} from './difficulty';
+} from '@/lib/sudoku/puzzle/difficulty';
 import { isNil } from '@/lib/utils/is-nil';
 
 /**
@@ -50,8 +50,8 @@ export function createPuzzle(
 		);
 	}
 
-	const callback = CELL_REMOVING_STRATEGY_BY_DIFFICULTY_LEVEL[difficulty];
-	if (isNil(callback)) {
+	const cellRemovingStrateg = CELL_REMOVING_STRATEGY_BY_DIFFICULTY_LEVEL[difficulty];
+	if (isNil(cellRemovingStrateg)) {
 		throw new Error(
 			`Hole punching function is not defined for difficulty level: '${difficulty.toString()}'`,
 		);
@@ -65,13 +65,14 @@ export function createPuzzle(
 	}
 
 	const [low, high] = totalCellsRange;
-	callback(puzzle, {
+	cellRemovingStrateg(puzzle, {
 		minimumGivenCells: {
 			col: minimumCellsInLineCount,
 			row: minimumCellsInLineCount,
 			total: low + getRandomInt(high - low),
 		},
 	});
+
 	return puzzle;
 }
 

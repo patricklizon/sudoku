@@ -112,13 +112,13 @@ export function hasDuplicates(cells: readonly GridCell[]): boolean {
 	return new Set(values).size !== values.length;
 }
 
-export function readGridCol(g: Grid, { colIdx }: GridCellCoordinates): GridCol {
+export function readGridCol(g: Readonly<Grid>, { colIdx }: Readonly<GridCellCoordinates>): GridCol {
 	const result = [];
 	for (let idx = colIdx; idx < GRID_CELLS_COUNT; idx += GRID_SIZE) result.push(g[idx]);
 	return result as GridCol;
 }
 
-export function readGridRow(g: Grid, { rowIdx }: GridCellCoordinates): GridRow {
+export function readGridRow(g: Readonly<Grid>, { rowIdx }: Readonly<GridCellCoordinates>): GridRow {
 	return g.slice(rowIdx * GRID_SIZE, (rowIdx + 1) * GRID_SIZE) as GridRow;
 }
 

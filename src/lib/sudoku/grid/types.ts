@@ -5,7 +5,7 @@ import type { Nil } from '@/lib/types/option';
 export type GridCellFilled = number;
 export type GridCellEmpty = Nil;
 export type GridCell = GridCellFilled | GridCellEmpty;
-export interface GridCellCoordinates {
+export type GridCellCoordinates = {
 	rowIdx: number;
 	colIdx: number;
 }
