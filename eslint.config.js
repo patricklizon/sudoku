@@ -18,6 +18,7 @@ export default [
 	...pluginVue.configs['flat/essential'],
 	...pluginVue.configs['flat/recommended'],
 	...pluginVue.configs['flat/strongly-recommended'],
+
 	...vueTsEslintConfig({
 		extends: [
 			'recommended',
@@ -27,6 +28,13 @@ export default [
 			'strictTypeChecked',
 		],
 	}),
+
+	{
+		name: 'typescript/overrides',
+		rules: {
+			'@typescript-eslint/consistent-type-definitions': ['error', 'type'],
+		},
+	},
 
 	{
 		files: ['src/**/__tests__/*', 'src/**/*.spec.*'],
