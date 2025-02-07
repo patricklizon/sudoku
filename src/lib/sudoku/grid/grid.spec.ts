@@ -19,7 +19,7 @@ import {
 	isGridCellEmpty,
 	isGridCellFilled,
 	indexToCoordinates,
-	readAllowedGridCellCellValuesAtCoordinates,
+	readAllowedGridCellValuesAtCoordinates,
 	fillEmptyGridCells,
 } from './grid';
 import type { Grid, GridCellCoordinates, GridFilled, GridRow } from './types';
@@ -425,7 +425,7 @@ describe(indexToCoordinates.name, () => {
 	});
 });
 
-describe(readAllowedGridCellCellValuesAtCoordinates.name, () => {
+describe(readAllowedGridCellValuesAtCoordinates.name, () => {
 	const _ = createEmptyCell();
 	const g = [
 		[7, 6, 5, _, _, _, _, 4, _],
@@ -444,6 +444,6 @@ describe(readAllowedGridCellCellValuesAtCoordinates.name, () => {
 		[{ rowIdx: 0, colIdx: 1 }, new Set()],
 		[{ rowIdx: 2, colIdx: 7 }, new Set([3, 5, 6])],
 	])('returns potentially correct values at given coordinate', (coordinates, expected) => {
-		expect(readAllowedGridCellCellValuesAtCoordinates(g, coordinates)).to.deep.equal(expected);
+		expect(readAllowedGridCellValuesAtCoordinates(g, coordinates)).to.deep.equal(expected);
 	});
 });

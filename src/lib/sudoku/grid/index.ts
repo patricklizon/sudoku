@@ -16,7 +16,7 @@ export {
 	readGridCell,
 	readGridCol,
 	readGridRow,
-	readAllowedGridCellCellValuesAtCoordinates,
+	readAllowedGridCellValuesAtCoordinates as readAllowedGridCellCellValuesAtCoordinates,
 } from './grid';
 export * from './constants';
 export * from './types';

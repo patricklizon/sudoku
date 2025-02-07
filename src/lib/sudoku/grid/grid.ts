@@ -34,7 +34,7 @@ export function fillEmptyGridCells(g: Grid, idx: number): g is GridFilled {
 	if (isGridCellFilled(cellCopy)) return fillEmptyGridCells(g, nextIdx);
 
 	const coordinates = readCoordinateByGridCellIndex(idx);
-	for (const v of readAllowedGridCellCellValuesAtCoordinates(g, coordinates)) {
+	for (const v of readAllowedGridCellValuesAtCoordinates(g, coordinates)) {
 		g[idx] = v;
 		if (fillEmptyGridCells(g, nextIdx)) return true;
 	}
@@ -79,7 +79,7 @@ function getRandomDigit(): number {
 	return Math.floor(Math.random() * GRID_SIZE) + 1;
 }
 
-export function readAllowedGridCellCellValuesAtCoordinates(
+export function readAllowedGridCellValuesAtCoordinates(
 	g: Grid,
 	c: GridCellCoordinates,
 ): Set<GridCellFilled> {
