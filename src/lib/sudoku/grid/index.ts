@@ -12,7 +12,7 @@ export {
 	isGridCellEmpty,
 	isGridCellFilled,
 	isGridCellValueCorrectAtCoordinates,
-	readCoordinateByGridCellIndex,
+	readCoordinatesByGridCellIndex as readCoordinateByGridCellIndex,
 	readGridCell,
 	readGridCol,
 	readGridRow,

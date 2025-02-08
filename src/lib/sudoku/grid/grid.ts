@@ -33,7 +33,7 @@ export function fillEmptyGridCells(g: Grid, idx: number): g is GridFilled {
 	const nextIdx = idx + 1;
 	if (isGridCellFilled(cellCopy)) return fillEmptyGridCells(g, nextIdx);
 
-	const coordinates = readCoordinateByGridCellIndex(idx);
+	const coordinates = readCoordinatesByGridCellIndex(idx);
 	for (const v of readAllowedGridCellValuesAtCoordinates(g, coordinates)) {
 		g[idx] = v;
 		if (fillEmptyGridCells(g, nextIdx)) return true;
@@ -122,7 +122,7 @@ export function readGridRow(g: Readonly<Grid>, { rowIdx }: Readonly<GridCellCoor
 	return g.slice(rowIdx * GRID_SIZE, (rowIdx + 1) * GRID_SIZE) as GridRow;
 }
 
-export function readCoordinateByGridCellIndex(idx: number): { rowIdx: number; colIdx: number } {
+export function readCoordinatesByGridCellIndex(idx: number): GridCellCoordinates {
 	if (idx < 0 || GRID_CELLS_COUNT < idx) {
 		throw new ValueOutOfRangeError([0, GRID_CELLS_COUNT], idx);
 	}

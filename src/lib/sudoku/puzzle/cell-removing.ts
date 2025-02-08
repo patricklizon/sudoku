@@ -86,9 +86,10 @@ export function isPuzzleValid(
 }
 
 export function hasUniqueSolution(puzzle: Readonly<Puzzle>): boolean {
-	return execute(structuredClone(puzzle));
+	let solutionCount = 0;
+	return execute(structuredClone(puzzle), 0);
 
-	function execute(p: Puzzle, idx = 0, solutionCount = 0): boolean {
+	function execute(p: Puzzle, idx: number): boolean {
 		if (p.every(isGridCellFilled)) solutionCount++;
 		if (solutionCount > 1) return false;
 
