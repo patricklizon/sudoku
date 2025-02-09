@@ -62,13 +62,23 @@ export const removeCellsRandomly: CellRemovingFn = (puzzle, config) => {
 
 /**
  * Mutates passed puzzle.
+ *
+ * Systematically removes cells by jumping two positions at a time in a zigzag pattern:
+ * - Even rows: moves left to right, jumps to next row at the end
+ * - Odd rows: moves right to left, jumps to next row at the beginning
+ * - Maintains consistent jump distance of 2 cells throughout
+ *
+ * If target number of empty cells isn't reached after traversing the grid,
+ * remaining cells are removed randomly from non empty positions.
  */
 export const removeCellsJumpingByOneCell: CellRemovingFn = (puzzle, config) => {
-	const lastIdx = GRID_SIZE - 1;
+	const oddRowLastIdx = 1;
+	const rowLastIdx = GRID_SIZE - 1;
+	const jumpByIdx = 2;
 
 	let idx = 0;
 	let cellCopy: Option<GridCell>;
-	let filledCellCount = GRID_CELLS_COUNT - 1;
+	let filledCellCount = GRID_CELLS_COUNT;
 	let coordinates: Option<GridCellCoordinates>;
 
 	while (filledCellCount > config.minimumGivenCells.total && idx < GRID_CELLS_COUNT) {
@@ -84,11 +94,11 @@ export const removeCellsJumpingByOneCell: CellRemovingFn = (puzzle, config) => {
 		} else puzzle[idx] = cellCopy;
 
 		if (coordinates.rowIdx % 2) {
-			if (coordinates.colIdx === 1) idx = idx + lastIdx;
-			else idx -= 2;
+			if (coordinates.colIdx === oddRowLastIdx) idx += rowLastIdx;
+			else idx -= jumpByIdx;
 		} else {
-			if (coordinates.colIdx === lastIdx) idx = idx + lastIdx;
-			else idx += 2;
+			if (coordinates.colIdx === rowLastIdx) idx += rowLastIdx;
+			else idx += jumpByIdx;
 		}
 	}
 
