@@ -1,15 +1,14 @@
 import { describe, expect, test } from 'vitest';
+import { createEmptyCell, GRID_SIZE, type Grid } from '../grid';
 import {
+	type Config,
 	hasUniqueSolution,
 	isRowAndColMinimumCellCountSatisfied,
-	type Config,
-} from '@/lib/sudoku/puzzle/cell-removing';
-import { createEmptyCell, GRID_SIZE } from '@/lib/sudoku/grid';
-import type { Puzzle } from '@/lib/sudoku/puzzle/types';
+} from './remove-cell-strategies';
 
 const _ = createEmptyCell();
 
-describe(hasUniqueSolution, () => {
+describe(hasUniqueSolution.name, () => {
 	test("returns 'false' when multiple solutions exists", () => {
 		const puzzle = [
 			[9, 2, 6, 5, 7, 1, 4, 8, 3],
@@ -21,7 +20,7 @@ describe(hasUniqueSolution, () => {
 			[2, 3, 8, 7, _, _, 6, 5, 1], // [9, 4]    [4, 9]
 			[6, 1, 7, 8, 3, 5, 9, 4, 2],
 			[4, 9, 5, 6, 1, 2, 7, 3, 8],
-		].flat() as Puzzle;
+		].flat() as Grid;
 
 		expect(hasUniqueSolution(puzzle)).to.equal(false);
 	});
@@ -37,7 +36,7 @@ describe(hasUniqueSolution, () => {
 			[_, 6, _, _, _, _, 2, 8, _],
 			[_, _, _, 4, 1, 9, _, _, 5],
 			[_, _, _, _, 8, _, _, 7, 9],
-		].flat() as Puzzle;
+		].flat() as Grid;
 
 		expect(hasUniqueSolution(puzzle)).to.equal(true);
 	});
@@ -54,7 +53,7 @@ describe(isRowAndColMinimumCellCountSatisfied.name, () => {
 		[2, 3, _, 7, 5, 1, 2, 1, 1],
 		[6, 1, 7, 8, 9, 5, _, 4, 2],
 		[4, 9, 5, 6, 1, 2, _, 3, _],
-	].flat() as Puzzle;
+	].flat() as Grid;
 
 	describe.each<[expected: boolean, config: Config['minimumGivenCells']]>([
 		[true, { total: 20, col: 5, row: 7 }],
@@ -65,7 +64,7 @@ describe(isRowAndColMinimumCellCountSatisfied.name, () => {
 			const idxs = Array.from({ length: GRID_SIZE }, (_, idx) => idx);
 
 			test.each(idxs)(
-				`resturns '${expected}' when config is ${expected ? '' : 'not '}satisfied for a field on diagonal (%d)`,
+				`returns '${expected}' when config is ${expected ? '' : 'not '}satisfied for a field on diagonal (%d)`,
 				(idx) => {
 					expect(
 						isRowAndColMinimumCellCountSatisfied({ minimumGivenCells }, puzzle, {

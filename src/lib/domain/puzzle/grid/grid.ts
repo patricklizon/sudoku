@@ -1,6 +1,7 @@
-import type { Range } from '@/lib/types/range';
+import type { Range } from '@/lib/utils/types/range';
+import { getRandomInt } from '@/lib/utils/get-random-int';
 import { isNil } from '@/lib/utils/is-nil';
-import { isDefined } from '@/lib/utils/is-defined';
+
 import { IncorrectGridError, ValueOutOfRangeError } from './errors';
 import {
 	CELL_ALLOWED_VALUES,
@@ -12,7 +13,7 @@ import {
 import type {
 	Grid,
 	GridCol,
-	GridCell,
+	GridCellValue,
 	GridFilled,
 	GridRow,
 	SubGrid,
@@ -20,7 +21,6 @@ import type {
 	GridCellFilled,
 	GridCellCoordinates,
 } from './types';
-import { getRandomInt } from '@/lib/utils/get-random-int';
 
 /**
  * Mutatest passed grid.
@@ -108,7 +108,7 @@ export function isGridCellValueCorrectAtCoordinates(g: Grid, c: GridCellCoordina
 	return true;
 }
 
-export function hasDuplicates(cells: readonly GridCell[]): boolean {
+export function hasDuplicates(cells: readonly GridCellValue[]): boolean {
 	const values = cells.filter(isGridCellFilled);
 	return new Set(values).size !== values.length;
 }
@@ -136,10 +136,9 @@ export function readCoordinatesByGridCellIndex(idx: number): GridCellCoordinates
 
 export function readGridCell<G extends Grid | GridFilled>(
 	g: G,
-	rowIdx: number,
-	colIdx: number,
+	coordinates: GridCellCoordinates,
 ): G[number] {
-	return g[rowIdx * GRID_SIZE + colIdx];
+	return g[coordinates.rowIdx * GRID_SIZE + coordinates.colIdx];
 }
 
 /**
@@ -213,12 +212,13 @@ export function createEmptySubGrid(): SubGrid {
 	return Array.from({ length: SUB_GRID_CELLS_COUNT }, createEmptyCell) as SubGrid;
 }
 
-export function isGridCellEmpty(it: GridCell): it is GridCellEmpty {
+export function isGridCellEmpty(it: GridCellValue): it is GridCellEmpty {
 	return isNil(it);
 }
 
-export function isGridCellFilled(it: GridCell): it is GridCellFilled {
-	return isDefined(it) && CELL_ALLOWED_VALUES.has(it);
+export function isGridCellFilled(it: GridCellValue): it is GridCellFilled {
+	if (isNil(it)) return false;
+	return CELL_ALLOWED_VALUES.has(it);
 }
 
 /**

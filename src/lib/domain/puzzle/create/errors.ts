@@ -1,4 +1,4 @@
-import { prettyDebug, type Grid } from '@/lib/sudoku/grid';
+import { prettyDebug, type Grid } from '../grid';
 
 export class PuzzleGenerationError extends Error {
 	constructor(grid: Grid) {

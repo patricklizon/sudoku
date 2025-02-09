@@ -1,6 +1,7 @@
-import { prettyDebug } from '@/lib/sudoku/grid/utils';
+import type { Range } from '@/lib/utils/types/range';
+
+import { prettyDebug } from './utils';
 import type { Grid } from './types';
-import type { Range } from '@/lib/types/range';
 
 export class ValueOutOfRangeError extends Error {
 	constructor(range: Range<number>, value: number) {

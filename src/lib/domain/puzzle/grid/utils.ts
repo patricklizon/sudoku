@@ -1,5 +1,6 @@
-import { GRID_SIZE, SUB_GRID_CELLS_COUNT, SUB_GRID_SIZE, type GridCell } from '.';
+import { GRID_SIZE, SUB_GRID_CELLS_COUNT, SUB_GRID_SIZE } from './constants';
 import { isGridCellFilled } from './grid';
+import type { GridCellValue } from './types';
 
 const COLOR = {
 	blue: '\x1b[38;5;69m',
@@ -16,7 +17,7 @@ function colorLog(color: Exclude<keyof typeof COLOR, 'suffix'>, s: string): stri
  * Prints formatted grid.
  */
 export function prettyDebug(
-	g: GridCell[],
+	g: GridCellValue[],
 	hilight?: Partial<{ rowIdx: number; colIdx: number }>,
 ): string {
 	const isSubGrid = g.length === SUB_GRID_CELLS_COUNT;

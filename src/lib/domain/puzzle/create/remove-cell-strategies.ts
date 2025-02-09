@@ -5,59 +5,58 @@
  * Different approaches to removing cells from PuzzleSolution.
  */
 
-import type { Option } from '@/lib/types/option';
+import type { Option } from '@/lib/utils/types/option';
 import { shuffleArray } from '@/lib/utils/to-shuffled-array';
+
 import {
 	GRID_CELLS_COUNT,
+	GRID_CELLS_INDEXES,
 	GRID_SIZE,
+	type Grid,
+	type GridCellCoordinates,
+	type GridCellValue,
 	isGridCellEmpty,
 	isGridCellFilled,
 	readAllowedGridCellValuesAtCoordinates,
 	readCoordinatesByGridCellIndex,
 	readGridCol,
 	readGridRow,
-	type GridCell,
-	type GridCellCoordinates,
-} from '@/lib/sudoku/grid';
-import type { Puzzle } from '@/lib/sudoku/puzzle/types';
-import { PuzzleGenerationError } from '@/lib/sudoku/puzzle/errors';
+} from '../grid';
+import { PuzzleGenerationError } from './errors';
 
 export type Config = { minimumGivenCells: { row: number; col: number; total: number } };
 
 /**
  * Mutates passed puzzle.
  */
-export type CellRemovingFn = (puzzle: Puzzle, config: Config) => void;
+export type CellRemovingFn = (grid: Grid, config: Config) => void;
 
 /**
  * Mutates passed puzzle.
  */
-export const removeCellsRandomly: CellRemovingFn = (puzzle, config) => {
-	const idxs = shuffleArray(Array.from({ length: GRID_CELLS_COUNT }, (_, idx) => idx));
+export const removeCellsRandomly: CellRemovingFn = (g, config) => {
+	const idxs = shuffleArray(GRID_CELLS_INDEXES);
 
-	let cellCopy: GridCell;
+	let cellCopy: GridCellValue;
 	let stepsCount = idxs.length;
 	let coordinates: GridCellCoordinates;
 
 	for (const idx of idxs) {
 		coordinates = readCoordinatesByGridCellIndex(idx);
-		cellCopy = puzzle[idx];
-		puzzle[idx] = undefined;
+		cellCopy = g[idx];
+		g[idx] = undefined;
 
-		if (
-			isRowAndColMinimumCellCountSatisfied(config, puzzle, coordinates) &&
-			hasUniqueSolution(puzzle)
-		) {
+		if (isRowAndColMinimumCellCountSatisfied(config, g, coordinates) && hasUniqueSolution(g)) {
 			stepsCount--;
 
 			if (stepsCount <= config.minimumGivenCells.total) return;
 			else continue;
 		} else {
-			puzzle[idx] = cellCopy;
+			g[idx] = cellCopy;
 		}
 	}
 
-	throw new PuzzleGenerationError(puzzle);
+	throw new PuzzleGenerationError(g);
 };
 
 /**
@@ -71,27 +70,24 @@ export const removeCellsRandomly: CellRemovingFn = (puzzle, config) => {
  * If target number of empty cells isn't reached after traversing the grid,
  * remaining cells are removed randomly from non empty positions.
  */
-export const removeCellsJumpingByOneCell: CellRemovingFn = (puzzle, config) => {
+export const removeCellsJumpingByOneCell: CellRemovingFn = (g, config) => {
 	const oddRowLastIdx = 1;
 	const rowLastIdx = GRID_SIZE - 1;
 	const jumpByIdx = 2;
 
 	let idx = 0;
-	let cellCopy: Option<GridCell>;
+	let cellCopy: Option<GridCellValue>;
 	let filledCellCount = GRID_CELLS_COUNT;
 	let coordinates: Option<GridCellCoordinates>;
 
 	while (filledCellCount > config.minimumGivenCells.total && idx < GRID_CELLS_COUNT) {
 		coordinates = readCoordinatesByGridCellIndex(idx);
-		cellCopy = puzzle[idx];
-		puzzle[idx] = undefined;
+		cellCopy = g[idx];
+		g[idx] = undefined;
 
-		if (
-			isRowAndColMinimumCellCountSatisfied(config, puzzle, coordinates) &&
-			hasUniqueSolution(puzzle)
-		) {
+		if (isRowAndColMinimumCellCountSatisfied(config, g, coordinates) && hasUniqueSolution(g)) {
 			filledCellCount--;
-		} else puzzle[idx] = cellCopy;
+		} else g[idx] = cellCopy;
 
 		if (coordinates.rowIdx % 2) {
 			if (coordinates.colIdx === oddRowLastIdx) idx += rowLastIdx;
@@ -105,7 +101,7 @@ export const removeCellsJumpingByOneCell: CellRemovingFn = (puzzle, config) => {
 	if (filledCellCount <= config.minimumGivenCells.total) return;
 
 	const nonEmptyIdxCollection = shuffleArray(
-		puzzle.reduce<number[]>((acc, cell, idx) => {
+		g.reduce<number[]>((acc, cell, idx) => {
 			if (isGridCellEmpty(cell)) return acc;
 			acc.push(idx);
 			return acc;
@@ -117,66 +113,62 @@ export const removeCellsJumpingByOneCell: CellRemovingFn = (puzzle, config) => {
 		if (filledCellCount <= config.minimumGivenCells.total) return;
 
 		coordinates = readCoordinatesByGridCellIndex(nonEmptyIdx);
-		cellCopy = puzzle[idx];
-		puzzle[idx] = undefined;
+		cellCopy = g[idx];
+		g[idx] = undefined;
 
-		if (
-			isRowAndColMinimumCellCountSatisfied(config, puzzle, coordinates) &&
-			hasUniqueSolution(puzzle)
-		) {
+		if (isRowAndColMinimumCellCountSatisfied(config, g, coordinates) && hasUniqueSolution(g)) {
 			filledCellCount--;
-		} else puzzle[idx] = cellCopy;
+		} else g[idx] = cellCopy;
 	}
 
-	throw new PuzzleGenerationError(puzzle);
+	throw new PuzzleGenerationError(g);
 };
 
 /**
  * Mutates passed puzzle.
  */
-// eslint-disable-next-line @typescript-eslint/no-empty-function
-export const removeCellsWanderingAlongS: CellRemovingFn = (puzzle, config) => {
-	throw new PuzzleGenerationError(puzzle);
+// TODO: implement
+export const removeCellsWanderingAlongS: CellRemovingFn = (g, _config) => {
+	throw new PuzzleGenerationError(g);
 };
 
 /**
  * Mutates passed puzzle.
  */
-// eslint-disable-next-line @typescript-eslint/no-empty-function
-export const removeCellsLeftToRightThenTopToBottom: CellRemovingFn = (puzzle, config) => {
-	throw new PuzzleGenerationError(puzzle);
+// TODO: implement
+export const removeCellsLeftToRightThenTopToBottom: CellRemovingFn = (g, _config) => {
+	throw new PuzzleGenerationError(g);
 };
 
 export function isRowAndColMinimumCellCountSatisfied(
 	config: Readonly<Config>,
-	puzzle: Readonly<Puzzle>,
+	g: Readonly<Grid>,
 	coordinates: Readonly<GridCellCoordinates>,
 ): boolean {
 	return (
-		readGridRow(puzzle, coordinates).filter(isGridCellFilled).length >=
-			config.minimumGivenCells.row &&
-		readGridCol(puzzle, coordinates).filter(isGridCellFilled).length >= config.minimumGivenCells.col
+		readGridRow(g, coordinates).filter(isGridCellFilled).length >= config.minimumGivenCells.row &&
+		readGridCol(g, coordinates).filter(isGridCellFilled).length >= config.minimumGivenCells.col
 	);
 }
 
-export function hasUniqueSolution(puzzle: Readonly<Puzzle>): boolean {
+export function hasUniqueSolution(puzzle: Readonly<Grid>): boolean {
 	let solutionCount = 0;
 	return execute(structuredClone(puzzle), 0);
 
-	function execute(p: Puzzle, idx: number): boolean {
-		if (p.every(isGridCellFilled)) solutionCount++;
+	function execute(g: Grid, idx: number): boolean {
+		if (g.every(isGridCellFilled)) solutionCount++;
 		if (solutionCount > 1) return false;
 
-		while (idx < p.length && isGridCellFilled(p[idx])) idx++;
-		if (idx >= p.length) return solutionCount === 1;
+		while (idx < g.length && isGridCellFilled(g[idx])) idx++;
+		if (idx >= g.length) return solutionCount === 1;
 
 		for (const val of readAllowedGridCellValuesAtCoordinates(
-			p,
+			g,
 			readCoordinatesByGridCellIndex(idx),
 		)) {
-			p[idx] = val;
-			if (!execute(p, idx + 1)) return false;
-			p[idx] = undefined;
+			g[idx] = val;
+			if (!execute(g, idx + 1)) return false;
+			g[idx] = undefined;
 		}
 
 		return true;
