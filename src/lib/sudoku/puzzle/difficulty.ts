@@ -1,10 +1,14 @@
 /**
  * @module sudoku/puzzle/difficulty
  *
+ * Based on `Sudoku Puzzles Generating: from Easy to Evil`
+ * @see https://zhangroup.aporc.org/images/files/Paper_3485.pdf
+ *
  * Factors affecting the difficulty level:
  *
  * - The total amount of given cells,
  * - The lower bound of given cells in each row and column,
+ * - shape of the generated puzzle
  */
 
 import type { Range } from '@/lib/types/range';
@@ -66,7 +70,6 @@ export const TOTAL_GIVEN_CELLS_RANGE_BY_LEVEL: Readonly<
 	 * generating one with less than 22 given cells is non-trivial.
 	 *
 	 * @see https://www.technologyreview.com/2012/01/06/188520/mathematicians-solve-minimum-sudoku-problem/
-	 * @see https://zhangroup.aporc.org/images/files/Paper_3485.pdf
 	 */
 	[DIFFICULTY_LEVEL[5]]: [23, 27],
 };
