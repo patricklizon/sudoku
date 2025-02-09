@@ -3,6 +3,10 @@
  * @description Private module providing tools for working with grid.
  */
 
+export * from './constants';
+export * from './errors';
+export * from './types';
+export { prettyDebug } from './utils';
 export {
 	createEmptyCell,
 	createEmptyGrid,
@@ -12,12 +16,9 @@ export {
 	isGridCellEmpty,
 	isGridCellFilled,
 	isGridCellValueCorrectAtCoordinates,
-	readCoordinatesByGridCellIndex as readCoordinateByGridCellIndex,
+	readCoordinatesByGridCellIndex,
 	readGridCell,
 	readGridCol,
 	readGridRow,
-	readAllowedGridCellValuesAtCoordinates as readAllowedGridCellCellValuesAtCoordinates,
+	readAllowedGridCellValuesAtCoordinates,
 } from './grid';
-export * from './constants';
-export * from './types';
-export * from './errors';

@@ -34,13 +34,30 @@ export const DIFFICULTY_LEVEL_BY_NAME = {
 } as const satisfies Record<DifficultyLevelName, number>;
 
 /**
+ * The positioning of empty cells significantly affects the difficulty level even when two
+ * puzzles have the same or similar number of given cells at the start of a Sudoku game.
+ * A puzzle with given cells clustered together is considered more difficult than one
+ * where given cells are scattered evenly. To manage this, minimum number of given cells
+ * per row and column is defined.
+ */
+export const MINIMUM_GIVEN_CELLS_COUNT_IN_LINE_BY_LEVEL: Readonly<
+	Record<DifficultyLevelScore, number>
+> = {
+	[DIFFICULTY_LEVEL[1]]: 5,
+	[DIFFICULTY_LEVEL[2]]: 4,
+	[DIFFICULTY_LEVEL[3]]: 3,
+	[DIFFICULTY_LEVEL[4]]: 2,
+	[DIFFICULTY_LEVEL[5]]: 0,
+};
+
+/**
  * The more empty cells provided at the start of a Sudoku game,
  * the higher level the puzzle graded in.
  */
 export const TOTAL_GIVEN_CELLS_RANGE_BY_LEVEL: Readonly<
 	Record<DifficultyLevelScore, Readonly<Range<number>>>
 > = {
-	[DIFFICULTY_LEVEL[1]]: [50, 80],
+	[DIFFICULTY_LEVEL[1]]: [50, 62],
 	[DIFFICULTY_LEVEL[2]]: [36, 49],
 	[DIFFICULTY_LEVEL[3]]: [32, 35],
 	[DIFFICULTY_LEVEL[4]]: [28, 31],
@@ -52,23 +69,6 @@ export const TOTAL_GIVEN_CELLS_RANGE_BY_LEVEL: Readonly<
 	 * @see https://zhangroup.aporc.org/images/files/Paper_3485.pdf
 	 */
 	[DIFFICULTY_LEVEL[5]]: [23, 27],
-};
-
-/**
- * The positioning of empty cells significantly affects the difficulty level even when two
- * puzzles have the same or similar number of given cells at the start of a Sudoku game.
- * A puzzle with given cells clustered together is considered more difficult than one
- * where given cells are scattered evenly. To manage this, minimum number of given cells
- * that must appear in each row and column for each difficulty level is defined.
- */
-export const MINIMUM_GIVEN_CELLS_COUNT_IN_LINE_BY_LEVEL: Readonly<
-	Record<DifficultyLevelScore, number>
-> = {
-	[DIFFICULTY_LEVEL[1]]: 5,
-	[DIFFICULTY_LEVEL[2]]: 4,
-	[DIFFICULTY_LEVEL[3]]: 3,
-	[DIFFICULTY_LEVEL[4]]: 2,
-	[DIFFICULTY_LEVEL[5]]: 0,
 };
 
 export const CELL_REMOVING_STRATEGY_BY_DIFFICULTY_LEVEL: Record<

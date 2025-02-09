@@ -20,6 +20,7 @@ import type {
 	GridCellFilled,
 	GridCellCoordinates,
 } from './types';
+import { getRandomInt } from '@/lib/utils/get-random-int';
 
 /**
  * Mutatest passed grid.
@@ -76,7 +77,7 @@ export function fillDiagonalSubGrids(g: Grid): void {
  * Returns digit within valid range.
  */
 function getRandomDigit(): number {
-	return Math.floor(Math.random() * GRID_SIZE) + 1;
+	return getRandomInt(GRID_SIZE) + 1;
 }
 
 export function readAllowedGridCellValuesAtCoordinates(

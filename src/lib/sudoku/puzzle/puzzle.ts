@@ -1,4 +1,4 @@
-import { getRandomInt } from '@/lib/utils/get-random-number';
+import { getRandomInt } from '@/lib/utils/get-random-int';
 import {
 	IncorrectGridError,
 	SUB_GRID_SIZE,

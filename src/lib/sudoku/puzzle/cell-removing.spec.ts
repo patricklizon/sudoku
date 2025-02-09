@@ -1,12 +1,16 @@
 import { describe, expect, test } from 'vitest';
-import { hasUniqueSolution } from '@/lib/sudoku/puzzle/cell-removing';
-import { createEmptyCell } from '@/lib/sudoku/grid';
+import {
+	hasUniqueSolution,
+	isRowAndColMinimumCellCountSatisfied,
+	type Config,
+} from '@/lib/sudoku/puzzle/cell-removing';
+import { createEmptyCell, GRID_SIZE } from '@/lib/sudoku/grid';
 import type { Puzzle } from '@/lib/sudoku/puzzle/types';
 
-describe(hasUniqueSolution, () => {
-	const _ = createEmptyCell();
+const _ = createEmptyCell();
 
-	test('returns false when multiple solutions exists', () => {
+describe(hasUniqueSolution, () => {
+	test("returns 'false' when multiple solutions exists", () => {
 		const puzzle = [
 			[9, 2, 6, 5, 7, 1, 4, 8, 3],
 			[3, 5, 1, 4, 8, 6, 2, 7, 9],
@@ -22,7 +26,7 @@ describe(hasUniqueSolution, () => {
 		expect(hasUniqueSolution(puzzle)).to.equal(false);
 	});
 
-	test('returns true when only one solution exists', () => {
+	test("returns 'true' when only one solution exists", () => {
 		const puzzle = [
 			[5, 3, _, _, 7, _, _, _, _],
 			[6, _, _, 1, 9, 5, _, _, _],
@@ -36,5 +40,55 @@ describe(hasUniqueSolution, () => {
 		].flat() as Puzzle;
 
 		expect(hasUniqueSolution(puzzle)).to.equal(true);
+	});
+});
+
+describe(isRowAndColMinimumCellCountSatisfied.name, () => {
+	const puzzle = [
+		[9, 2, 6, 5, 7, 1, _, 8, 3],
+		[3, 5, 1, _, 8, 6, 2, 7, 9],
+		[8, 7, _, 9, 2, 3, _, 1, 6],
+		[5, 8, 2, 3, _, 7, 1, 9, 4],
+		[1, 4, 9, 2, 5, _, 1, 6, 7],
+		[7, 6, 3, 1, 4, 9, 1, 2, 5],
+		[2, 3, _, 7, 5, 1, 2, 1, 1],
+		[6, 1, 7, 8, 9, 5, _, 4, 2],
+		[4, 9, 5, 6, 1, 2, _, 3, _],
+	].flat() as Puzzle;
+
+	describe.each<[expected: boolean, config: Config['minimumGivenCells']]>([
+		[true, { total: 20, col: 5, row: 7 }],
+		[false, { total: 20, col: 9, row: 9 }],
+	])(
+		'depending on amount of minimum required cells per row and column',
+		(expected, minimumGivenCells) => {
+			const idxs = Array.from({ length: GRID_SIZE }, (_, idx) => idx);
+
+			test.each(idxs)(
+				`resturns '${expected}' when config is ${expected ? '' : 'not '}satisfied for a field on diagonal (%d)`,
+				(idx) => {
+					expect(
+						isRowAndColMinimumCellCountSatisfied({ minimumGivenCells }, puzzle, {
+							colIdx: idx,
+							rowIdx: idx,
+						}),
+					).to.equal(expected);
+				},
+			);
+		},
+	);
+
+	test.each<[config: Config['minimumGivenCells']]>([
+		[{ total: 81, col: 0, row: 0 }],
+		[{ total: 20, col: 0, row: 0 }],
+		[{ total: -1, col: 0, row: 0 }],
+		[{ total: 999, col: 0, row: 0 }],
+	])('amount of minimal total given fields should not affect the result', (minimumGivenCells) => {
+		expect(
+			isRowAndColMinimumCellCountSatisfied({ minimumGivenCells }, puzzle, {
+				colIdx: 0,
+				rowIdx: 0,
+			}),
+		).to.equal(true);
 	});
 });

@@ -1,16 +1,21 @@
-import { getRandomInt } from './get-random-number';
+import { getRandomInt } from './get-random-int';
 
 /**
  * @returns deeply cloned shuffled array
  */
 export function toShuffledArray<A extends unknown[]>(a: Readonly<A>): A {
-	const copyA = structuredClone<A>(a);
+	return shuffleArray(structuredClone<A>(a));
+}
 
+/**
+ * @returns mutated array
+ */
+export function shuffleArray<A extends unknown[]>(a: A): A {
 	let randomIdx = 0;
 	for (let idx = 0; idx < a.length; idx++) {
 		randomIdx = getRandomInt(a.length);
-		[copyA[idx], copyA[randomIdx]] = [copyA[randomIdx], copyA[idx]];
+		[a[idx], a[randomIdx]] = [a[randomIdx], a[idx]];
 	}
 
-	return copyA;
+	return a;
 }
