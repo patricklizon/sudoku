@@ -7,12 +7,11 @@
 
 import type { Option } from '@/lib/utils/types/option';
 import { shuffleArray } from '@/lib/utils/to-shuffled-array';
-
 import {
+	type Grid,
 	GRID_CELLS_COUNT,
 	GRID_CELLS_INDEXES,
 	GRID_SIZE,
-	type Grid,
 	type GridCellCoordinates,
 	type GridCellValue,
 	isGridCellEmpty,
@@ -50,7 +49,7 @@ export const removeCellsRandomly: CellRemovingFn = (g, config) => {
 			stepsCount--;
 
 			if (stepsCount <= config.minimumGivenCells.total) return;
-			else continue;
+			continue;
 		} else {
 			g[idx] = cellCopy;
 		}
@@ -153,7 +152,8 @@ export function isRowAndColMinimumCellCountSatisfied(
 
 export function hasUniqueSolution(puzzle: Readonly<Grid>): boolean {
 	let solutionCount = 0;
-	return execute(structuredClone(puzzle), 0);
+	const initialIdx = 0;
+	return execute(structuredClone(puzzle), initialIdx);
 
 	function execute(g: Grid, idx: number): boolean {
 		if (g.every(isGridCellFilled)) solutionCount++;

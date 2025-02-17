@@ -1,12 +1,12 @@
 import { GRID_SIZE, SUB_GRID_CELLS_COUNT, SUB_GRID_SIZE } from './constants';
-import { isGridCellFilled } from './grid';
 import type { GridCellValue } from './types';
+import { isGridCellFilled } from './grid';
 
 const COLOR = {
-	blue: '\x1b[38;5;69m',
-	yellow: '\x1b[38;5;136m',
-	orange: '\x1b[38;5;208m',
-	suffix: '\x1b[0m',
+	blue: '\u001B[38;5;69m',
+	orange: '\u001B[38;5;208m',
+	suffix: '\u001B[0m',
+	yellow: '\u001B[38;5;136m',
 };
 
 function colorLog(color: Exclude<keyof typeof COLOR, 'suffix'>, s: string): string {

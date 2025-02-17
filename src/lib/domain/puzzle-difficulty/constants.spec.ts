@@ -1,9 +1,9 @@
-import { test, expect } from 'vitest';
+import { expect, test } from 'vitest';
 import { GRID_CELLS_COUNT } from '@/lib/domain/puzzle/grid/constants';
 import {
-	TOTAL_GIVEN_CELLS_RANGE_BY_DIFFICULTY_LEVEL,
-	MINIMUM_GIVEN_CELLS_COUNT_IN_LINE_BY_DIFFICULTY_LEVEL,
 	DIFFICULTY_LEVEL,
+	MINIMUM_GIVEN_CELLS_COUNT_IN_LINE_BY_DIFFICULTY_LEVEL,
+	TOTAL_GIVEN_CELLS_RANGE_BY_DIFFICULTY_LEVEL,
 } from './constants';
 import type { PuzzleDifficultyLevelScore } from './types';
 

@@ -1,20 +1,20 @@
 import { describe, expect, test } from 'vitest';
 import {
-	isGridCellFilled,
-	isGridCellValueCorrectAtCoordinates,
-	readGridCol,
-	readGridRow,
 	GRID_CELLS_COUNT,
 	GRID_SIZE,
 	type GridCellCoordinates,
 	type GridFilled,
+	isGridCellFilled,
+	isGridCellValueCorrectAtCoordinates,
+	readGridCol,
+	readGridRow,
 } from '../grid';
-import { createPuzzleSolution, isValueValid, createUnsolvedPuzzle } from '.';
+import { createPuzzleSolution, createUnsolvedPuzzle, isValueValid } from '.';
 import {
 	DIFFICULTY_LEVEL,
 	MINIMUM_GIVEN_CELLS_COUNT_IN_LINE_BY_DIFFICULTY_LEVEL,
-	TOTAL_GIVEN_CELLS_RANGE_BY_DIFFICULTY_LEVEL,
 	type PuzzleDifficultyLevelScore,
+	TOTAL_GIVEN_CELLS_RANGE_BY_DIFFICULTY_LEVEL,
 } from '@/lib/domain/puzzle-difficulty';
 
 describe(createPuzzleSolution.name, () => {

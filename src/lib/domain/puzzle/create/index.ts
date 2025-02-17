@@ -2,27 +2,27 @@ import { getRandomInt } from '@/lib/utils/get-random-int';
 import {
 	DIFFICULTY_LEVEL,
 	MINIMUM_GIVEN_CELLS_COUNT_IN_LINE_BY_DIFFICULTY_LEVEL,
-	TOTAL_GIVEN_CELLS_RANGE_BY_DIFFICULTY_LEVEL,
 	type PuzzleDifficultyLevelScore,
+	TOTAL_GIVEN_CELLS_RANGE_BY_DIFFICULTY_LEVEL,
 } from '@/lib/domain/puzzle-difficulty';
 import { isNil } from '@/lib/utils/is-nil';
 import {
-	SUB_GRID_SIZE,
-	IncorrectGridError,
 	createEmptyGrid,
 	fillDiagonalSubGrids,
 	fillEmptyGridCells,
-	readGridCell,
 	type Grid,
-	type GridFilled,
 	type GridCellCoordinates,
+	type GridFilled,
+	IncorrectGridError,
+	readGridCell,
+	SUB_GRID_SIZE,
 } from '../grid';
 import {
+	type CellRemovingFn,
 	removeCellsJumpingByOneCell,
 	removeCellsLeftToRightThenTopToBottom,
 	removeCellsRandomly,
 	removeCellsWanderingAlongS,
-	type CellRemovingFn,
 } from './remove-cell-strategies';
 
 const CELL_REMOVING_STRATEGY_BY_DIFFICULTY_LEVEL: Record<

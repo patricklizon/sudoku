@@ -1,34 +1,16 @@
 import type { GameId } from '@/lib/domain/core/id';
-import type { EncodedPuzzle, GridCellValue } from '@/lib/domain/puzzle';
+import type { EncodedPuzzle } from '@/lib/domain/puzzle';
 import type { Option } from '@/lib/utils/types/option';
+import type { PuzzleDifficultyLevelScore } from '@/lib/domain/puzzle-difficulty';
+import type { TimeISOString } from '@/lib/domain/core/time';
 
 export type Game = {
-	createdAt: string;
+	createdAt: TimeISOString;
+	difficulty: PuzzleDifficultyLevelScore;
 	id: GameId;
-	lastPlayedAt: string;
-	mode: 'practice' | 'challenge' | 'speedrun';
+	lastOpenedAt: Option<TimeISOString>;
+	mode: 'practice' | 'challenge' | 'speed-run';
 	puzzleId: EncodedPuzzle;
-	status:
-		| 'new'
-		| 'in-progress'
-		| 'paused'
-		| 'completed-success'
-		| 'completed-failure'
-		| 'completed-timeout';
-	updatedAt: string;
-};
-
-export type GameHistory = {
-	createdAt: string;
-	id: GameId;
-	rowIdx: number;
-	value: GridCellValue;
-};
-
-export type GameBoard = {
-	id: EncodedPuzzle;
-	difficulty: string;
-	createdAt: string;
-	updatedAt: string;
-	lastPlayedAt: Option<string>;
+	status: 'in-progress' | 'success' | 'failure' | 'paused';
+	timerId: GameId;
 };

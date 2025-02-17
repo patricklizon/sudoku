@@ -20,7 +20,7 @@ export const DIFFICULTY_LEVEL = {
 	[3]: 3 as PuzzleDifficultyLevelScore,
 	[4]: 4 as PuzzleDifficultyLevelScore,
 	[5]: 5 as PuzzleDifficultyLevelScore,
-} as const;
+} as const satisfies Record<number, number>;
 
 export const DIFFICULTY_LEVEL_BY_NAME = {
 	'extremely-easy': DIFFICULTY_LEVEL[1],

@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import { createEmptyCell, GRID_SIZE, type Grid } from '../grid';
+import { createEmptyCell, type Grid, GRID_CELLS_INDEXES } from '../grid';
 import {
 	type Config,
 	hasUniqueSolution,
@@ -15,7 +15,7 @@ describe(hasUniqueSolution.name, () => {
 			[3, 5, 1, 4, 8, 6, 2, 7, 9],
 			[8, 7, 4, 9, 2, 3, 5, 1, 6],
 			[5, 8, 2, 3, 6, 7, 1, 9, 4],
-			[1, 4, 9, 2, 5, 8, 3, 6, 7],
+			[1, 4, 9, 2, 5, 8, 3, 6, 7], // two possible solutions
 			[7, 6, 3, 1, _, _, 8, 2, 5], // [4, 9] or [9, 4]
 			[2, 3, 8, 7, _, _, 6, 5, 1], // [9, 4]    [4, 9]
 			[6, 1, 7, 8, 3, 5, 9, 4, 2],
@@ -55,27 +55,35 @@ describe(isRowAndColMinimumCellCountSatisfied.name, () => {
 		[4, 9, 5, 6, 1, 2, _, 3, _],
 	].flat() as Grid;
 
-	describe.each<[expected: boolean, config: Config['minimumGivenCells']]>([
-		[true, { total: 20, col: 5, row: 7 }],
-		[false, { total: 20, col: 9, row: 9 }],
-	])(
-		'depending on amount of minimum required cells per row and column',
-		(expected, minimumGivenCells) => {
-			const idxs = Array.from({ length: GRID_SIZE }, (_, idx) => idx);
+	describe("when puzzle satisfies config's constarains", () => {
+		const config: Config = {
+			minimumGivenCells: { total: 20, col: 5, row: 7 },
+		};
 
-			test.each(idxs)(
-				`returns '${expected}' when config is ${expected ? '' : 'not '}satisfied for a field on diagonal (%d)`,
-				(idx) => {
-					expect(
-						isRowAndColMinimumCellCountSatisfied({ minimumGivenCells }, puzzle, {
-							colIdx: idx,
-							rowIdx: idx,
-						}),
-					).to.equal(expected);
-				},
-			);
-		},
-	);
+		test.each(GRID_CELLS_INDEXES)('returns true at index %d', (idx) => {
+			expect(
+				isRowAndColMinimumCellCountSatisfied(config, puzzle, {
+					colIdx: idx,
+					rowIdx: idx,
+				}),
+			).to.equal(true);
+		});
+	});
+
+	describe("when puzzle does not satisfy config's constarains", () => {
+		const confgi: Config = {
+			minimumGivenCells: { total: 20, col: 9, row: 9 },
+		};
+
+		test.each(GRID_CELLS_INDEXES)('returns false at index %d', (idx) => {
+			expect(
+				isRowAndColMinimumCellCountSatisfied(confgi, puzzle, {
+					colIdx: idx,
+					rowIdx: idx,
+				}),
+			).to.equal(false);
+		});
+	});
 
 	test.each<[config: Config['minimumGivenCells']]>([
 		[{ total: 81, col: 0, row: 0 }],

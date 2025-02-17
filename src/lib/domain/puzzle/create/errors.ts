@@ -1,4 +1,4 @@
-import { prettyDebug, type Grid } from '../grid';
+import { type Grid, prettyDebug } from '../grid';
 
 export class PuzzleGenerationError extends Error {
 	constructor(grid: Grid) {

@@ -1,6 +1,6 @@
-import type { Range } from '@/lib/utils/types/range';
 import { getRandomInt } from '@/lib/utils/get-random-int';
 import { isNil } from '@/lib/utils/is-nil';
+import type { Range } from '@/lib/utils/types/range';
 
 import { IncorrectGridError, ValueOutOfRangeError } from './errors';
 import {
@@ -12,18 +12,18 @@ import {
 } from './constants';
 import type {
 	Grid,
-	GridCol,
+	GridCellCoordinates,
+	GridCellEmptyValue,
+	GridCellFilledValue,
 	GridCellValue,
+	GridCol,
 	GridFilled,
 	GridRow,
 	SubGrid,
-	GridCellEmpty,
-	GridCellFilled,
-	GridCellCoordinates,
 } from './types';
 
 /**
- * Mutatest passed grid.
+ * Mutates passed grid.
  *
  * Recursively fills entire grid.
  */
@@ -45,6 +45,8 @@ export function fillEmptyGridCells(g: Grid, idx: number): g is GridFilled {
 }
 
 /**
+ * Mutates passed grid.
+ *
  * Fills the diagonal sub-grids (3x3 blocks) of the given grid with random digits 1-9.
  * Only fills the diagonal blocks from top-left to bottom-right.
  *
@@ -83,9 +85,9 @@ function getRandomDigit(): number {
 export function readAllowedGridCellValuesAtCoordinates(
 	g: Grid,
 	c: GridCellCoordinates,
-): Set<GridCellFilled> {
+): Set<GridCellFilledValue> {
 	const forbidden = new Set<number>();
-	const placed = new Set(readGridRow(g, c).concat(readGridCol(g, c), readSubGridCells(g, c)));
+	const placed = new Set([...readGridRow(g, c), ...readGridCol(g, c), ...readSubGridCells(g, c)]);
 
 	for (const value of placed) {
 		if (isNil(value) || forbidden.has(value)) continue;
@@ -190,7 +192,7 @@ export function assertCoordinateIsWithinRange(it: number): void {
 	throw new ValueOutOfRangeError(range, it);
 }
 
-export function createEmptyCell(): GridCellEmpty {
+export function createEmptyCell(): GridCellEmptyValue {
 	return undefined;
 }
 
@@ -212,11 +214,11 @@ export function createEmptySubGrid(): SubGrid {
 	return Array.from({ length: SUB_GRID_CELLS_COUNT }, createEmptyCell) as SubGrid;
 }
 
-export function isGridCellEmpty(it: GridCellValue): it is GridCellEmpty {
+export function isGridCellEmpty(it: GridCellValue): it is GridCellEmptyValue {
 	return isNil(it);
 }
 
-export function isGridCellFilled(it: GridCellValue): it is GridCellFilled {
+export function isGridCellFilled(it: GridCellValue): it is GridCellFilledValue {
 	if (isNil(it)) return false;
 	return CELL_ALLOWED_VALUES.has(it);
 }
@@ -224,7 +226,7 @@ export function isGridCellFilled(it: GridCellValue): it is GridCellFilled {
 /**
  * @throws {ValueOutOfRangeError} when number is out of allowed range.
  */
-export function assertIndexIsWithinRange(idx: number) {
+export function assertIndexIsWithinRange(idx: number): void {
 	const range = [0, GRID_CELLS_COUNT - 1] satisfies Range<number>;
 	if (idx < range[0] || range[1] < idx) {
 		throw new ValueOutOfRangeError(range, idx);

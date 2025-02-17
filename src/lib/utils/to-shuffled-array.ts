@@ -11,7 +11,7 @@ export function toShuffledArray<A extends unknown[]>(a: Readonly<A>): A {
  * @returns mutated array
  */
 export function shuffleArray<A extends unknown[]>(a: A): A {
-	let randomIdx = 0;
+	let randomIdx: number;
 	for (let idx = 0; idx < a.length; idx++) {
 		randomIdx = getRandomInt(a.length);
 		[a[idx], a[randomIdx]] = [a[randomIdx], a[idx]];
