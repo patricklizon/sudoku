@@ -37,6 +37,15 @@ export default [
 	},
 
 	{
+		name: 'eslint/overrides',
+		files: ['src/**/*.{ts,mts,tsx}'],
+		rules: {
+			'prefer-object-spread': 'error',
+		},
+	},
+
+	{
+		name: 'vitest/overrides',
 		files: ['src/**/__tests__/*', 'src/**/*.spec.*'],
 		...pluginVitest.configs.recommended,
 		rules: {
@@ -64,6 +73,6 @@ export default [
 		},
 	},
 
-	oxlint.configs['flat/recommended'],
+	oxlint.configs['flat/all'],
 	skipFormatting,
 ];
