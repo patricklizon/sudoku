@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import { createEmptyCell, type Grid, GRID_CELLS_INDEXES } from '../grid';
+import { createEmptyCell, type Grid, GRID_SIZE } from '../grid';
 import {
 	type Config,
 	hasUniqueSolution,
@@ -55,12 +55,14 @@ describe(isRowAndColMinimumCellCountSatisfied.name, () => {
 		[4, 9, 5, 6, 1, 2, _, 3, _],
 	].flat() as Grid;
 
-	describe("when puzzle satisfies config's constarains", () => {
+	const diagonalIdxs = Array.from({ length: GRID_SIZE }, (_, idx) => idx);
+
+	describe("when puzzle satisfies configuration's constrains", () => {
 		const config: Config = {
-			minimumGivenCells: { total: 20, col: 5, row: 7 },
+			minimumGivenCells: { total: { count: 20, range: [19, 21] }, col: 5, row: 7 },
 		};
 
-		test.each(GRID_CELLS_INDEXES)('returns true at index %d', (idx) => {
+		test.each(diagonalIdxs)('returns true at index %d', (idx) => {
 			expect(
 				isRowAndColMinimumCellCountSatisfied(config, puzzle, {
 					colIdx: idx,
@@ -71,13 +73,13 @@ describe(isRowAndColMinimumCellCountSatisfied.name, () => {
 	});
 
 	describe("when puzzle does not satisfy config's constarains", () => {
-		const confgi: Config = {
-			minimumGivenCells: { total: 20, col: 9, row: 9 },
+		const configuration: Config = {
+			minimumGivenCells: { total: { count: 20, range: [19, 21] }, col: 9, row: 9 },
 		};
 
-		test.each(GRID_CELLS_INDEXES)('returns false at index %d', (idx) => {
+		test.each(diagonalIdxs)("returns 'false' at index %d", (idx) => {
 			expect(
-				isRowAndColMinimumCellCountSatisfied(confgi, puzzle, {
+				isRowAndColMinimumCellCountSatisfied(configuration, puzzle, {
 					colIdx: idx,
 					rowIdx: idx,
 				}),
@@ -86,10 +88,10 @@ describe(isRowAndColMinimumCellCountSatisfied.name, () => {
 	});
 
 	test.each<[config: Config['minimumGivenCells']]>([
-		[{ total: 81, col: 0, row: 0 }],
-		[{ total: 20, col: 0, row: 0 }],
-		[{ total: -1, col: 0, row: 0 }],
-		[{ total: 999, col: 0, row: 0 }],
+		[{ total: { count: 81, range: [80, 81] }, col: 0, row: 0 }],
+		[{ total: { count: 20, range: [19, 20] }, col: 0, row: 0 }],
+		[{ total: { count: -1, range: [-10, 10] }, col: 0, row: 0 }],
+		[{ total: { count: 999, range: [900, 999] }, col: 0, row: 0 }],
 	])('amount of minimal total given fields should not affect the result', (minimumGivenCells) => {
 		expect(
 			isRowAndColMinimumCellCountSatisfied({ minimumGivenCells }, puzzle, {

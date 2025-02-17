@@ -1,10 +1,11 @@
 import { getRandomInt } from './get-random-int';
+import type { Mutable } from './types/mutable';
 
 /**
  * @returns deeply cloned shuffled array
  */
-export function toShuffledArray<A extends unknown[]>(a: Readonly<A>): A {
-	return shuffleArray(structuredClone<A>(a));
+export function toShuffledArray<A extends unknown[] | readonly unknown[]>(a: Readonly<A>): A {
+	return shuffleArray<Mutable<A>>(structuredClone(a));
 }
 
 /**

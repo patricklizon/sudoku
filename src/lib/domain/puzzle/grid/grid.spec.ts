@@ -29,12 +29,12 @@ import {
 import { ValueOutOfRangeError } from './errors';
 
 describe(isGridCellEmpty.name, () => {
-	test('returns true when cell is empty', () => {
-		expect(isGridCellEmpty()).to.equal(true);
+	test.each([undefined, null])('returns true when cell is empty', (value) => {
+		expect(isGridCellEmpty(value)).to.equal(true);
 	});
 
-	test('returns false when cell has value', () => {
-		expect(isGridCellEmpty(2)).to.equal(false);
+	test.each([0, 2])('returns false when cell has value', (value) => {
+		expect(isGridCellEmpty(value)).to.equal(false);
 	});
 });
 
@@ -43,8 +43,8 @@ describe(isGridCellFilled.name, () => {
 		expect(isGridCellFilled(value)).to.equal(true);
 	});
 
-	test('returns false when cell does not have value', () => {
-		expect(isGridCellFilled()).to.equal(false);
+	test.each([undefined, null])('returns false when cell does not have value', (value) => {
+		expect(isGridCellFilled(value)).to.equal(false);
 	});
 
 	test.each([-1, 10])('returns false when cell has illegal value', (value) => {

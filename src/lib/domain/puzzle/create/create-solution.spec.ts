@@ -9,7 +9,7 @@ import {
 	readGridCol,
 	readGridRow,
 } from '../grid';
-import { createPuzzleSolution, createUnsolvedPuzzle, isValueValid } from '.';
+import { createPuzzleSolved, createPuzzleUnsolved, isValueValid } from './create-solution';
 import {
 	DIFFICULTY_LEVEL,
 	MINIMUM_GIVEN_CELLS_COUNT_IN_LINE_BY_DIFFICULTY_LEVEL,
@@ -17,9 +17,9 @@ import {
 	TOTAL_GIVEN_CELLS_RANGE_BY_DIFFICULTY_LEVEL,
 } from '@/lib/domain/puzzle-difficulty';
 
-describe(createPuzzleSolution.name, () => {
+describe(createPuzzleSolved.name, () => {
 	test('generates correct puzzle', () => {
-		const solvedPuzzle = createPuzzleSolution();
+		const solvedPuzzle = createPuzzleSolved();
 
 		expect(solvedPuzzle).to.have.length(GRID_CELLS_COUNT);
 		expect(solvedPuzzle.every(Number.isInteger)).to.equal(true);
@@ -37,7 +37,7 @@ describe.each<PuzzleDifficultyLevelScore>([
 	DIFFICULTY_LEVEL[1],
 	DIFFICULTY_LEVEL[2],
 	DIFFICULTY_LEVEL[3],
-])(createUnsolvedPuzzle.name, (level) => {
+])(createPuzzleUnsolved.name, (level) => {
 	const p = structuredClone(
 		[
 			[7, 6, 5, 1, 2, 8, 3, 4, 9],
@@ -51,9 +51,9 @@ describe.each<PuzzleDifficultyLevelScore>([
 			[8, 3, 7, 9, 4, 2, 6, 1, 5],
 		].flat(),
 	) as GridFilled;
-	const puzzle = createUnsolvedPuzzle(p, level);
+	const puzzle = createPuzzleUnsolved(p, level);
 
-	test(`creates correct amount of holes for given difficulty level (${level.toString()})`, () => {
+	test(`creates correct amount of holes for difficulty level '${level.toString()}'`, () => {
 		const left = puzzle.filter(isGridCellFilled);
 
 		expect(left)

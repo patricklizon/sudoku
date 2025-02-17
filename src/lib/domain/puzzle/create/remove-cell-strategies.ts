@@ -6,7 +6,7 @@
  */
 
 import type { Option } from '@/lib/utils/types/option';
-import { shuffleArray } from '@/lib/utils/to-shuffled-array';
+import { shuffleArray, toShuffledArray } from '@/lib/utils/to-shuffled-array';
 import {
 	type Grid,
 	GRID_CELLS_COUNT,
@@ -22,45 +22,57 @@ import {
 	readGridRow,
 } from '../grid';
 import { PuzzleGenerationError } from './errors';
+import type { Range } from '@/lib/utils/types/range';
+import type { DeepReadonly } from '@/lib/utils/types/deep-readonly';
 
-export type Config = { minimumGivenCells: { row: number; col: number; total: number } };
+export type Config = DeepReadonly<{
+	minimumGivenCells: {
+		row: number;
+		col: number;
+		total: { count: number; range: Range<number> };
+	};
+}>;
+
+export type CellRemovingFn = (grid: Readonly<Grid>, config: Config) => Grid;
 
 /**
- * Mutates passed puzzle.
- */
-export type CellRemovingFn = (grid: Grid, config: Config) => void;
-
-/**
- * Mutates passed puzzle.
+ * Removes cells in random order.
  */
 export const removeCellsRandomly: CellRemovingFn = (g, config) => {
-	const idxs = shuffleArray(GRID_CELLS_INDEXES);
+	assertConfigCorrectness(config);
+
+	const gCopy = structuredClone<Grid>(g);
+	const idxs = toShuffledArray(GRID_CELLS_INDEXES);
+	const targetEmptyCellCount = GRID_CELLS_INDEXES.length - config.minimumGivenCells.total.count;
 
 	let cellCopy: GridCellValue;
-	let stepsCount = idxs.length;
 	let coordinates: GridCellCoordinates;
+	let removedCellCount = 0;
 
 	for (const idx of idxs) {
 		coordinates = readCoordinatesByGridCellIndex(idx);
-		cellCopy = g[idx];
-		g[idx] = undefined;
+		cellCopy = gCopy[idx];
+		gCopy[idx] = undefined;
 
-		if (isRowAndColMinimumCellCountSatisfied(config, g, coordinates) && hasUniqueSolution(g)) {
-			stepsCount--;
+		if (
+			isRowAndColMinimumCellCountSatisfied(config, gCopy, coordinates) &&
+			hasUniqueSolution(gCopy)
+		) {
+			removedCellCount++;
 
-			if (stepsCount <= config.minimumGivenCells.total) return;
+			if (removedCellCount >= targetEmptyCellCount) return gCopy;
 			continue;
 		} else {
-			g[idx] = cellCopy;
+			gCopy[idx] = cellCopy;
 		}
 	}
 
-	throw new PuzzleGenerationError(g);
+	if (isRemovedCellCountWithinConstrains(config, removedCellCount)) return gCopy;
+
+	throw new PuzzleGenerationError(gCopy);
 };
 
 /**
- * Mutates passed puzzle.
- *
  * Systematically removes cells by jumping two positions at a time in a zigzag pattern:
  * - Even rows: moves left to right, jumps to next row at the end
  * - Odd rows: moves right to left, jumps to next row at the beginning
@@ -70,23 +82,30 @@ export const removeCellsRandomly: CellRemovingFn = (g, config) => {
  * remaining cells are removed randomly from non empty positions.
  */
 export const removeCellsJumpingByOneCell: CellRemovingFn = (g, config) => {
+	assertConfigCorrectness(config);
+
+	const gCopy = structuredClone<Grid>(g);
+	const targetEmptyCellCount = GRID_CELLS_COUNT - config.minimumGivenCells.total.count;
 	const oddRowLastIdx = 1;
 	const rowLastIdx = GRID_SIZE - 1;
 	const jumpByIdx = 2;
 
 	let idx = 0;
 	let cellCopy: Option<GridCellValue>;
-	let filledCellCount = GRID_CELLS_COUNT;
+	let removedCellCount = 0;
 	let coordinates: Option<GridCellCoordinates>;
 
-	while (filledCellCount > config.minimumGivenCells.total && idx < GRID_CELLS_COUNT) {
+	while (removedCellCount < targetEmptyCellCount && idx < GRID_CELLS_COUNT) {
 		coordinates = readCoordinatesByGridCellIndex(idx);
-		cellCopy = g[idx];
-		g[idx] = undefined;
+		cellCopy = gCopy[idx];
+		gCopy[idx] = undefined;
 
-		if (isRowAndColMinimumCellCountSatisfied(config, g, coordinates) && hasUniqueSolution(g)) {
-			filledCellCount--;
-		} else g[idx] = cellCopy;
+		if (
+			isRowAndColMinimumCellCountSatisfied(config, gCopy, coordinates) &&
+			hasUniqueSolution(gCopy)
+		) {
+			removedCellCount++;
+		} else gCopy[idx] = cellCopy;
 
 		if (coordinates.rowIdx % 2) {
 			if (coordinates.colIdx === oddRowLastIdx) idx += rowLastIdx;
@@ -97,10 +116,10 @@ export const removeCellsJumpingByOneCell: CellRemovingFn = (g, config) => {
 		}
 	}
 
-	if (filledCellCount <= config.minimumGivenCells.total) return;
+	if (removedCellCount >= targetEmptyCellCount) return gCopy;
 
 	const nonEmptyIdxCollection = shuffleArray(
-		g.reduce<number[]>((acc, cell, idx) => {
+		gCopy.reduce<number[]>((acc, cell, idx) => {
 			if (isGridCellEmpty(cell)) return acc;
 			acc.push(idx);
 			return acc;
@@ -109,33 +128,40 @@ export const removeCellsJumpingByOneCell: CellRemovingFn = (g, config) => {
 
 	for (const nonEmptyIdx of nonEmptyIdxCollection) {
 		idx = nonEmptyIdx;
-		if (filledCellCount <= config.minimumGivenCells.total) return;
+		if (removedCellCount >= targetEmptyCellCount) return gCopy;
 
 		coordinates = readCoordinatesByGridCellIndex(nonEmptyIdx);
-		cellCopy = g[idx];
-		g[idx] = undefined;
+		cellCopy = gCopy[idx];
+		gCopy[idx] = undefined;
 
-		if (isRowAndColMinimumCellCountSatisfied(config, g, coordinates) && hasUniqueSolution(g)) {
-			filledCellCount--;
-		} else g[idx] = cellCopy;
+		if (
+			isRowAndColMinimumCellCountSatisfied(config, gCopy, coordinates) &&
+			hasUniqueSolution(gCopy)
+		) {
+			removedCellCount++;
+		} else gCopy[idx] = cellCopy;
 	}
 
-	throw new PuzzleGenerationError(g);
+	if (isRemovedCellCountWithinConstrains(config, removedCellCount)) return gCopy;
+
+	throw new PuzzleGenerationError(gCopy);
 };
 
-/**
- * Mutates passed puzzle.
- */
 // TODO: implement
 export const removeCellsWanderingAlongS: CellRemovingFn = (g, _config) => {
+	// const gCopy = structuredClone<Grid>(g);
+	//
+	// if (isRemovedCellCountWithinConstrains(config, removedCellCount)) return g;
+
 	throw new PuzzleGenerationError(g);
 };
 
-/**
- * Mutates passed puzzle.
- */
 // TODO: implement
 export const removeCellsLeftToRightThenTopToBottom: CellRemovingFn = (g, _config) => {
+	// const gCopy = structuredClone<Grid>(g);
+	//
+	// if (isRemovedCellCountWithinConstrains(config, removedCellCount)) return g;
+
 	throw new PuzzleGenerationError(g);
 };
 
@@ -173,4 +199,20 @@ export function hasUniqueSolution(puzzle: Readonly<Grid>): boolean {
 
 		return true;
 	}
+}
+
+export function assertConfigCorrectness(config: Config): void {
+	if (
+		config.minimumGivenCells.total.count <
+		GRID_SIZE * Math.max(config.minimumGivenCells.row, config.minimumGivenCells.col)
+	) {
+		throw new Error("Configuraion's constrains cold not be satisfied");
+	}
+}
+
+export function isRemovedCellCountWithinConstrains(config: Config, count: number): boolean {
+	if (count < config.minimumGivenCells.total.count) return false;
+
+	const [min, max] = config.minimumGivenCells.total.range;
+	return min <= count && count <= max;
 }
