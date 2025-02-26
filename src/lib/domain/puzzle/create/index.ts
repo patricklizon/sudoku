@@ -1,2 +1,2 @@
-export * from './create-solution';
+export * from './create-puzzle';
 export * from './errors';

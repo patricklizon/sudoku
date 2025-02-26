@@ -12,15 +12,20 @@
  */
 
 import type { Range } from '@/lib/utils/types/range';
-import type { PuzzleDifficultyLevelName, PuzzleDifficultyLevelScore } from './types';
+import type { PuzzleDifficultyLevelName, PuzzleDifficultyLevel } from './types';
 
 export const DIFFICULTY_LEVEL = {
-	[1]: 1 as PuzzleDifficultyLevelScore,
-	[2]: 2 as PuzzleDifficultyLevelScore,
-	[3]: 3 as PuzzleDifficultyLevelScore,
-	[4]: 4 as PuzzleDifficultyLevelScore,
-	[5]: 5 as PuzzleDifficultyLevelScore,
+	[1]: 1 as PuzzleDifficultyLevel,
+	[2]: 2 as PuzzleDifficultyLevel,
+	[3]: 3 as PuzzleDifficultyLevel,
+	[4]: 4 as PuzzleDifficultyLevel,
+	[5]: 5 as PuzzleDifficultyLevel,
 } as const satisfies Record<number, number>;
+
+export const DISABLED_DIFFICULTY_LEVELS = new Set<PuzzleDifficultyLevel>([
+	DIFFICULTY_LEVEL[4],
+	DIFFICULTY_LEVEL[5],
+]);
 
 export const DIFFICULTY_LEVEL_BY_NAME = {
 	'extremely-easy': DIFFICULTY_LEVEL[1],
@@ -38,7 +43,7 @@ export const DIFFICULTY_LEVEL_BY_NAME = {
  * per row and column is defined.
  */
 export const MINIMUM_GIVEN_CELLS_COUNT_IN_LINE_BY_DIFFICULTY_LEVEL: Readonly<
-	Record<PuzzleDifficultyLevelScore, number>
+	Record<PuzzleDifficultyLevel, number>
 > = {
 	[DIFFICULTY_LEVEL[1]]: 5,
 	[DIFFICULTY_LEVEL[2]]: 4,
@@ -52,7 +57,7 @@ export const MINIMUM_GIVEN_CELLS_COUNT_IN_LINE_BY_DIFFICULTY_LEVEL: Readonly<
  * the higher level the puzzle graded in.
  */
 export const TOTAL_GIVEN_CELLS_RANGE_BY_DIFFICULTY_LEVEL: Readonly<
-	Record<PuzzleDifficultyLevelScore, Readonly<Range<number>>>
+	Record<PuzzleDifficultyLevel, Readonly<Range<number>>>
 > = {
 	[DIFFICULTY_LEVEL[1]]: [50, 62],
 	[DIFFICULTY_LEVEL[2]]: [36, 49],

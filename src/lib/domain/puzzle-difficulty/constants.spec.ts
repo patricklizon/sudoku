@@ -5,7 +5,7 @@ import {
 	MINIMUM_GIVEN_CELLS_COUNT_IN_LINE_BY_DIFFICULTY_LEVEL,
 	TOTAL_GIVEN_CELLS_RANGE_BY_DIFFICULTY_LEVEL,
 } from './constants';
-import type { PuzzleDifficultyLevelScore } from './types';
+import type { PuzzleDifficultyLevel } from './types';
 
 test.each([
 	TOTAL_GIVEN_CELLS_RANGE_BY_DIFFICULTY_LEVEL,
@@ -16,9 +16,7 @@ test.each([
 
 test('amount of given cells scales down by difficulty', () => {
 	const levels = (
-		Object.keys(
-			TOTAL_GIVEN_CELLS_RANGE_BY_DIFFICULTY_LEVEL,
-		) as unknown as PuzzleDifficultyLevelScore[]
+		Object.keys(TOTAL_GIVEN_CELLS_RANGE_BY_DIFFICULTY_LEVEL) as unknown as PuzzleDifficultyLevel[]
 	).sort();
 
 	const easiest = levels.at(0)!;

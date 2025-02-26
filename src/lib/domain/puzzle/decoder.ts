@@ -9,9 +9,9 @@ export function decodePuzzle(s: EncodedPuzzle): {
 	solution: GridFilled;
 	puzzle: Grid;
 } {
-	const diff = ENCODED_EMPTY_FIELD_CODE_POINT_OFFSET;
+	const codePointOffset = ENCODED_EMPTY_FIELD_CODE_POINT_OFFSET;
 	const solution = [] as unknown as GridFilled;
-	const puzzle = [] as unknown as GridFilled;
+	const puzzle = [] as unknown as Grid;
 
 	const str = s.split('');
 
@@ -19,7 +19,10 @@ export function decodePuzzle(s: EncodedPuzzle): {
 	for (const [idx, char] of str.entries()) {
 		number = Number.parseInt(char, 10);
 		if (Number.isNaN(number)) {
-			solution[idx] = Number.parseInt(String.fromCodePoint((char.codePointAt(0) ?? 0) - diff), 10);
+			solution[idx] = Number.parseInt(
+				String.fromCodePoint((char.codePointAt(0) ?? 0) - codePointOffset),
+				10,
+			);
 		} else {
 			solution[idx] = number;
 			puzzle[idx] = number;

@@ -1,5 +1,5 @@
 import type { Opaque } from '@/lib/utils/types/opaque';
-import type { PuzzleDifficultyLevelScore } from '@/lib/domain/puzzle-difficulty';
+import type { PuzzleDifficultyLevel } from '@/lib/domain/puzzle-difficulty';
 import type { TimeISOString } from '@/lib/domain/core/time';
 
 /**
@@ -10,7 +10,10 @@ import type { TimeISOString } from '@/lib/domain/core/time';
 export type EncodedPuzzle = Opaque<'encoded-puzzle', string>;
 
 export type Puzzle = {
-	createdAt: TimeISOString;
-	difficulty: PuzzleDifficultyLevelScore;
+	difficulty: PuzzleDifficultyLevel;
 	id: EncodedPuzzle;
+};
+
+export type DBPuzzle = Puzzle & {
+	createdAt: TimeISOString;
 };

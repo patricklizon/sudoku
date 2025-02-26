@@ -1,11 +1,12 @@
 import type { GameId } from '@/lib/domain/core/id';
 import type { GridCellValue } from '@/lib/domain/puzzle';
-import type { TimeISOString } from '../core/time';
+import type { TimeISOString } from '@/lib/domain/core/time';
 
-export type GameHistory = {
+export type GameHistoryEntry = {
 	colIdx: number;
 	createdAt: TimeISOString;
-	id: GameId;
+	gameId: GameId;
+	id: string;
 	rowIdx: number;
 	value: GridCellValue;
 };

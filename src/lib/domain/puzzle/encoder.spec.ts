@@ -28,12 +28,13 @@ describe(encodePuzzle.name, () => {
 		[6, 7, _, 9, 4, 1, 3, 8, 2],
 	].flat() as Grid;
 
-	test('encodes puzzle and solution into an URL safe string', () => {
-		const left = encodePuzzle(puzzle, solution);
-		const encoded =
-			'24651379H31I28G5DF75849F12319482EFCG83G1F925DEFB3748A99B1GC8465483F529G167E941382';
+	const encoded =
+		'24651379H31I28G5DF75849F12319482EFCG83G1F925DEFB3748A99B1GC8465483F529G167E941382';
 
-		expect(left).to.equal(encoded);
-		expect(encoded).to.equal(encodeURI(encoded));
+	test('encodes puzzle and solution into an URL safe string', () => {
+		const result = encodePuzzle(puzzle, solution);
+
+		expect(result).to.equal(encoded);
+		expect(result).to.equal(encodeURI(encoded));
 	});
 });

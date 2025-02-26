@@ -34,9 +34,9 @@ describe(decodePuzzle.name, () => {
 		'24651379H31I28G5DF75849F12319482EFCG83G1F925DEFB3748A99B1GC8465483F529G167E941382' as EncodedPuzzle;
 
 	test('decodes string to puzzle and solution', () => {
-		const left = decodePuzzle(encoded);
+		const result = decodePuzzle(encoded);
 
-		expect(left.solution).to.deep.equal(solution);
-		expect(left.puzzle).to.deep.equal(puzzle);
+		expect(result.solution).to.deep.equal(solution);
+		expect(result.puzzle).to.deep.equal(puzzle);
 	});
 });
