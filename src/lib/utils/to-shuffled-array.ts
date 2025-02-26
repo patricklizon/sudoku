@@ -1,11 +1,11 @@
 import { getRandomInt } from './get-random-int';
-import type { RecordMutable } from './types/record';
+import type { Mutable } from './types/mutable';
 
 /**
  * @returns deeply cloned shuffled array
  */
 export function toShuffledArray<A extends unknown[] | readonly unknown[]>(a: Readonly<A>): A {
-	return shuffleArray<RecordMutable<A>>(structuredClone(a));
+	return shuffleArray<Mutable<A>>(structuredClone(a));
 }
 
 /**

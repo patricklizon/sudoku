@@ -5,7 +5,7 @@ import {
 	MINIMUM_GIVEN_CELLS_COUNT_IN_LINE_BY_DIFFICULTY_LEVEL,
 	TOTAL_GIVEN_CELLS_RANGE_BY_DIFFICULTY_LEVEL,
 } from './constants';
-import type { PuzzleDifficultyLevel } from './types';
+import type { PuzzleDifficultyLevel } from '@/lib/domain/puzzle/types';
 
 test.each([
 	TOTAL_GIVEN_CELLS_RANGE_BY_DIFFICULTY_LEVEL,

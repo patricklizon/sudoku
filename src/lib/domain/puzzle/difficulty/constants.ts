@@ -12,7 +12,7 @@
  */
 
 import type { Range } from '@/lib/utils/types/range';
-import type { PuzzleDifficultyLevelName, PuzzleDifficultyLevel } from './types';
+import type { PuzzleDifficultyLevelName, PuzzleDifficultyLevel } from '@/lib/domain/puzzle/types';
 
 export const DIFFICULTY_LEVEL = {
 	[1]: 1 as PuzzleDifficultyLevel,

@@ -1,22 +1,32 @@
-import { ENCODED_EMPTY_FIELD_CODE_POINT_OFFSET } from './constants';
-import { isGridCellFilled, type Grid, type GridFilled } from './grid';
-import type { EncodedPuzzle } from './types';
+import { isNil } from '@/lib/utils/is-nil';
+import { ENCODED_EMPTY_FIELD_CODE_POINT_OFFSET } from '@/lib/domain/puzzle/constants';
+import { isGridCellFilled } from '@/lib/domain/puzzle/grid';
+import type {
+	PuzzleDifficultyLevel,
+	PuzzleEncoded,
+	PuzzleProblem,
+	PuzzleSolution,
+} from '@/lib/domain/puzzle/types';
 
 /**
  * Encodes a solvable puzzle into a string format
  */
-export function encodePuzzle(puzzle: Grid, solution: GridFilled): EncodedPuzzle {
+export function encodePuzzle(
+	problem: PuzzleProblem,
+	solution: PuzzleSolution,
+	difficulty: PuzzleDifficultyLevel,
+): PuzzleEncoded {
 	const codePointOffset = ENCODED_EMPTY_FIELD_CODE_POINT_OFFSET;
 	let result = '';
 
-	for (const [idx, char] of puzzle.entries()) {
+	for (const [idx, char] of problem.entries()) {
 		if (isGridCellFilled(char)) result += char.toString();
 		else {
-			result += String.fromCodePoint(
-				(solution[idx]?.toString().codePointAt(0) ?? 0) + codePointOffset,
-			);
+			const p = solution[idx]?.toString().codePointAt(0);
+			if (isNil(p)) throw new Error('Character not defined');
+			result += String.fromCodePoint(p + codePointOffset);
 		}
 	}
 
-	return result as EncodedPuzzle;
+	return encodeURIComponent(result + difficulty) as PuzzleEncoded;
 }

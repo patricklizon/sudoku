@@ -4,15 +4,10 @@ import {
 	DIFFICULTY_LEVEL,
 	MINIMUM_GIVEN_CELLS_COUNT_IN_LINE_BY_DIFFICULTY_LEVEL,
 	TOTAL_GIVEN_CELLS_RANGE_BY_DIFFICULTY_LEVEL,
-	type PuzzleDifficultyLevel,
-} from '@/lib/domain/puzzle-difficulty';
-import {
-	GRID_SIZE,
-	isGridCellFilled,
-	readGridCol,
-	readGridRow,
-	type GridFilled,
-} from '@/lib/domain/puzzle/grid';
+} from '@/lib/domain/puzzle/difficulty';
+import { GRID_SIZE, isGridCellFilled, readGridCol, readGridRow } from '@/lib/domain/puzzle/grid';
+
+import type { PuzzleDifficultyLevel, PuzzleSolution } from '@/lib/domain/puzzle/types';
 
 // TODO: Object.values(DIFFICULTY_LEVEL)
 describe.each<PuzzleDifficultyLevel>([
@@ -32,7 +27,7 @@ describe.each<PuzzleDifficultyLevel>([
 			[9, 5, 2, 6, 8, 1, 4, 7, 3],
 			[8, 3, 7, 9, 4, 2, 6, 1, 5],
 		].flat(),
-	) as GridFilled;
+	) as PuzzleSolution;
 	const puzzle = createPuzzleProblem(p, level);
 
 	test(`creates correct amount of holes for difficulty level '${level.toString()}'`, () => {

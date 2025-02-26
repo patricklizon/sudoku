@@ -1,5 +1,5 @@
-import type { GameId } from '@/lib/domain/core/id';
-import type { TimeISOString, TimeSecond } from '@/lib/domain/core/time';
+import type { GameId } from '@/lib/domain/id';
+import type { TimeISOString, TimeSecond } from '@/lib/domain/time';
 import type { Option } from '@/lib/utils/types/option';
 
 export type GameTimer = {
@@ -8,6 +8,9 @@ export type GameTimer = {
 	status: 'on' | 'off';
 	timeLimit: Option<TimeSecond>;
 	timeSpent: TimeSecond;
+};
+
+export type DBGameTimer = GameTimer & {
 	updatedAt: TimeISOString;
 	createdAt: TimeISOString;
 };

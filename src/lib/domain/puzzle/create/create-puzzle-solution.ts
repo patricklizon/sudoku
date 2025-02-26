@@ -2,17 +2,17 @@ import {
 	createEmptyGrid,
 	fillDiagonalSubGrids,
 	fillEmptyGridCells,
-	type GridFilled,
 	IncorrectGridError,
 	SUB_GRID_SIZE,
 } from '@/lib/domain/puzzle/grid';
+import type { PuzzleSolution } from '@/lib/domain/puzzle/types';
 
 /**
  * Creates a fully solved Sudoku puzzle.
  *
  * @throws {IncorrectGridError} when a valid solution cannot be generated
  */
-export function createPuzzleSolution(): GridFilled {
+export function createPuzzleSolution(): PuzzleSolution {
 	const grid = createEmptyGrid();
 
 	// Creating start with filling the diagonal sub-grids because these can be filled

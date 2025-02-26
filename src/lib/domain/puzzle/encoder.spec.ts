@@ -1,6 +1,8 @@
 import { describe, expect, test } from 'vitest';
-import { encodePuzzle } from './encoder';
-import { createEmptyCell, type Grid, type GridFilled } from './grid';
+import { encodePuzzle } from '@/lib/domain/puzzle/encoder';
+import { createEmptyCell } from '@/lib/domain/puzzle/grid';
+import type { PuzzleProblem, PuzzleSolution } from '@/lib/domain/puzzle/types';
+import { DIFFICULTY_LEVEL } from '@/lib/domain/puzzle/difficulty';
 
 describe(encodePuzzle.name, () => {
 	const _ = createEmptyCell();
@@ -14,7 +16,7 @@ describe(encodePuzzle.name, () => {
 		[9, 2, 1, 7, 3, 8, 4, 6, 5],
 		[4, 8, 3, 6, 5, 2, 9, 7, 1],
 		[6, 7, 5, 9, 4, 1, 3, 8, 2],
-	].flat() as GridFilled;
+	].flat() as PuzzleSolution;
 
 	const puzzle = [
 		[2, 4, 6, 5, 1, 3, 7, 9, _],
@@ -26,13 +28,15 @@ describe(encodePuzzle.name, () => {
 		[9, _, 1, _, _, 8, 4, 6, 5],
 		[4, 8, 3, _, 5, 2, 9, _, 1],
 		[6, 7, _, 9, 4, 1, 3, 8, 2],
-	].flat() as Grid;
+	].flat() as PuzzleProblem;
 
+	const difficultyLevel = DIFFICULTY_LEVEL[4];
 	const encoded =
-		'24651379H31I28G5DF75849F12319482EFCG83G1F925DEFB3748A99B1GC8465483F529G167E941382';
+		'24651379H31I28G5DF75849F12319482EFCG83G1F925DEFB3748A99B1GC8465483F529G167E941382' +
+		difficultyLevel;
 
 	test('encodes puzzle and solution into an URL safe string', () => {
-		const result = encodePuzzle(puzzle, solution);
+		const result = encodePuzzle(puzzle, solution, difficultyLevel);
 
 		expect(result).to.equal(encoded);
 		expect(result).to.equal(encodeURI(encoded));

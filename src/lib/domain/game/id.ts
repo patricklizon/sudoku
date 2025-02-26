@@ -1,6 +1,6 @@
-import { createRandomId } from '@/lib/domain/core/id';
-import type { Game } from './types';
+import { createRandomStringId } from '@/lib/domain/id';
+import type { Game } from '@/lib/domain/game/types';
 
 export function createGameId(): Game['id'] {
-	return createRandomId() as Game['id'];
+	return createRandomStringId();
 }

@@ -1,19 +1,30 @@
-import { ENCODED_EMPTY_FIELD_CODE_POINT_OFFSET } from './constants';
-import type { Grid, GridFilled } from './grid';
-import type { EncodedPuzzle } from './types';
+import { ENCODED_EMPTY_FIELD_CODE_POINT_OFFSET } from '@/lib/domain/puzzle/constants';
+import { isPuzzleDifficultyLevel } from '@/lib/domain/puzzle/difficulty/predicate';
+import type {
+	PuzzleDifficultyLevel,
+	PuzzleEncoded,
+	PuzzleProblem,
+	PuzzleSolution,
+} from '@/lib/domain/puzzle/types';
 
 /**
  * Decodes an encoded puzzle string into its solution and initial puzzle state
  */
-export function decodePuzzle(s: EncodedPuzzle): {
-	solution: GridFilled;
-	puzzle: Grid;
+export function decodePuzzle(s: PuzzleEncoded): {
+	solution: PuzzleSolution;
+	problem: PuzzleProblem;
+	difficulty: PuzzleDifficultyLevel;
 } {
 	const codePointOffset = ENCODED_EMPTY_FIELD_CODE_POINT_OFFSET;
-	const solution = [] as unknown as GridFilled;
-	const puzzle = [] as unknown as Grid;
+	const solution = [] as unknown as PuzzleSolution;
+	const problem = [] as unknown as PuzzleProblem;
 
-	const str = s.split('');
+	const difficulty = Number.parseInt(s.at(-1) ?? '', 10);
+	if (!isPuzzleDifficultyLevel(difficulty)) {
+		throw new Error('Difficulty level is not defined');
+	}
+
+	const str = s.slice(0, -1).split('');
 
 	let number;
 	for (const [idx, char] of str.entries()) {
@@ -25,9 +36,9 @@ export function decodePuzzle(s: EncodedPuzzle): {
 			);
 		} else {
 			solution[idx] = number;
-			puzzle[idx] = number;
+			problem[idx] = number;
 		}
 	}
 
-	return { solution, puzzle };
+	return { solution, problem, difficulty };
 }

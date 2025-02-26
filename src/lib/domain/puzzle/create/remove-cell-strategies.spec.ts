@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import { createEmptyCell, type Grid, GRID_SIZE } from '../grid';
+import { createEmptyCell, type Grid, GRID_SIZE } from '@/lib/domain/puzzle/grid';
 import {
 	type Config,
 	hasUniqueSolution,

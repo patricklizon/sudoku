@@ -1,11 +1,10 @@
 import { getRandomInt } from '@/lib/utils/get-random-int';
 import { isNil } from '@/lib/utils/is-nil';
 import {
-	type PuzzleDifficultyLevel,
 	TOTAL_GIVEN_CELLS_RANGE_BY_DIFFICULTY_LEVEL,
 	MINIMUM_GIVEN_CELLS_COUNT_IN_LINE_BY_DIFFICULTY_LEVEL,
 	DIFFICULTY_LEVEL,
-} from '@/lib/domain/puzzle-difficulty';
+} from '@/lib/domain/puzzle/difficulty';
 import type { GridFilled, Grid } from '@/lib/domain/puzzle/grid';
 import {
 	removeCellsJumpingByOneCell,
@@ -14,6 +13,7 @@ import {
 	removeCellsWanderingAlongS,
 	type CellRemovingFn,
 } from './remove-cell-strategies';
+import type { PuzzleDifficultyLevel } from '@/lib/domain/puzzle/types';
 
 const CELL_REMOVING_STRATEGY_BY_DIFFICULTY_LEVEL: Record<PuzzleDifficultyLevel, CellRemovingFn> = {
 	[DIFFICULTY_LEVEL[1]]: removeCellsRandomly,
