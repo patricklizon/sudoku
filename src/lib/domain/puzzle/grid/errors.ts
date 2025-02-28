@@ -1,7 +1,7 @@
 import type { Range } from '@/lib/utils/types/range';
 
-import { prettyDebug } from './utils';
-import type { Grid } from './types';
+import { debug } from './debug';
+import type { ConstructionGrid, Grid } from './types';
 
 export class ValueOutOfRangeError extends Error {
 	constructor(range: Range<number>, value: number) {
@@ -11,8 +11,14 @@ export class ValueOutOfRangeError extends Error {
 	}
 }
 
-export class IncorrectGridError extends Error {
+export class GridHasWrongSizeError extends Error {
 	constructor(grid: Grid) {
-		super(`Incorrect grid: ${prettyDebug(grid)}`);
+		super(`Incorrect grid: ${debug(grid)}`);
+	}
+}
+
+export class UnableToPopulateGridWithValuesError extends Error {
+	constructor(grid: Grid | ConstructionGrid) {
+		super(`Unable to populate grid with values: ${debug(grid)}`);
 	}
 }

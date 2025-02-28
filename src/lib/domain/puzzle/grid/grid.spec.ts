@@ -12,18 +12,19 @@ import type { Grid, GridCellCoordinates, GridFilled, GridRow } from './types';
 
 import {
 	assertCoordinateIsWithinRange,
-	assertIndexIsWithinRange,
+	assertGridIndexIsWithinRange,
 	createEmptyCell,
 	createEmptyGrid,
 	createEmptySubGrid,
 	fillDiagonalSubGrids,
-	fillEmptyGridCells,
-	indexToCoordinates,
 	isGridCellEmpty,
 	isGridCellFilled,
-	isGridCellValueCorrectAtCoordinates,
-	readAllowedGridCellValuesAtCoordinates,
-	readSubGridCells,
+	isGridCellValueCorrectAt,
+	readAllowedGridCellValuesAt,
+	readSubGridCellsAt,
+	mapGridIndexToColIndex,
+	mapGridIndexToRowIndex,
+	mapGridIndexToCoordinates,
 } from './grid';
 
 import { ValueOutOfRangeError } from './errors';
@@ -52,42 +53,7 @@ describe(isGridCellFilled.name, () => {
 	});
 });
 
-describe(fillEmptyGridCells.name, () => {
-	test('fills only empty fields of grid producing solution', () => {
-		const _ = createEmptyCell();
-		const left = structuredClone(
-			[
-				[7, 6, 5, _, _, _, _, _, _],
-				[3, 9, 1, _, _, _, _, _, _],
-				[2, 4, 8, _, _, _, _, _, _],
-				[_, _, _, 8, 7, 3, _, _, _],
-				[_, _, _, 2, 6, 4, _, _, _],
-				[_, _, _, 5, 1, 9, _, _, _],
-				[_, _, _, _, _, _, 9, 2, 8],
-				[_, _, _, _, _, _, 4, 7, 3],
-				[_, _, _, _, _, _, 6, 1, 5],
-			].flat(),
-		) as Grid;
-
-		const right = [
-			[7, 6, 5, 1, 2, 8, 3, 4, 9],
-			[3, 9, 1, 4, 5, 6, 2, 8, 7],
-			[2, 4, 8, 3, 9, 7, 1, 5, 6],
-			[1, 2, 6, 8, 7, 3, 5, 9, 4],
-			[5, 7, 9, 2, 6, 4, 8, 3, 1],
-			[4, 8, 3, 5, 1, 9, 7, 6, 2],
-			[6, 1, 4, 7, 3, 5, 9, 2, 8],
-			[9, 5, 2, 6, 8, 1, 4, 7, 3],
-			[8, 3, 7, 9, 4, 2, 6, 1, 5],
-		].flat() as GridFilled;
-
-		fillEmptyGridCells(left, 0);
-
-		expect(left).to.deep.equal(right);
-	});
-});
-
-describe(readSubGridCells.name, () => {
+describe(readSubGridCellsAt.name, () => {
 	type TestData = Record<'middle' | 'left' | 'right', GridRow>;
 
 	const top = {
@@ -211,7 +177,7 @@ describe(readSubGridCells.name, () => {
 		['bottom-right', 8, 7, bottom.right],
 		['bottom-right', 8, 8, bottom.right],
 	])('reads %s subgrid with coordinates (%d, %d)', (_, rowIdx, colIdx, expected) => {
-		const result = readSubGridCells(grid, { colIdx, rowIdx });
+		const result = readSubGridCellsAt(grid, { colIdx, rowIdx });
 
 		expect(result).to.deep.equal(expected);
 	});
@@ -221,7 +187,7 @@ describe(readSubGridCells.name, () => {
 		[2, 9],
 		[-2, 10],
 	])('throws when reading with coordinates outside of range', (rowIdx, colIdx) => {
-		expect(() => readSubGridCells(grid, { colIdx, rowIdx })).to.throw(ValueOutOfRangeError);
+		expect(() => readSubGridCellsAt(grid, { colIdx, rowIdx })).to.throw(ValueOutOfRangeError);
 	});
 });
 
@@ -261,20 +227,20 @@ describe(fillDiagonalSubGrids.name, () => {
 
 		fillDiagonalSubGrids(grid);
 
-		const topLeftSubGrid = readSubGridCells(grid, { colIdx: 0, rowIdx: 0 });
-		const topMiddleSubGrid = readSubGridCells(grid, { colIdx: SUB_GRID_SIZE, rowIdx: 0 });
-		const topRightSubGrid = readSubGridCells(grid, { colIdx: SUB_GRID_SIZE * 2, rowIdx: 0 });
+		const topLeftSubGrid = readSubGridCellsAt(grid, { colIdx: 0, rowIdx: 0 });
+		const topMiddleSubGrid = readSubGridCellsAt(grid, { colIdx: SUB_GRID_SIZE, rowIdx: 0 });
+		const topRightSubGrid = readSubGridCellsAt(grid, { colIdx: SUB_GRID_SIZE * 2, rowIdx: 0 });
 
 		expect(topLeftSubGrid.every(isGridCellFilled)).to.equal(true);
 		expect(topMiddleSubGrid.every(isGridCellEmpty)).to.equal(true);
 		expect(topRightSubGrid.every(isGridCellEmpty)).to.equal(true);
 
-		const middleLeftSubGrid = readSubGridCells(grid, { colIdx: 0, rowIdx: SUB_GRID_SIZE });
-		const middleMiddleSubGrid = readSubGridCells(grid, {
+		const middleLeftSubGrid = readSubGridCellsAt(grid, { colIdx: 0, rowIdx: SUB_GRID_SIZE });
+		const middleMiddleSubGrid = readSubGridCellsAt(grid, {
 			colIdx: SUB_GRID_SIZE,
 			rowIdx: SUB_GRID_SIZE,
 		});
-		const middleRightSubGrid = readSubGridCells(grid, {
+		const middleRightSubGrid = readSubGridCellsAt(grid, {
 			colIdx: SUB_GRID_SIZE * 2,
 			rowIdx: SUB_GRID_SIZE,
 		});
@@ -283,12 +249,12 @@ describe(fillDiagonalSubGrids.name, () => {
 		expect(middleMiddleSubGrid.every(isGridCellFilled)).to.equal(true);
 		expect(middleRightSubGrid.every(isGridCellEmpty)).to.equal(true);
 
-		const bottomLeftSubGrid = readSubGridCells(grid, { colIdx: 0, rowIdx: SUB_GRID_SIZE * 2 });
-		const bottomMiddleSubGrid = readSubGridCells(grid, {
+		const bottomLeftSubGrid = readSubGridCellsAt(grid, { colIdx: 0, rowIdx: SUB_GRID_SIZE * 2 });
+		const bottomMiddleSubGrid = readSubGridCellsAt(grid, {
 			colIdx: SUB_GRID_SIZE,
 			rowIdx: SUB_GRID_SIZE * 2,
 		});
-		const bottomRightSubGrid = readSubGridCells(grid, {
+		const bottomRightSubGrid = readSubGridCellsAt(grid, {
 			colIdx: SUB_GRID_SIZE * 2,
 			rowIdx: SUB_GRID_SIZE * 2,
 		});
@@ -319,12 +285,12 @@ describe.each([])(assertCoordinateIsWithinRange.name, () => {
 	);
 });
 
-describe(assertIndexIsWithinRange.name, () => {
+describe(assertGridIndexIsWithinRange.name, () => {
 	test.each<number>([-Number.MAX_SAFE_INTEGER, -2, -1, GRID_CELLS_COUNT, Number.MAX_SAFE_INTEGER])(
 		'throws when out of range',
 		(value) => {
 			expect(() => {
-				assertIndexIsWithinRange(value);
+				assertGridIndexIsWithinRange(value);
 			}).to.throw(ValueOutOfRangeError);
 		},
 	);
@@ -333,13 +299,13 @@ describe(assertIndexIsWithinRange.name, () => {
 		'does nothing when within range',
 		(value) => {
 			expect(() => {
-				assertIndexIsWithinRange(value);
+				assertGridIndexIsWithinRange(value);
 			}).not.to.throw(ValueOutOfRangeError);
 		},
 	);
 });
 
-describe(isGridCellValueCorrectAtCoordinates.name, () => {
+describe(isGridCellValueCorrectAt.name, () => {
 	const _ = createEmptyCell();
 	const g = [
 		[7, 6, 5, _, _, _, _, _, _], // 1st sub-grid is filled correctly
@@ -359,7 +325,7 @@ describe(isGridCellValueCorrectAtCoordinates.name, () => {
 			return { colIdx: Math.floor(idx / SUB_GRID_SIZE), rowIdx: idx % SUB_GRID_SIZE };
 		}),
 	)(`no interference, therefore %j is marked as correctly placed`, (coordinates) => {
-		expect(isGridCellValueCorrectAtCoordinates(g, coordinates)).to.equal(true);
+		expect(isGridCellValueCorrectAt(g, coordinates)).to.equal(true);
 	});
 
 	// 1st row of 4th sub-grid
@@ -370,7 +336,7 @@ describe(isGridCellValueCorrectAtCoordinates.name, () => {
 	] satisfies GridCellCoordinates[])(
 		`duplicate value in other sub-grid's row, therefore %j marked as incorrectly placed`,
 		(coordinates) => {
-			expect(isGridCellValueCorrectAtCoordinates(g, coordinates)).to.equal(false);
+			expect(isGridCellValueCorrectAt(g, coordinates)).to.equal(false);
 		},
 	);
 
@@ -382,7 +348,7 @@ describe(isGridCellValueCorrectAtCoordinates.name, () => {
 	] satisfies GridCellCoordinates[])(
 		`no interference, therefore (%d, %d) is marked as correctly placed`,
 		(coordinates) => {
-			expect(isGridCellValueCorrectAtCoordinates(g, coordinates)).to.equal(true);
+			expect(isGridCellValueCorrectAt(g, coordinates)).to.equal(true);
 		},
 	);
 
@@ -392,7 +358,7 @@ describe(isGridCellValueCorrectAtCoordinates.name, () => {
 			return { colIdx: idx, rowIdx: 4 };
 		}),
 	)(`row has duplicated values which makes %j marked as incorrectly placed`, (coordinates) => {
-		expect(isGridCellValueCorrectAtCoordinates(g, coordinates)).to.equal(false);
+		expect(isGridCellValueCorrectAt(g, coordinates)).to.equal(false);
 	});
 
 	// 9th sub-grid
@@ -401,7 +367,7 @@ describe(isGridCellValueCorrectAtCoordinates.name, () => {
 			return { colIdx: 6 + Math.floor(idx / SUB_GRID_SIZE), rowIdx: 6 + (idx % SUB_GRID_SIZE) };
 		}),
 	)(`sub-grid has duplicated value which makes %j marked as incorrectly placed`, (coordinates) => {
-		expect(isGridCellValueCorrectAtCoordinates(g, coordinates)).to.equal(false);
+		expect(isGridCellValueCorrectAt(g, coordinates)).to.equal(false);
 	});
 });
 
@@ -411,21 +377,7 @@ describe(createEmptyCell.name, () => {
 	});
 });
 
-describe(indexToCoordinates.name, () => {
-	test.each([-1, GRID_CELLS_COUNT])('throws when index is out of range', (idx) => {
-		expect(() => indexToCoordinates(idx)).to.throw(ValueOutOfRangeError);
-	});
-
-	test.each<[idx: number, coordinates: GridCellCoordinates]>([
-		[0, { colIdx: 0, rowIdx: 0 }],
-		[1, { colIdx: 1, rowIdx: 0 }],
-		[4 * GRID_SIZE + 3, { colIdx: 3, rowIdx: 4 }],
-	])('translate index (%d) to grid coordinate %j', (idx, coordinates) => {
-		expect(indexToCoordinates(idx)).and.to.deep.equal(coordinates);
-	});
-});
-
-describe(readAllowedGridCellValuesAtCoordinates.name, () => {
+describe(readAllowedGridCellValuesAt.name, () => {
 	const _ = createEmptyCell();
 	const g = [
 		[7, 6, 5, _, _, _, _, 4, _],
@@ -444,6 +396,69 @@ describe(readAllowedGridCellValuesAtCoordinates.name, () => {
 		[{ colIdx: 1, rowIdx: 0 }, new Set()],
 		[{ colIdx: 7, rowIdx: 2 }, new Set([3, 5, 6])],
 	])('returns potentially correct values at given coordinate', (coordinates, expected) => {
-		expect(readAllowedGridCellValuesAtCoordinates(g, coordinates)).to.deep.equal(expected);
+		expect(readAllowedGridCellValuesAt(g, coordinates)).to.deep.equal(expected);
 	});
+});
+
+describe(mapGridIndexToCoordinates.name, () => {
+	test.each<[index: number, coordinates: GridCellCoordinates][]>([
+		[
+			[0, { rowIdx: 0, colIdx: 0 }],
+			[2, { rowIdx: 0, colIdx: 2 }],
+			[33, { rowIdx: 4, colIdx: 7 }],
+		],
+	])('returns coorect coordinates', ([index, coordinates]) => {
+		expect(mapGridIndexToCoordinates(index)).to.deep.equal(coordinates);
+	});
+
+	test.each<number[]>([[-1, Number.POSITIVE_INFINITY]])(
+		'throws error when index is out or range',
+		(index) => {
+			expect(() => {
+				mapGridIndexToCoordinates(index);
+			}).toThrowError(ValueOutOfRangeError);
+		},
+	);
+});
+
+describe(mapGridIndexToRowIndex.name, () => {
+	test.each<[gridIdx: number, rowIdx: number][]>([
+		[
+			[0, 0],
+			[2, 0],
+			[33, 4],
+		],
+	])('returns coorect row index', ([index, coordinates]) => {
+		expect(mapGridIndexToRowIndex(index)).to.deep.equal(coordinates);
+	});
+
+	test.each<number[]>([[-1, Number.POSITIVE_INFINITY]])(
+		'throws error when index is out or range',
+		(index) => {
+			expect(() => {
+				mapGridIndexToRowIndex(index);
+			}).toThrowError(ValueOutOfRangeError);
+		},
+	);
+});
+
+describe(mapGridIndexToColIndex.name, () => {
+	test.each<[gridIdx: number, rowIdx: number][]>([
+		[
+			[0, 0],
+			[2, 2],
+			[33, 7],
+		],
+	])('returns coorect row index', ([index, coordinates]) => {
+		expect(mapGridIndexToColIndex(index)).to.deep.equal(coordinates);
+	});
+
+	test.each<number[]>([[-1, Number.POSITIVE_INFINITY]])(
+		'throws error when index is out or range',
+		(index) => {
+			expect(() => {
+				mapGridIndexToColIndex(index);
+			}).toThrowError(ValueOutOfRangeError);
+		},
+	);
 });

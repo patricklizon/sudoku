@@ -9,15 +9,24 @@ import vueDevTools from 'vite-plugin-vue-devtools';
 export default defineConfig({
 	plugins: [vue(), vueJsx(), vueDevTools()],
 
+	resolve: {
+		alias: {
+			'@': fileURLToPath(new URL('./src', import.meta.url)),
+		},
+	},
+
 	css: {
 		modules: {
 			localsConvention: 'camelCaseOnly',
 		},
 	},
 
-	resolve: {
-		alias: {
-			'@': fileURLToPath(new URL('./src', import.meta.url)),
+	worker: {
+		format: 'es',
+		rollupOptions: {
+			output: {
+				esModule: true,
+			},
 		},
 	},
 });

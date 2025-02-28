@@ -1,0 +1,10 @@
+{
+	"extends": "./tsconfig.app.json",
+	"include": ["src/**/*.worker.ts"],
+	"exclude": [],
+	"compilerOptions": {
+		"tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
+		"lib": ["ESNext", "WebWorker"],
+		"types": ["node"]
+	}
+}

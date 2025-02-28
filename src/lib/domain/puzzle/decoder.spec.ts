@@ -2,7 +2,6 @@ import { describe, expect, test } from 'vitest';
 import { decodePuzzle } from '@/lib/domain/puzzle/decoder';
 import { createEmptyCell } from '@/lib/domain/puzzle/grid';
 import type { PuzzleEncoded, PuzzleProblem, PuzzleSolution } from '@/lib/domain/puzzle/types';
-import { DIFFICULTY_LEVEL } from '@/lib/domain/puzzle/difficulty';
 
 describe(decodePuzzle.name, () => {
 	const _ = createEmptyCell();
@@ -31,7 +30,7 @@ describe(decodePuzzle.name, () => {
 		[6, 7, _, 9, 4, 1, 3, 8, 2],
 	].flat() as PuzzleProblem;
 
-	const difficulty = DIFFICULTY_LEVEL[2];
+	const difficulty = 2;
 
 	const encoded =
 		('24651379H31I28G5DF75849F12319482EFCG83G1F925DEFB3748A99B1GC8465483F529G167E941382' +

@@ -1,7 +1,10 @@
-import { type Grid, prettyDebug } from './grid';
+import type { AnyRecord } from '@/lib/utils/types/record';
+import { type Grid, debug } from './grid';
 
 export class PuzzleGenerationError extends Error {
-	constructor(grid: Grid) {
-		super(`It was not possible to generate puzzle for grid: ${prettyDebug(grid)}`);
+	constructor(grid: Grid, record: AnyRecord, removedCount: number) {
+		super(
+			`It was not possible to generate puzzle for grid: ${debug(grid)} \n\nremoved count: ${removedCount.toString()} \n\n${JSON.stringify(record, undefined, '\t')}`,
+		);
 	}
 }

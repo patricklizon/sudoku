@@ -14,30 +14,29 @@ import type { PuzzleDifficultyLevel } from '@/lib/domain/puzzle/types';
  */
 export function createPuzzleProblem(
 	g: Readonly<GridFilled>,
-	difficultyLevel: PuzzleDifficultyLevel,
+	difficulty: PuzzleDifficultyLevel,
 ): Grid {
-	const totalCellsRange = TOTAL_GIVEN_CELLS_RANGE_BY_DIFFICULTY_LEVEL[difficultyLevel];
+	const totalCellsRange = TOTAL_GIVEN_CELLS_RANGE_BY_DIFFICULTY_LEVEL[difficulty];
 	if (isNil(totalCellsRange)) {
 		// TODO: extract error
 		throw new Error(
-			`Total given cells range is not defined for difficulty level: ${difficultyLevel.toString()}`,
+			`Total given cells range is not defined for difficulty level: ${difficulty.toString()}`,
 		);
 	}
 
-	const cellRemovingStrategy = CELL_REMOVING_STRATEGY_BY_DIFFICULTY_LEVEL[difficultyLevel];
+	const cellRemovingStrategy = CELL_REMOVING_STRATEGY_BY_DIFFICULTY_LEVEL[difficulty];
 	if (isNil(cellRemovingStrategy)) {
 		// TODO: extract error
 		throw new Error(
-			`Hole punching function is not defined for difficulty level: '${difficultyLevel.toString()}'`,
+			`Hole punching function is not defined for difficulty level: '${difficulty.toString()}'`,
 		);
 	}
 
-	const minimumCellsInLineCount =
-		MINIMUM_GIVEN_CELLS_COUNT_IN_LINE_BY_DIFFICULTY_LEVEL[difficultyLevel];
+	const minimumCellsInLineCount = MINIMUM_GIVEN_CELLS_COUNT_IN_LINE_BY_DIFFICULTY_LEVEL[difficulty];
 	if (isNil(minimumCellsInLineCount)) {
 		// TODO: extract error
 		throw new Error(
-			`Minimum given cells in line count is not defined for difficulty level: ${difficultyLevel.toString()}`,
+			`Minimum given cells in line count is not defined for difficulty level: ${difficulty.toString()}`,
 		);
 	}
 
@@ -46,7 +45,11 @@ export function createPuzzleProblem(
 		minimumGivenCells: {
 			col: minimumCellsInLineCount,
 			row: minimumCellsInLineCount,
-			total: { count: low + getRandomInt(high - low), range: totalCellsRange },
+			total: {
+				count: low + getRandomInt(high - low),
+				range: totalCellsRange,
+			},
 		},
+		difficulty,
 	});
 }

@@ -195,6 +195,7 @@
 				"eslint/max-params": "off",
 				"max-nested-describe": "error",
 				"no-conditional-in-test": "error",
+				"eslint/no-unused-expressions": "off",
 				"no-explicit-any": "off",
 				"no-identical-title": "error",
 				"prefer-dom-node-text-content": "error",

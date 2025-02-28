@@ -1,10 +1,4 @@
-import {
-	createEmptyGrid,
-	fillDiagonalSubGrids,
-	fillEmptyGridCells,
-	IncorrectGridError,
-	SUB_GRID_SIZE,
-} from '@/lib/domain/puzzle/grid';
+import { createEmptyGrid, fillDiagonalSubGrids, solve } from '@/lib/domain/puzzle/grid';
 import type { PuzzleSolution } from '@/lib/domain/puzzle/types';
 
 /**
@@ -22,7 +16,5 @@ export function createPuzzleSolution(): PuzzleSolution {
 	// for the rest of the grid.
 	fillDiagonalSubGrids(grid);
 
-	if (fillEmptyGridCells(grid, SUB_GRID_SIZE)) return grid;
-
-	throw new IncorrectGridError(grid);
+	return solve(grid);
 }

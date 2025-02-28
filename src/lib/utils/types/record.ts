@@ -19,3 +19,5 @@ export type RecordDifference<
 	R extends Record<RecordKey, unknown>,
 	ExcludeKeysFrom extends Record<RecordKey, unknown>,
 > = { [K in Exclude<keyof R, keyof ExcludeKeysFrom>]: R[K] };
+
+export type AnyRecord = Record<RecordKey, unknown>;

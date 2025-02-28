@@ -5,7 +5,12 @@ import {
 	MINIMUM_GIVEN_CELLS_COUNT_IN_LINE_BY_DIFFICULTY_LEVEL,
 	TOTAL_GIVEN_CELLS_RANGE_BY_DIFFICULTY_LEVEL,
 } from '@/lib/domain/puzzle/difficulty';
-import { GRID_SIZE, isGridCellFilled, readGridCol, readGridRow } from '@/lib/domain/puzzle/grid';
+import {
+	GRID_SIZE,
+	isGridCellFilled,
+	readGridColAt,
+	readGridRowCellsAt,
+} from '@/lib/domain/puzzle/grid';
 
 import type { PuzzleDifficultyLevel, PuzzleSolution } from '@/lib/domain/puzzle/types';
 
@@ -44,10 +49,10 @@ describe.each<PuzzleDifficultyLevel>([
 			const cellsFilledCount = MINIMUM_GIVEN_CELLS_COUNT_IN_LINE_BY_DIFFICULTY_LEVEL[level]!;
 
 			expect(
-				readGridRow(puzzle, { colIdx: 0, rowIdx: idx }).filter(isGridCellFilled),
+				readGridRowCellsAt(puzzle, { colIdx: 0, rowIdx: idx }).filter(isGridCellFilled),
 			).to.have.length.of.at.least(cellsFilledCount);
 			expect(
-				readGridCol(puzzle, { colIdx: idx, rowIdx: 0 }).filter(isGridCellFilled),
+				readGridColAt(puzzle, { colIdx: idx, rowIdx: 0 }).filter(isGridCellFilled),
 			).to.have.length.of.at.least(cellsFilledCount);
 		},
 	);

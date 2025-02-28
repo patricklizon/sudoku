@@ -20,6 +20,7 @@ import {
 	removeCellsWanderingAlongS,
 	type CellRemovingFn,
 } from '@/lib/domain/puzzle/grid';
+import type { DeepReadonly } from '@/lib/utils/types/deep-readonly';
 
 export const DIFFICULTY_LEVEL = {
 	[1]: 1 as PuzzleDifficultyLevel,
@@ -27,13 +28,13 @@ export const DIFFICULTY_LEVEL = {
 	[3]: 3 as PuzzleDifficultyLevel,
 	[4]: 4 as PuzzleDifficultyLevel,
 	[5]: 5 as PuzzleDifficultyLevel,
-} as const satisfies Record<number, number>;
+} as const satisfies Readonly<Record<number, number>>;
 
 export const AVALIABLE_DIFFICULTY_LEVELS = new Set<PuzzleDifficultyLevel>([
 	DIFFICULTY_LEVEL[1],
 	DIFFICULTY_LEVEL[2],
 	DIFFICULTY_LEVEL[3],
-]);
+]) satisfies ReadonlySet<PuzzleDifficultyLevel>;
 
 export const DIFFICULTY_LEVEL_BY_NAME = {
 	'extremely-easy': DIFFICULTY_LEVEL[1],
@@ -41,7 +42,7 @@ export const DIFFICULTY_LEVEL_BY_NAME = {
 	medium: DIFFICULTY_LEVEL[3],
 	difficult: DIFFICULTY_LEVEL[4],
 	evil: DIFFICULTY_LEVEL[5],
-} as const satisfies Record<PuzzleDifficultyLevelName, number>;
+} as const satisfies Readonly<Record<PuzzleDifficultyLevelName, number>>;
 
 export const NAME_BY_DIFFICULTY_LEVEL = {
 	[DIFFICULTY_LEVEL[1]]: 'extremely-easy',
@@ -49,7 +50,7 @@ export const NAME_BY_DIFFICULTY_LEVEL = {
 	[DIFFICULTY_LEVEL[3]]: 'medium',
 	[DIFFICULTY_LEVEL[4]]: 'difficult',
 	[DIFFICULTY_LEVEL[5]]: 'evil',
-} as const satisfies Record<number, PuzzleDifficultyLevelName>;
+} as const satisfies Readonly<Record<number, PuzzleDifficultyLevelName>>;
 
 /**
  * The positioning of empty cells significantly affects the difficulty level even when two
@@ -72,8 +73,8 @@ export const MINIMUM_GIVEN_CELLS_COUNT_IN_LINE_BY_DIFFICULTY_LEVEL: Readonly<
  * The more empty cells provided at the start of a Sudoku game,
  * the higher level the puzzle graded in.
  */
-export const TOTAL_GIVEN_CELLS_RANGE_BY_DIFFICULTY_LEVEL: Readonly<
-	Record<PuzzleDifficultyLevel, Readonly<Range<number>>>
+export const TOTAL_GIVEN_CELLS_RANGE_BY_DIFFICULTY_LEVEL: DeepReadonly<
+	Record<PuzzleDifficultyLevel, Range<number>>
 > = {
 	[DIFFICULTY_LEVEL[1]]: [50, 62],
 	[DIFFICULTY_LEVEL[2]]: [36, 49],
@@ -92,9 +93,8 @@ export const TOTAL_GIVEN_CELLS_RANGE_BY_DIFFICULTY_LEVEL: Readonly<
  * At some point cells cannot be removed randomly as some patterns might be simple to solve,
  * even with lower count of given cells.
  */
-export const CELL_REMOVING_STRATEGY_BY_DIFFICULTY_LEVEL: Record<
-	PuzzleDifficultyLevel,
-	CellRemovingFn
+export const CELL_REMOVING_STRATEGY_BY_DIFFICULTY_LEVEL: Readonly<
+	Record<PuzzleDifficultyLevel, CellRemovingFn>
 > = {
 	[DIFFICULTY_LEVEL[1]]: removeCellsRandomly,
 	[DIFFICULTY_LEVEL[2]]: removeCellsRandomly,

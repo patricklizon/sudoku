@@ -1,0 +1,26 @@
+dictionaries = ["en_us"]
+words = [
+	"eslint",
+	"idxs",
+	"jsdom",
+	"mts",
+	"oxc",
+	"oxlint",
+	"oxlint",
+	"readwrite",
+	"ssr",
+	"tx",
+	"upgradeneeded",
+	"vite",
+	"vitest",
+	"vitejs",
+	"vue",
+	"trunc"
+]
+flag_words = []
+ignore_paths = [
+	".git/**/*",
+	"dist/**/*",
+	"node_modules/**/*",
+]
+ignore_patterns=[]

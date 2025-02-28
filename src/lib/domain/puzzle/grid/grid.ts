@@ -2,7 +2,7 @@ import { getRandomInt } from '@/lib/utils/get-random-int';
 import { isNil } from '@/lib/utils/is-nil';
 import type { Range } from '@/lib/utils/types/range';
 
-import { IncorrectGridError, ValueOutOfRangeError } from './errors';
+import { GridHasWrongSizeError, ValueOutOfRangeError } from './errors';
 import {
 	CELL_ALLOWED_VALUES,
 	GRID_CELLS_COUNT,
@@ -11,6 +11,8 @@ import {
 	SUB_GRID_SIZE,
 } from './constants';
 import type {
+	ConstructionGrid,
+	ConstructionSubGrid,
 	Grid,
 	GridCellCoordinates,
 	GridCellEmptyValue,
@@ -22,33 +24,13 @@ import type {
 	SubGrid,
 } from './types';
 
-/**
- * Mutates passed grid.
- *
- * Recursively fills entire grid.
- */
-export function fillEmptyGridCells(g: Grid, idx: number): g is GridFilled {
-	if (g.every(isGridCellFilled)) return true;
-
-	const cellCopy = g[idx];
-	const nextIdx = idx + 1;
-	if (isGridCellFilled(cellCopy)) return fillEmptyGridCells(g, nextIdx);
-
-	const coordinates = readCoordinatesByGridCellIndex(idx);
-	for (const v of readAllowedGridCellValuesAtCoordinates(g, coordinates)) {
-		g[idx] = v;
-		if (fillEmptyGridCells(g, nextIdx)) return true;
-	}
-
-	g[idx] = cellCopy;
-	return false;
-}
+import type { Option } from '@/lib/utils/types/option';
 
 /**
  * Mutates passed grid.
  *
- * Fills the diagonal sub-grids (3x3 blocks) of the given grid with random digits 1-9.
- * Only fills the diagonal blocks from top-left to bottom-right.
+ * Fills the diagonal {@link SubGrid} of the given grid with random values.
+ * Only fills the diagonal from top-left to bottom-right.
  *
  * @example
  * ```txt
@@ -82,29 +64,30 @@ function getRandomDigit(): number {
 	return getRandomInt(GRID_SIZE) + 1;
 }
 
-export function readAllowedGridCellValuesAtCoordinates(
-	g: Grid,
-	c: GridCellCoordinates,
+export function readAllowedGridCellValuesAt(
+	g: Grid | ConstructionGrid,
+	coordinates: Readonly<GridCellCoordinates>,
 ): Set<GridCellFilledValue> {
-	const forbidden = new Set<number>();
-	const placed = new Set([...readGridRow(g, c), ...readGridCol(g, c), ...readSubGridCells(g, c)]);
-
-	for (const value of placed) {
-		if (isNil(value) || forbidden.has(value)) continue;
-		forbidden.add(value);
-	}
-
-	return CELL_ALLOWED_VALUES.difference(forbidden);
+	return CELL_ALLOWED_VALUES.difference(
+		new Set([
+			...readSubGridCellsAt(g, coordinates),
+			...readGridRowCellsAt(g, coordinates),
+			...readGridColAt(g, coordinates),
+		]),
+	);
 }
 
-export function isGridCellValueCorrectAtCoordinates(g: Grid, c: GridCellCoordinates): boolean {
-	const row = readGridRow(g, c);
+export function isGridCellValueCorrectAt(
+	g: Grid,
+	coordinates: Readonly<GridCellCoordinates>,
+): boolean {
+	const row = readGridRowCellsAt(g, coordinates);
 	if (hasDuplicates(row)) return false;
 
-	const col = readGridCol(g, c);
+	const col = readGridColAt(g, coordinates);
 	if (hasDuplicates(col)) return false;
 
-	const boxValues = readSubGridCells(g, c);
+	const boxValues = readSubGridCellsAt(g, coordinates);
 	if (hasDuplicates(boxValues)) return false;
 
 	return true;
@@ -115,31 +98,41 @@ export function hasDuplicates(cells: readonly GridCellValue[]): boolean {
 	return new Set(values).size !== values.length;
 }
 
-export function readGridCol(g: Readonly<Grid>, { colIdx }: Readonly<GridCellCoordinates>): GridCol {
+export function readGridColAt(
+	g: Readonly<Grid | ConstructionGrid>,
+	coordinates: Readonly<GridCellCoordinates>,
+): GridCol {
 	const result = [];
-	for (let idx = colIdx; idx < GRID_CELLS_COUNT; idx += GRID_SIZE) result.push(g[idx]);
+	for (let idx = coordinates.colIdx; idx < GRID_CELLS_COUNT; idx += GRID_SIZE) result.push(g[idx]);
 	return result as GridCol;
 }
 
-export function readGridRow(g: Readonly<Grid>, { rowIdx }: Readonly<GridCellCoordinates>): GridRow {
-	return g.slice(rowIdx * GRID_SIZE, (rowIdx + 1) * GRID_SIZE) as GridRow;
+export function readColCellIndexesAt(coordinates: Readonly<GridCellCoordinates>): Set<number> {
+	const result = new Set<number>();
+	for (let idx = 0; idx < GRID_CELLS_COUNT; idx += GRID_SIZE) result.add(coordinates.colIdx + idx);
+	return result;
 }
 
-export function readCoordinatesByGridCellIndex(idx: number): GridCellCoordinates {
-	if (idx < 0 || GRID_CELLS_COUNT < idx) {
-		throw new ValueOutOfRangeError([0, GRID_CELLS_COUNT], idx);
-	}
-
-	return {
-		rowIdx: Math.floor(idx / GRID_SIZE),
-		colIdx: idx % GRID_SIZE,
-	};
+export function readGridRowCellsAt(
+	g: Readonly<Grid | ConstructionGrid>,
+	coordinates: Readonly<GridCellCoordinates>,
+): GridRow {
+	return g.slice(coordinates.rowIdx * GRID_SIZE, (coordinates.rowIdx + 1) * GRID_SIZE) as GridRow;
 }
 
-export function readGridCell<G extends Grid | GridFilled>(
-	g: G,
-	coordinates: GridCellCoordinates,
-): G[number] {
+export function readRowCellIndexesAt(coordinates: Readonly<GridCellCoordinates>): Set<number> {
+	const result = new Set<number>();
+	for (let idx = 0; idx < GRID_SIZE; idx++) result.add(coordinates.rowIdx * GRID_SIZE + idx);
+	return result;
+}
+
+export function readGridCell(
+	g: Readonly<Grid | GridFilled>,
+	coordinates: Readonly<GridCellCoordinates>,
+): Readonly<Option<number>> {
+	assertCoordinateIsWithinRange(coordinates.rowIdx);
+	assertCoordinateIsWithinRange(coordinates.colIdx);
+
 	return g[coordinates.rowIdx * GRID_SIZE + coordinates.colIdx];
 }
 
@@ -163,12 +156,21 @@ export function readGridCell<G extends Grid | GridFilled>(
  * Returns: [4, 5, 6, 7, 8, 9, 1, 2, 3]
  * ```
  */
-export function readSubGridCells(g: Readonly<Grid>, c: GridCellCoordinates): SubGrid {
-	assertCoordinateIsWithinRange(c.rowIdx);
-	assertCoordinateIsWithinRange(c.colIdx);
 
-	const subGridStartRowIdx = Math.floor(c.rowIdx / SUB_GRID_SIZE) * SUB_GRID_SIZE;
-	const subGridStartColIdx = Math.floor(c.colIdx / SUB_GRID_SIZE) * SUB_GRID_SIZE;
+export function readSubGridCellsAt(
+	g: Readonly<Grid>,
+	coordinates: Readonly<GridCellCoordinates>,
+): SubGrid;
+export function readSubGridCellsAt(
+	g: Readonly<ConstructionGrid>,
+	coordinates: Readonly<GridCellCoordinates>,
+): ConstructionSubGrid;
+export function readSubGridCellsAt(g: unknown, coordinates: GridCellCoordinates): Array<unknown> {
+	assertCoordinateIsWithinRange(coordinates.rowIdx);
+	assertCoordinateIsWithinRange(coordinates.colIdx);
+
+	const subGridStartRowIdx = Math.floor(coordinates.rowIdx / SUB_GRID_SIZE) * SUB_GRID_SIZE;
+	const subGridStartColIdx = Math.floor(coordinates.colIdx / SUB_GRID_SIZE) * SUB_GRID_SIZE;
 
 	const result = createEmptySubGrid();
 	let resultIdx = 0;
@@ -177,6 +179,27 @@ export function readSubGridCells(g: Readonly<Grid>, c: GridCellCoordinates): Sub
 		for (let cIdx = 0; cIdx < SUB_GRID_SIZE; cIdx++) {
 			const gridIdx = (subGridStartRowIdx + rIdx) * GRID_SIZE + (subGridStartColIdx + cIdx);
 			result[resultIdx++] = g[gridIdx];
+		}
+	}
+
+	return result;
+}
+
+export function readCellIndexesOfSubGridAt(
+	coordinates: Readonly<GridCellCoordinates>,
+): Set<number> {
+	assertCoordinateIsWithinRange(coordinates.rowIdx);
+	assertCoordinateIsWithinRange(coordinates.colIdx);
+
+	const result = new Set<number>();
+	const subGridStartRowIdx = Math.floor(coordinates.rowIdx / SUB_GRID_SIZE) * SUB_GRID_SIZE;
+	const subGridStartColIdx = Math.floor(coordinates.colIdx / SUB_GRID_SIZE) * SUB_GRID_SIZE;
+
+	let gridIdx: number;
+	for (let rIdx = 0; rIdx < SUB_GRID_SIZE; rIdx++) {
+		for (let cIdx = 0; cIdx < SUB_GRID_SIZE; cIdx++) {
+			gridIdx = (subGridStartRowIdx + rIdx) * GRID_SIZE + (subGridStartColIdx + cIdx);
+			result.add(gridIdx);
 		}
 	}
 
@@ -199,22 +222,22 @@ export function createEmptyCell(): GridCellEmptyValue {
 /**
  * Creates an empty Sudoku grid.
  *
- * @throws {IncorrectGridError} when created grid length does not match required size.
+ * @throws {GridHasWrongSizeError} when created grid length does not match required size.
  */
 export function createEmptyGrid(): Grid {
 	const result = Array.from({ length: GRID_CELLS_COUNT }, createEmptyCell) as Grid;
 	if (GRID_SIZE ** 2 !== result.length) {
-		throw new IncorrectGridError(result);
+		throw new GridHasWrongSizeError(result);
 	}
 
 	return result;
 }
 
-export function createEmptySubGrid(): SubGrid {
+export function createEmptySubGrid(): SubGrid | ConstructionSubGrid {
 	return Array.from({ length: SUB_GRID_CELLS_COUNT }, createEmptyCell) as SubGrid;
 }
 
-export function isGridCellEmpty(it: GridCellValue): it is GridCellEmptyValue {
+export function isGridCellEmpty(it: unknown): it is GridCellEmptyValue {
 	return isNil(it);
 }
 
@@ -226,18 +249,38 @@ export function isGridCellFilled(it: GridCellValue): it is GridCellFilledValue {
 /**
  * @throws {ValueOutOfRangeError} when number is out of allowed range.
  */
-export function assertIndexIsWithinRange(idx: number): void {
+export function assertGridIndexIsWithinRange(idx: number): void {
 	const range = [0, GRID_CELLS_COUNT - 1] satisfies Range<number>;
 	if (idx < range[0] || range[1] < idx) {
 		throw new ValueOutOfRangeError(range, idx);
 	}
 }
 
-export function indexToCoordinates(idx: number): GridCellCoordinates {
-	assertIndexIsWithinRange(idx);
+export function mapGridIndexToCoordinates(idx: number): GridCellCoordinates {
+	assertGridIndexIsWithinRange(idx);
 
 	return {
 		rowIdx: Math.floor(idx / GRID_SIZE),
 		colIdx: idx % GRID_SIZE,
 	};
+}
+
+export function mapGridIndexToRowIndex(idx: number): number {
+	assertGridIndexIsWithinRange(idx);
+
+	return Math.floor(idx / GRID_SIZE);
+}
+
+export function mapGridIndexToColIndex(idx: number): number {
+	assertGridIndexIsWithinRange(idx);
+
+	return Math.floor(idx % GRID_SIZE);
+}
+
+export function mapGridToConstructionGrid(g: Grid): ConstructionGrid {
+	return g.map((it, idx) => {
+		return isGridCellFilled(it)
+			? it
+			: readAllowedGridCellValuesAt(g, mapGridIndexToCoordinates(idx));
+	});
 }

@@ -1,9 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import {
-	GRID_CELLS_COUNT,
-	GRID_SIZE,
-	isGridCellValueCorrectAtCoordinates,
-} from '@/lib/domain/puzzle/grid';
+import { GRID_CELLS_COUNT, GRID_SIZE, isGridCellValueCorrectAt } from '@/lib/domain/puzzle/grid';
 import { createPuzzleSolution } from './create-puzzle-solution';
 
 describe(createPuzzleSolution.name, () => {
@@ -15,7 +11,7 @@ describe(createPuzzleSolution.name, () => {
 
 		for (let rowIdx = 0; rowIdx < GRID_SIZE; rowIdx++) {
 			for (let colIdx = 0; colIdx < GRID_SIZE; colIdx++) {
-				expect(isGridCellValueCorrectAtCoordinates(solution, { rowIdx, colIdx }));
+				expect(isGridCellValueCorrectAt(solution, { rowIdx, colIdx }));
 			}
 		}
 	});
