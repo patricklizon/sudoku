@@ -3,25 +3,11 @@ import { isNil } from '@/lib/utils/is-nil';
 import {
 	TOTAL_GIVEN_CELLS_RANGE_BY_DIFFICULTY_LEVEL,
 	MINIMUM_GIVEN_CELLS_COUNT_IN_LINE_BY_DIFFICULTY_LEVEL,
-	DIFFICULTY_LEVEL,
+	CELL_REMOVING_STRATEGY_BY_DIFFICULTY_LEVEL,
 } from '@/lib/domain/puzzle/difficulty';
 import type { GridFilled, Grid } from '@/lib/domain/puzzle/grid';
-import {
-	removeCellsJumpingByOneCell,
-	removeCellsLeftToRightThenTopToBottom,
-	removeCellsRandomly,
-	removeCellsWanderingAlongS,
-	type CellRemovingFn,
-} from './remove-cell-strategies';
-import type { PuzzleDifficultyLevel } from '@/lib/domain/puzzle/types';
 
-const CELL_REMOVING_STRATEGY_BY_DIFFICULTY_LEVEL: Record<PuzzleDifficultyLevel, CellRemovingFn> = {
-	[DIFFICULTY_LEVEL[1]]: removeCellsRandomly,
-	[DIFFICULTY_LEVEL[2]]: removeCellsRandomly,
-	[DIFFICULTY_LEVEL[3]]: removeCellsJumpingByOneCell,
-	[DIFFICULTY_LEVEL[4]]: removeCellsWanderingAlongS,
-	[DIFFICULTY_LEVEL[5]]: removeCellsLeftToRightThenTopToBottom,
-};
+import type { PuzzleDifficultyLevel } from '@/lib/domain/puzzle/types';
 
 /**
  * Creates unsolved sudoku puzzle with unique solution.

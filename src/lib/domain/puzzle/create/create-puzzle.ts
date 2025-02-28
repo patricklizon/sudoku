@@ -1,6 +1,6 @@
 import type { Puzzle, PuzzleDifficultyLevel } from '@/lib/domain/puzzle/types';
-import { createPuzzleProblem } from '@/lib/domain/puzzle/create/create-puzzle-problem';
-import { createPuzzleSolution } from '@/lib/domain/puzzle/create/create-puzzle-solution';
+import { createPuzzleProblem } from '@/lib/domain/puzzle/problem/create-puzzle-problem';
+import { createPuzzleSolution } from '@/lib/domain/puzzle/solution/create-puzzle-solution';
 import { encodePuzzle } from '@/lib/domain/puzzle/encoder';
 
 export function createPuzzle(difficulty: PuzzleDifficultyLevel): Puzzle {

@@ -21,7 +21,7 @@ import {
 	readGridCol,
 	readGridRow,
 } from '@/lib/domain/puzzle/grid';
-import { PuzzleGenerationError } from '@/lib/domain/puzzle/create/errors';
+import { PuzzleGenerationError } from '@/lib/domain/puzzle/errors';
 import type { Range } from '@/lib/utils/types/range';
 import type { DeepReadonly } from '@/lib/utils/types/deep-readonly';
 
