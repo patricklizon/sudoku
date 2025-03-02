@@ -1,7 +1,7 @@
 import type { Range } from '@/lib/utils/types/range';
 
 import { debug } from './debug';
-import type { ConstructionGrid, Grid } from './types';
+import type { Grid, GridWithPossibleValues } from './types';
 
 export class ValueOutOfRangeError extends Error {
 	constructor(range: Range<number>, value: number) {
@@ -18,7 +18,7 @@ export class GridHasWrongSizeError extends Error {
 }
 
 export class UnableToPopulateGridWithValuesError extends Error {
-	constructor(grid: Grid | ConstructionGrid) {
+	constructor(grid: Grid | GridWithPossibleValues) {
 		super(`Unable to populate grid with values: ${debug(grid)}`);
 	}
 }

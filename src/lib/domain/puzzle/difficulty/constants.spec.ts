@@ -1,5 +1,5 @@
 import { expect, test } from 'vitest';
-import { GRID_CELLS_COUNT } from '@/lib/domain/puzzle/grid/constants';
+import { GRID_CELL_COUNT } from '@/lib/domain/puzzle/grid/constants';
 import {
 	DIFFICULTY_LEVEL,
 	MINIMUM_GIVEN_CELLS_COUNT_IN_LINE_BY_DIFFICULTY_LEVEL,
@@ -25,7 +25,7 @@ test('amount of given cells scales down by difficulty', () => {
 	const givenCellsForHardestLevel = TOTAL_GIVEN_CELLS_RANGE_BY_DIFFICULTY_LEVEL[hardest]!;
 
 	expect(givenCellsForHardestLevel[0] >= 17).to.equal(true);
-	expect(givenCellsForEasiestLevel[1] < GRID_CELLS_COUNT).to.equal(true);
+	expect(givenCellsForEasiestLevel[1] < GRID_CELL_COUNT).to.equal(true);
 
 	for (let idx = 1; idx < levels.length; idx++) {
 		const currentLevel = levels[idx]!;

@@ -1,10 +1,10 @@
-import { config } from '@/lib/config';
 import { createGameId, type DBGame, type Game } from '@/lib/domain/game';
 import type { Puzzle } from '@/lib/domain/puzzle';
 import { isNil } from '@/lib/utils/is-nil';
 import type { Option } from '@/lib/utils/types/option';
 import { mapDateToTimeISOString } from '@/lib/domain/time';
 import type { DB } from '@/lib/infrastructure/persistence';
+import { gameTbl } from '../persistence/tables/game';
 
 export class GameRepository {
 	constructor(db: DB) {
@@ -12,7 +12,7 @@ export class GameRepository {
 	}
 
 	private db: DB;
-	static tableName = config.db.table.game;
+	static tableName = gameTbl.name;
 
 	async save(
 		payload: {

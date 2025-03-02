@@ -1,12 +1,18 @@
 import { isNumber } from '@/lib/utils/is-number';
 import { isDefined } from '@/lib/utils/is-defined';
-import type { ConstructionGrid, Grid, GridFilled, GridCellCoordinates } from './types';
+import type {
+	Grid,
+	GridFilled,
+	GridCellFilled,
+	GridCellCoordinates,
+	GridCellEmptyWithPossibleValues,
+} from './types';
 import {
 	mapGridIndexToCoordinates,
-	readAllowedGridCellValuesAt,
-	readColCellIndexesAt,
-	readRowCellIndexesAt,
-	readCellIndexesOfSubGridAt,
+	getAllowedGridCellValuesAt,
+	readGridColumnCellIndexesAt,
+	readGridRowCellIndexesAt,
+	readGridCellIndexesOfGridBoxAt,
 } from './grid';
 import { isNil } from '@/lib/utils/is-nil';
 import type { Option } from '@/lib/utils/types/option';
@@ -16,15 +22,15 @@ import { UnableToPopulateGridWithValuesError } from './errors';
  * Creates filled grid.
  */
 export function solve(g: Grid): GridFilled {
-	const grid: ConstructionGrid = g.map((it, idx) => {
-		return isDefined(it) ? it : readAllowedGridCellValuesAt(g, mapGridIndexToCoordinates(idx));
-	});
+	const grid = g.map((it, idx) => {
+		return isDefined(it) ? it : getAllowedGridCellValuesAt(g, mapGridIndexToCoordinates(idx));
+	}) as Grid<GridCellEmptyWithPossibleValues | GridCellFilled>;
 
 	if (execute(grid)) return grid;
 
 	throw new UnableToPopulateGridWithValuesError(grid);
 
-	function execute(cg: ConstructionGrid): cg is GridFilled {
+	function execute(cg: Grid<GridCellEmptyWithPossibleValues | GridCellFilled>): cg is GridFilled {
 		const idx = findCellIdxWithSmallestCountOfPossibleValues(cg) ?? 0;
 		const cell = cg[idx];
 
@@ -53,9 +59,9 @@ export function solve(g: Grid): GridFilled {
  * Verifies if given grid has unique solution
  */
 export function hasUniqueSolution(g: Grid): boolean {
-	const grid: ConstructionGrid = g.map((it, idx) => {
-		return isDefined(it) ? it : readAllowedGridCellValuesAt(g, mapGridIndexToCoordinates(idx));
-	});
+	const grid = g.map((it, idx) => {
+		return isDefined(it) ? it : getAllowedGridCellValuesAt(g, mapGridIndexToCoordinates(idx));
+	}) as Grid<GridCellEmptyWithPossibleValues | GridCellFilled>;
 
 	let solutionCount = 0;
 	let shouldContinue = true;
@@ -64,7 +70,7 @@ export function hasUniqueSolution(g: Grid): boolean {
 
 	return solutionCount === 1;
 
-	function execute(cg: ConstructionGrid): void {
+	function execute(cg: Grid<GridCellEmptyWithPossibleValues | GridCellFilled>): void {
 		if (!shouldContinue) return;
 
 		const idx = findCellIdxWithSmallestCountOfPossibleValues(cg) ?? 0;
@@ -93,7 +99,9 @@ export function hasUniqueSolution(g: Grid): boolean {
  * Findes index of {@link GridCellValue} with smalles count of possible valid values,
  * which is a good candidate for next element to try.
  */
-export function findCellIdxWithSmallestCountOfPossibleValues(g: ConstructionGrid): Option<number> {
+export function findCellIdxWithSmallestCountOfPossibleValues(
+	g: Grid<GridCellEmptyWithPossibleValues | GridCellFilled>,
+): Option<number> {
 	let smallestSize = Number.MAX_SAFE_INTEGER;
 	let result: Option<number>;
 
@@ -111,17 +119,17 @@ export function findCellIdxWithSmallestCountOfPossibleValues(g: ConstructionGrid
  * @private
  *
  * Modifies possible values of cells that were affected by changing value at given index.
- * In all cases affected cells are within {@link SubGrid}, {@link GridRow}, and {@link GridCol}
+ * In all cases affected cells are within {@link GridBox}, {@link GridRow}, and {@link GridColumn}
  */
 export function _updateCellsPossibleValuesAffectedByCellValueAt(
-	cg: ConstructionGrid,
+	cg: Grid<GridCellEmptyWithPossibleValues | GridCellFilled>,
 	coordinates: GridCellCoordinates,
 ): void {
-	const affectedIdxs = readCellIndexesOfSubGridAt(coordinates)
-		.union(readRowCellIndexesAt(coordinates))
-		.union(readColCellIndexesAt(coordinates));
+	const affectedIdxs = readGridCellIndexesOfGridBoxAt(coordinates)
+		.union(readGridRowCellIndexesAt(coordinates))
+		.union(readGridColumnCellIndexesAt(coordinates));
 
-	let cell: Option<ConstructionGrid[number]>;
+	let cell: Option<Grid<GridCellEmptyWithPossibleValues | GridCellFilled>[number]>;
 	for (const aIdx of affectedIdxs) {
 		cell = cg.at(aIdx);
 		// TODO: add errors
@@ -129,7 +137,7 @@ export function _updateCellsPossibleValuesAffectedByCellValueAt(
 		if (isNumber(cell)) continue;
 
 		cell.clear();
-		for (const allowed of readAllowedGridCellValuesAt(cg, mapGridIndexToCoordinates(aIdx))) {
+		for (const allowed of getAllowedGridCellValuesAt(cg, mapGridIndexToCoordinates(aIdx))) {
 			cell.add(allowed);
 		}
 	}

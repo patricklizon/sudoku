@@ -8,7 +8,7 @@ import {
 import {
 	GRID_SIZE,
 	isGridCellFilled,
-	readGridColAt,
+	readGridColumnAt,
 	readGridRowCellsAt,
 } from '@/lib/domain/puzzle/grid';
 
@@ -52,7 +52,7 @@ describe.each<PuzzleDifficultyLevel>([
 				readGridRowCellsAt(puzzle, { colIdx: 0, rowIdx: idx }).filter(isGridCellFilled),
 			).to.have.length.of.at.least(cellsFilledCount);
 			expect(
-				readGridColAt(puzzle, { colIdx: idx, rowIdx: 0 }).filter(isGridCellFilled),
+				readGridColumnAt(puzzle, { colIdx: idx, rowIdx: 0 }).filter(isGridCellFilled),
 			).to.have.length.of.at.least(cellsFilledCount);
 		},
 	);

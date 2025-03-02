@@ -9,17 +9,17 @@ import type { Option } from '@/lib/utils/types/option';
 import { shuffleArray, toShuffledArray } from '@/lib/utils/to-shuffled-array';
 import {
 	type Grid,
-	GRID_CELLS_COUNT,
-	GRID_CELLS_INDEXES,
+	GRID_CELL_COUNT,
+	GRID_CELL_INDEXES,
 	GRID_SIZE,
 	type GridCellCoordinates,
-	type GridCellValue,
+	type GridCell,
 	type GridFilled,
 	hasUniqueSolution,
 	isGridCellEmpty,
 	isGridCellFilled,
 	mapGridIndexToCoordinates,
-	readGridColAt,
+	readGridColumnAt,
 	readGridRowCellsAt,
 } from '@/lib/domain/puzzle/grid';
 import { PuzzleGenerationError } from '@/lib/domain/puzzle/errors';
@@ -47,10 +47,10 @@ export const removeCellsRandomly: CellRemovingFn = (g, config) => {
 	_assertConfigCorrectness(config);
 
 	const gCopy = structuredClone<Grid>(g);
-	const idxs = toShuffledArray(GRID_CELLS_INDEXES);
-	const targetEmptyCellCount = GRID_CELLS_COUNT - config.minimumGivenCells.total.count;
+	const idxs = toShuffledArray(GRID_CELL_INDEXES);
+	const targetEmptyCellCount = GRID_CELL_COUNT - config.minimumGivenCells.total.count;
 
-	let cellCopy: GridCellValue;
+	let cellCopy: GridCell;
 	let coordinates: GridCellCoordinates;
 	let removedCellCount = 0;
 
@@ -104,17 +104,17 @@ export const removeCellsJumpingByOneCell: CellRemovingFn = (g, config) => {
 	_assertConfigCorrectness(config);
 
 	const gCopy = structuredClone<Grid>(g);
-	const targetEmptyCellCount = GRID_CELLS_COUNT - config.minimumGivenCells.total.count;
+	const targetEmptyCellCount = GRID_CELL_COUNT - config.minimumGivenCells.total.count;
 	const oddRowLastIdx = 1;
 	const rowLastIdx = GRID_SIZE - 1;
 	const jumpByIdx = 2;
 
 	let idx = 0;
-	let cellCopy: Option<GridCellValue>;
+	let cellCopy: Option<GridCell>;
 	let removedCellCount = 0;
 	let coordinates: Option<GridCellCoordinates>;
 
-	while (removedCellCount < targetEmptyCellCount && idx < GRID_CELLS_COUNT) {
+	while (removedCellCount < targetEmptyCellCount && idx < GRID_CELL_COUNT) {
 		coordinates = mapGridIndexToCoordinates(idx);
 		cellCopy = gCopy[idx];
 		gCopy[idx] = undefined;
@@ -199,7 +199,7 @@ export function _isRowAndColMinimumCellCountSatisfied(
 	return (
 		readGridRowCellsAt(g, coordinates).filter(isGridCellFilled).length >=
 			config.minimumGivenCells.row &&
-		readGridColAt(g, coordinates).filter(isGridCellFilled).length >= config.minimumGivenCells.col
+		readGridColumnAt(g, coordinates).filter(isGridCellFilled).length >= config.minimumGivenCells.col
 	);
 }
 
@@ -222,7 +222,7 @@ export function _isRemovedCellCountWithinRequestedConstrains(
 	config: Config,
 	removedCount: number,
 ): boolean {
-	const remainingCount = 81 - removedCount;
+	const remainingCount = GRID_CELL_COUNT - removedCount;
 	if (remainingCount < config.minimumGivenCells.total.count) return false;
 
 	const [min, max] = config.minimumGivenCells.total.range;
@@ -236,7 +236,7 @@ export function _isRemovedCellCountWithinGlobalConstrains(
 	config: Config,
 	removedCount: number,
 ): boolean {
-	const remainingCount = 81 - removedCount;
+	const remainingCount = GRID_CELL_COUNT - removedCount;
 	if (remainingCount < config.minimumGivenCells.total.count) return false;
 
 	const globalRange =

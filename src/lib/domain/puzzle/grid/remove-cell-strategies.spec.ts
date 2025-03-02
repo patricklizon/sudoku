@@ -1,5 +1,10 @@
 import { describe, expect, test } from 'vitest';
-import { createEmptyCell, type Grid, GRID_SIZE, type GridFilled } from '@/lib/domain/puzzle/grid';
+import {
+	createEmptyGridCell,
+	type Grid,
+	GRID_SIZE,
+	type GridFilled,
+} from '@/lib/domain/puzzle/grid';
 import {
 	type Config,
 	_isRowAndColMinimumCellCountSatisfied,
@@ -7,7 +12,7 @@ import {
 } from './remove-cell-strategies';
 import { DIFFICULTY_LEVEL } from '../difficulty';
 
-const _ = createEmptyCell();
+const _ = createEmptyGridCell();
 
 describe(_isRowAndColMinimumCellCountSatisfied.name, () => {
 	const puzzle = [

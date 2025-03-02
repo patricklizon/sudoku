@@ -1,9 +1,8 @@
-import { config } from '@/lib/config';
 import type { DBGame } from '@/lib/domain/game';
 import type { ObjectStoreIndexRecord } from '@/lib/utils/types/object-store';
 
 export const gameTbl = {
-	name: config.db.table.game,
+	name: 'game',
 	index: {
 		mode: {
 			name: 'mode',

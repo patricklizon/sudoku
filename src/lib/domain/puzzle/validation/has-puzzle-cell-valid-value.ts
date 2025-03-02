@@ -1,14 +1,14 @@
 import {
 	type GridFilled,
 	type GridCellCoordinates,
-	readGridCell,
-	type GridCellValue,
+	readGridCellAt,
+	type GridCell,
 } from '@/lib/domain/puzzle/grid';
 
 export function hasPuzzleCellValidValue(
 	g: GridFilled,
 	coordinates: GridCellCoordinates,
-	value: GridCellValue,
+	value: GridCell,
 ): boolean {
-	return readGridCell(g, coordinates) === value;
+	return readGridCellAt(g, coordinates) === value;
 }

@@ -1,5 +1,5 @@
-import { GRID_SIZE, SUB_GRID_CELLS_COUNT, SUB_GRID_SIZE } from './constants';
-import type { ConstructionGrid, Grid } from './types';
+import { GRID_SIZE, GRID_BOX_CELLS_COUNT, GRID_BOX_SIZE } from './constants';
+import type { Grid, GridBox, GridWithPossibleValues } from './types';
 import { isGridCellFilled } from './grid';
 
 const COLOR = {
@@ -17,11 +17,11 @@ function colorLog(color: Exclude<keyof typeof COLOR, 'suffix'>, s: string): stri
  * Prints formatted grid.
  */
 export function debug(
-	g: Grid | ConstructionGrid,
+	g: Grid | GridBox | GridWithPossibleValues,
 	o?: Partial<{ hilightIdxs: number[]; displayIdxMatrix: boolean; activeIdx: number }>,
 ): string {
-	const isSubGrid = g.length === SUB_GRID_CELLS_COUNT;
-	const breakAtIdx = isSubGrid ? SUB_GRID_SIZE : GRID_SIZE;
+	const isGridBox = g.length === GRID_BOX_CELLS_COUNT;
+	const breakAtIdx = isGridBox ? GRID_BOX_SIZE : GRID_SIZE;
 
 	const formattedGrid = g
 		.map((it, idx) => {

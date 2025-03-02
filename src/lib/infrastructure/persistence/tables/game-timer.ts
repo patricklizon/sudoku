@@ -1,9 +1,8 @@
-import { config } from '@/lib/config';
 import type { DBGameTimer } from '@/lib/domain/game-timer';
 import type { ObjectStoreIndexRecord } from '@/lib/utils/types/object-store';
 
 export const gameTimerTbl = {
-	name: config.db.table.gameTimer,
+	name: 'game-timer',
 	index: {
 		gameId: {
 			name: 'gameId',

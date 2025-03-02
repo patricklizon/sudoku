@@ -1,4 +1,4 @@
-import { createEmptyGrid, fillDiagonalSubGrids, solve } from '@/lib/domain/puzzle/grid';
+import { createEmptyGrid, fillDiagonalGridBoxesWithValues, solve } from '@/lib/domain/puzzle/grid';
 import type { PuzzleSolution } from '@/lib/domain/puzzle/types';
 
 /**
@@ -14,7 +14,7 @@ export function createPuzzleSolution(): PuzzleSolution {
 	// This initial filling provides anchor points that make the subsequent filling of
 	// remaining cells more efficient, as it reduces the number of possible valid combinations
 	// for the rest of the grid.
-	fillDiagonalSubGrids(grid);
+	fillDiagonalGridBoxesWithValues(grid);
 
 	return solve(grid);
 }

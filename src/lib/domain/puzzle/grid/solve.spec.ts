@@ -1,16 +1,16 @@
 import { describe, expect, test } from 'vitest';
 import { findCellIdxWithSmallestCountOfPossibleValues, hasUniqueSolution, solve } from './solve';
 import {
-	createEmptyCell,
+	createEmptyGridCell,
 	createEmptyGrid,
-	fillDiagonalSubGrids,
-	mapGridToConstructionGrid,
+	fillDiagonalGridBoxesWithValues,
+	mapGridToGridWithPossibleValues,
 } from './grid';
 import type { Grid, GridFilled } from './types';
 
 describe(solve.name, () => {
 	test('fills only empty fields of grid producing solution', () => {
-		const _ = createEmptyCell();
+		const _ = createEmptyGridCell();
 		const input = [
 			[1, 3, 8, _, _, _, _, _, _],
 			[4, 6, 9, _, _, _, _, _, _],
@@ -42,7 +42,7 @@ describe(solve.name, () => {
 	test.each(Array.from({ length: 10 }, () => [createEmptyGrid()]))(
 		'should not throw an error when filling a randomly generated grid',
 		(grid) => {
-			fillDiagonalSubGrids(grid);
+			fillDiagonalGridBoxesWithValues(grid);
 
 			expect(() => {
 				solve(grid);
@@ -53,7 +53,7 @@ describe(solve.name, () => {
 
 describe(hasUniqueSolution.name, () => {
 	test("returns 'false' when multiple solutions exists", () => {
-		const _ = createEmptyCell();
+		const _ = createEmptyGridCell();
 		const puzzle = [
 			[9, 2, 6, 5, 7, 1, 4, 8, 3],
 			[3, 5, 1, 4, 8, 6, 2, 7, 9],
@@ -70,7 +70,7 @@ describe(hasUniqueSolution.name, () => {
 	});
 
 	test("returns 'true' when only one solution exists", () => {
-		const _ = createEmptyCell();
+		const _ = createEmptyGridCell();
 		const puzzle = [
 			[5, 3, _, _, 7, _, _, _, _],
 			[6, _, _, 1, 9, 5, _, _, _],
@@ -90,7 +90,7 @@ describe(hasUniqueSolution.name, () => {
 describe(findCellIdxWithSmallestCountOfPossibleValues.name, () => {
 	test('returns first index when all cells are empty', () => {
 		const expectedIdx = 0;
-		const grid = mapGridToConstructionGrid(createEmptyGrid());
+		const grid = mapGridToGridWithPossibleValues(createEmptyGrid());
 		const left = findCellIdxWithSmallestCountOfPossibleValues(grid);
 
 		expect(left).to.equal(expectedIdx);
@@ -98,7 +98,7 @@ describe(findCellIdxWithSmallestCountOfPossibleValues.name, () => {
 
 	test('returns correct index when some cells have less possibilities', () => {
 		const expectedIdx = 33;
-		const grid = mapGridToConstructionGrid(createEmptyGrid());
+		const grid = mapGridToGridWithPossibleValues(createEmptyGrid());
 
 		grid[expectedIdx] = new Set([1, 4, 5]);
 		const left = findCellIdxWithSmallestCountOfPossibleValues(grid);

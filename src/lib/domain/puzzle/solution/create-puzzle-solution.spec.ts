@@ -1,12 +1,12 @@
 import { describe, expect, test } from 'vitest';
-import { GRID_CELLS_COUNT, GRID_SIZE, isGridCellValueCorrectAt } from '@/lib/domain/puzzle/grid';
+import { GRID_CELL_COUNT, GRID_SIZE, isGridCellValueCorrectAt } from '@/lib/domain/puzzle/grid';
 import { createPuzzleSolution } from './create-puzzle-solution';
 
 describe(createPuzzleSolution.name, () => {
 	test('generates correct puzzle', () => {
 		const solution = createPuzzleSolution();
 
-		expect(solution).to.have.length(GRID_CELLS_COUNT);
+		expect(solution).to.have.length(GRID_CELL_COUNT);
 		expect(solution.every(Number.isInteger)).to.equal(true);
 
 		for (let rowIdx = 0; rowIdx < GRID_SIZE; rowIdx++) {
