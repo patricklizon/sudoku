@@ -9,7 +9,7 @@ import {
 import type { Grid, GridFilled } from './types';
 
 describe(solve.name, () => {
-	test('fills only empty fields of grid producing solution', () => {
+	test('fills only empty fields of grid producing solution, without mutating input', () => {
 		const _ = createEmptyGridCell();
 		const input = [
 			[1, 3, 8, _, _, _, _, _, _],
@@ -37,6 +37,7 @@ describe(solve.name, () => {
 		].flat() as GridFilled;
 
 		expect(left).to.deep.equal(right);
+		expect(input).not.to.deep.equal(right);
 	});
 
 	test.each(Array.from({ length: 10 }, () => [createEmptyGrid()]))(

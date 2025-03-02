@@ -1,6 +1,6 @@
 import type { Puzzle } from '@/lib/domain/puzzle';
 import type { CreatePuzzleWorkerRequest, CreatePuzzleWorkerResponse } from './types';
-import worker from './worker?worker&url';
+import worker from './create-puzzle.worker?worker&url';
 import { createRandomStringId } from '@/lib/domain/id';
 
 export class CreatePuzzleService {

@@ -14,11 +14,11 @@
 import type { Range } from '@/lib/utils/types/range';
 import type { PuzzleDifficultyLevelName, PuzzleDifficultyLevel } from '@/lib/domain/puzzle/types';
 import {
-	removeCellsJumpingByOneCell,
-	removeCellsLeftToRightThenTopToBottom,
-	removeCellsRandomly,
-	removeCellsWanderingAlongS,
-	type CellRemovingFn,
+	removeGridCellsJumpingByOneCell,
+	removeGridCellsLeftToRightThenTopToBottom,
+	removeGridCellsRandomly,
+	removeGridCellsWanderingAlongS,
+	type GridCellRemovingFn,
 } from '@/lib/domain/puzzle/grid';
 import type { DeepReadonly } from '@/lib/utils/types/deep-readonly';
 
@@ -94,11 +94,11 @@ export const TOTAL_GIVEN_CELLS_RANGE_BY_DIFFICULTY_LEVEL: DeepReadonly<
  * even with lower count of given cells.
  */
 export const CELL_REMOVING_STRATEGY_BY_DIFFICULTY_LEVEL: Readonly<
-	Record<PuzzleDifficultyLevel, CellRemovingFn>
+	Record<PuzzleDifficultyLevel, GridCellRemovingFn>
 > = {
-	[DIFFICULTY_LEVEL[1]]: removeCellsRandomly,
-	[DIFFICULTY_LEVEL[2]]: removeCellsRandomly,
-	[DIFFICULTY_LEVEL[3]]: removeCellsJumpingByOneCell,
-	[DIFFICULTY_LEVEL[4]]: removeCellsWanderingAlongS,
-	[DIFFICULTY_LEVEL[5]]: removeCellsLeftToRightThenTopToBottom,
+	[DIFFICULTY_LEVEL[1]]: removeGridCellsRandomly,
+	[DIFFICULTY_LEVEL[2]]: removeGridCellsRandomly,
+	[DIFFICULTY_LEVEL[3]]: removeGridCellsJumpingByOneCell,
+	[DIFFICULTY_LEVEL[4]]: removeGridCellsWanderingAlongS,
+	[DIFFICULTY_LEVEL[5]]: removeGridCellsLeftToRightThenTopToBottom,
 };

@@ -21,7 +21,7 @@ import { UnableToPopulateGridWithValuesError } from './errors';
 /**
  * Creates filled grid.
  */
-export function solve(g: Grid): GridFilled {
+export function solve(g: Readonly<Grid>): GridFilled {
 	const grid = g.map((it, idx) => {
 		return isDefined(it) ? it : getAllowedGridCellValuesAt(g, mapGridIndexToCoordinates(idx));
 	}) as Grid<GridCellEmptyWithPossibleValues | GridCellFilled>;
@@ -58,7 +58,7 @@ export function solve(g: Grid): GridFilled {
 /**
  * Verifies if given grid has unique solution
  */
-export function hasUniqueSolution(g: Grid): boolean {
+export function hasUniqueSolution(g: Readonly<Grid>): boolean {
 	const grid = g.map((it, idx) => {
 		return isDefined(it) ? it : getAllowedGridCellValuesAt(g, mapGridIndexToCoordinates(idx));
 	}) as Grid<GridCellEmptyWithPossibleValues | GridCellFilled>;
@@ -100,7 +100,7 @@ export function hasUniqueSolution(g: Grid): boolean {
  * which is a good candidate for next element to try.
  */
 export function findCellIdxWithSmallestCountOfPossibleValues(
-	g: Grid<GridCellEmptyWithPossibleValues | GridCellFilled>,
+	g: Readonly<Grid<GridCellEmptyWithPossibleValues | GridCellFilled>>,
 ): Option<number> {
 	let smallestSize = Number.MAX_SAFE_INTEGER;
 	let result: Option<number>;
@@ -122,7 +122,7 @@ export function findCellIdxWithSmallestCountOfPossibleValues(
  * In all cases affected cells are within {@link GridBox}, {@link GridRow}, and {@link GridColumn}
  */
 export function _updateCellsPossibleValuesAffectedByCellValueAt(
-	cg: Grid<GridCellEmptyWithPossibleValues | GridCellFilled>,
+	cg: Readonly<Grid<GridCellEmptyWithPossibleValues | GridCellFilled>>,
 	coordinates: GridCellCoordinates,
 ): void {
 	const affectedIdxs = readGridCellIndexesOfGridBoxAt(coordinates)

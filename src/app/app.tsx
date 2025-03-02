@@ -1,6 +1,8 @@
 import { defineComponent } from 'vue';
 import { CreatePuzzleService } from '@/lib/services/create-puzzle/service';
 import { DIFFICULTY_LEVEL } from '@/lib/domain/puzzle/difficulty';
+import { debug } from '@/lib/domain/puzzle/grid';
+import { isDefined } from '@/lib/utils/is-defined';
 
 let service: InstanceType<typeof CreatePuzzleService>;
 
@@ -15,9 +17,12 @@ export const App = defineComponent({
 					onClick={() => {
 						performance.mark('start');
 						service
-							.create(DIFFICULTY_LEVEL[3])
+							.create(DIFFICULTY_LEVEL[4])
 							.then((it) => {
-								console.log(it.payload.puzzle.id);
+								console.log(
+									debug(it.payload.puzzle.problem),
+									it.payload.puzzle.problem.filter(isDefined).length,
+								);
 								performance.mark('end');
 								performance.measure('x', 'start', 'end');
 								const measure = performance.getEntriesByName('x');

@@ -19,6 +19,7 @@ describe.each<PuzzleDifficultyLevel>([
 	DIFFICULTY_LEVEL[1],
 	DIFFICULTY_LEVEL[2],
 	DIFFICULTY_LEVEL[3],
+	DIFFICULTY_LEVEL[4],
 ])(createPuzzleProblem.name, (level) => {
 	const p = structuredClone(
 		[

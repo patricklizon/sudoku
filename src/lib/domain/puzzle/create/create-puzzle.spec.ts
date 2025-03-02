@@ -4,7 +4,7 @@ import { DIFFICULTY_LEVEL } from '@/lib/domain/puzzle/difficulty';
 
 describe(createPuzzle.name, () => {
 	// TODO: enable all
-	test.each(Object.values(DIFFICULTY_LEVEL).slice(0, 3))('creates puzzle', (expectedDifficulty) => {
+	test.each(Object.values(DIFFICULTY_LEVEL).slice(0, 4))('creates puzzle', (expectedDifficulty) => {
 		const left = createPuzzle(expectedDifficulty);
 
 		expect(left.difficulty).to.equal(expectedDifficulty);

@@ -4,6 +4,10 @@ export const GRID_SIZE = 9;
 
 export const GRID_BOX_SIZE = 3;
 export const GRID_BOX_CELLS_COUNT = 9;
+export const GRID_BOX_CELLS_INDEXES: readonly number[] = Array.from(
+	{ length: GRID_BOX_CELLS_COUNT },
+	(_, idx) => idx,
+);
 
 export const GRID_CELL_COUNT = 81;
 export const GRID_CELL_INDEXES: readonly number[] = Array.from(
