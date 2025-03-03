@@ -24,7 +24,7 @@ import {
 	readGridBoxCellsAt,
 	mapGridCellIndexToColIndex,
 	mapGridCellIndexToRowIndex,
-	mapGridIndexToCoordinates,
+	mapGridCellIndexToCoordinates,
 	readGridCellIndexesOfGridBoxAt,
 } from './grid';
 
@@ -401,7 +401,7 @@ describe(getAllowedGridCellValuesAt.name, () => {
 	});
 });
 
-describe(mapGridIndexToCoordinates.name, () => {
+describe(mapGridCellIndexToCoordinates.name, () => {
 	test.each<[index: number, coordinates: GridCellCoordinates][]>([
 		[
 			[0, { rowIdx: 0, colIdx: 0 }],
@@ -409,14 +409,14 @@ describe(mapGridIndexToCoordinates.name, () => {
 			[33, { rowIdx: 4, colIdx: 7 }],
 		],
 	])('returns coorect coordinates', ([index, coordinates]) => {
-		expect(mapGridIndexToCoordinates(index)).to.deep.equal(coordinates);
+		expect(mapGridCellIndexToCoordinates(index)).to.deep.equal(coordinates);
 	});
 
 	test.each<number[]>([[-1, Number.POSITIVE_INFINITY]])(
 		'throws error when index is out or range',
 		(index) => {
 			expect(() => {
-				mapGridIndexToCoordinates(index);
+				mapGridCellIndexToCoordinates(index);
 			}).toThrowError(ValueOutOfRangeError);
 		},
 	);

@@ -249,7 +249,7 @@ export function assertGridCellIndexIsWithinRange(idx: number): void {
 	}
 }
 
-export function mapGridIndexToCoordinates(idx: number): GridCellCoordinates {
+export function mapGridCellIndexToCoordinates(idx: number): GridCellCoordinates {
 	assertGridCellIndexIsWithinRange(idx);
 
 	return {
@@ -274,6 +274,6 @@ export function mapGridToGridWithPossibleValues(g: Readonly<Grid>): GridWithPoss
 	return g.map((it, idx) => {
 		return isGridCellFilled(it)
 			? it
-			: getAllowedGridCellValuesAt(g, mapGridIndexToCoordinates(idx));
+			: getAllowedGridCellValuesAt(g, mapGridCellIndexToCoordinates(idx));
 	}) as GridWithPossibleValues;
 }

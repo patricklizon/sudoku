@@ -21,6 +21,7 @@ export const App = defineComponent({
 							.then((it) => {
 								console.log(
 									debug(it.payload.puzzle.problem),
+									debug(it.payload.puzzle.solution),
 									it.payload.puzzle.problem.filter(isDefined).length,
 								);
 								performance.mark('end');

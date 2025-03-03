@@ -8,7 +8,7 @@ import type {
 	GridCellEmptyWithPossibleValues,
 } from './types';
 import {
-	mapGridIndexToCoordinates,
+	mapGridCellIndexToCoordinates,
 	getAllowedGridCellValuesAt,
 	readGridColumnCellIndexesAt,
 	readGridRowCellIndexesAt,
@@ -23,7 +23,7 @@ import { UnableToPopulateGridWithValuesError } from './errors';
  */
 export function solve(g: Readonly<Grid>): GridFilled {
 	const grid = g.map((it, idx) => {
-		return isDefined(it) ? it : getAllowedGridCellValuesAt(g, mapGridIndexToCoordinates(idx));
+		return isDefined(it) ? it : getAllowedGridCellValuesAt(g, mapGridCellIndexToCoordinates(idx));
 	}) as Grid<GridCellEmptyWithPossibleValues | GridCellFilled>;
 
 	if (execute(grid)) return grid;
@@ -38,7 +38,7 @@ export function solve(g: Readonly<Grid>): GridFilled {
 		if (isNil(cell)) throw new Error('shouod never happen');
 		if (isNumber(cell)) return true;
 
-		const coordinates = mapGridIndexToCoordinates(idx);
+		const coordinates = mapGridCellIndexToCoordinates(idx);
 
 		const stableOrder = [...cell];
 		for (const value of stableOrder) {
@@ -60,7 +60,7 @@ export function solve(g: Readonly<Grid>): GridFilled {
  */
 export function hasUniqueSolution(g: Readonly<Grid>): boolean {
 	const grid = g.map((it, idx) => {
-		return isDefined(it) ? it : getAllowedGridCellValuesAt(g, mapGridIndexToCoordinates(idx));
+		return isDefined(it) ? it : getAllowedGridCellValuesAt(g, mapGridCellIndexToCoordinates(idx));
 	}) as Grid<GridCellEmptyWithPossibleValues | GridCellFilled>;
 
 	let solutionCount = 0;
@@ -84,7 +84,7 @@ export function hasUniqueSolution(g: Readonly<Grid>): boolean {
 			return;
 		}
 
-		const coordinates = mapGridIndexToCoordinates(idx);
+		const coordinates = mapGridCellIndexToCoordinates(idx);
 
 		const stableOrder = [...cell];
 		for (const value of stableOrder) {
@@ -137,7 +137,7 @@ export function _updateCellsPossibleValuesAffectedByCellValueAt(
 		if (isNumber(cell)) continue;
 
 		cell.clear();
-		for (const allowed of getAllowedGridCellValuesAt(cg, mapGridIndexToCoordinates(aIdx))) {
+		for (const allowed of getAllowedGridCellValuesAt(cg, mapGridCellIndexToCoordinates(aIdx))) {
 			cell.add(allowed);
 		}
 	}

@@ -22,3 +22,9 @@ export class UnableToPopulateGridWithValuesError extends Error {
 		super(`Unable to populate grid with values: ${debug(grid)}`);
 	}
 }
+
+export class UnableToRemoveGridCellsError extends Error {
+	constructor(grid: Grid | GridWithPossibleValues) {
+		super(`Unable to remove grid cells from grid: ${debug(grid)}`);
+	}
+}

@@ -3,9 +3,9 @@ import { isNil } from '@/lib/utils/is-nil';
 import {
 	TOTAL_GIVEN_CELLS_RANGE_BY_DIFFICULTY_LEVEL,
 	MINIMUM_GIVEN_CELLS_COUNT_IN_LINE_BY_DIFFICULTY_LEVEL,
-	CELL_REMOVING_STRATEGY_BY_DIFFICULTY_LEVEL,
+	INDEX_TRAVERSING_ORDER_BY_DIFFICULTY_LEVEL,
 } from '@/lib/domain/puzzle/difficulty';
-import type { GridFilled, Grid } from '@/lib/domain/puzzle/grid';
+import { type GridFilled, type Grid, removeGridCells } from '@/lib/domain/puzzle/grid';
 
 import type { PuzzleDifficultyLevel } from '@/lib/domain/puzzle/types';
 
@@ -24,8 +24,8 @@ export function createPuzzleProblem(
 		);
 	}
 
-	const cellRemovingStrategy = CELL_REMOVING_STRATEGY_BY_DIFFICULTY_LEVEL[difficulty];
-	if (isNil(cellRemovingStrategy)) {
+	const indexTraversingOrder = INDEX_TRAVERSING_ORDER_BY_DIFFICULTY_LEVEL[difficulty]?.();
+	if (isNil(indexTraversingOrder)) {
 		// TODO: extract error
 		throw new Error(
 			`Hole punching function is not defined for difficulty level: '${difficulty.toString()}'`,
@@ -41,7 +41,7 @@ export function createPuzzleProblem(
 	}
 
 	const [low, high] = totalCellsRange;
-	return cellRemovingStrategy(g, {
+	return removeGridCells(g, {
 		minimumGivenCells: {
 			col: minimumCellsInLineCount,
 			row: minimumCellsInLineCount,
@@ -50,6 +50,6 @@ export function createPuzzleProblem(
 				range: totalCellsRange,
 			},
 		},
-		difficulty,
+		indexes: indexTraversingOrder,
 	});
 }
