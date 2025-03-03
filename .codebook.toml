@@ -14,13 +14,8 @@ words = [
 	"vite",
 	"vitest",
 	"vitejs",
-	"vue",
-	"trunc"
+	"trunc",
 ]
 flag_words = []
-ignore_paths = [
-	".git/**/*",
-	"dist/**/*",
-	"node_modules/**/*",
-]
-ignore_patterns=[]
+ignore_paths = [".git/**/*", "dist/**/*", "node_modules/**/*"]
+ignore_patterns = []

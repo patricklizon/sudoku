@@ -2,5 +2,6 @@ node_modules/
 /**/assets/
 dist/
 public/
+static/
 
 package-lock.json

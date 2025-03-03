@@ -1,5 +1,5 @@
-import type { DBPuzzle } from '@/lib/domain/puzzle';
-import type { ObjectStoreIndexRecord } from '@/lib/utils/types/object-store';
+import type { DBPuzzle } from '$lib/domain/puzzle';
+import type { ObjectStoreIndexRecord } from '$lib/utils/types/object-store';
 
 export const puzzleTbl = {
 	name: 'puzzle',

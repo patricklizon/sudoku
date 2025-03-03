@@ -1,5 +1,5 @@
-import type { DBGameTimer } from '@/lib/domain/game-timer';
-import type { ObjectStoreIndexRecord } from '@/lib/utils/types/object-store';
+import type { DBGameTimer } from '$lib/domain/game-timer';
+import type { ObjectStoreIndexRecord } from '$lib/utils/types/object-store';
 
 export const gameTimerTbl = {
 	name: 'game-timer',

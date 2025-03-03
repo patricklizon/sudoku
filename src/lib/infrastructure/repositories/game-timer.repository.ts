@@ -1,11 +1,11 @@
-import type { GameTimer, DBGameTimer } from '@/lib/domain/game-timer';
-import { createRandomStringId } from '@/lib/domain/id';
-import { mapDateToTimeISOString, mapNumberToTimeSecond } from '@/lib/domain/time';
-import type { DB } from '@/lib/infrastructure/persistence';
-import { gameTimerTbl } from '@/lib/infrastructure/persistence/tables/game-timer';
-import { isDefined } from '@/lib/utils/is-defined';
-import { isNil } from '@/lib/utils/is-nil';
-import type { Option } from '@/lib/utils/types/option';
+import type { GameTimer, DBGameTimer } from '$lib/domain/game-timer';
+import { createRandomStringId } from '$lib/domain/id';
+import { mapDateToTimeISOString, mapNumberToTimeSecond } from '$lib/domain/time';
+import type { DB } from '$lib/infrastructure/persistence';
+import { gameTimerTbl } from '$lib/infrastructure/persistence/client/tables/game-timer';
+import { isDefined } from '$lib/utils/is-defined';
+import { isNil } from '$lib/utils/is-nil';
+import type { Option } from '$lib/utils/types/option';
 
 export class GameTimerRepository {
 	constructor(db: DB) {
@@ -29,6 +29,8 @@ export class GameTimerRepository {
 		return await new Promise<DBGameTimer>((resolve, reject) => {
 			const now = mapDateToTimeISOString(new Date());
 			const timeSpent = mapNumberToTimeSecond(0);
+			// TODO: implement error
+			if (isNil(timeSpent)) throw new TypeError('invalid data');
 
 			const result = {
 				gameId: payload.gameId,

@@ -16,7 +16,7 @@ function colorLog(color: Exclude<keyof typeof COLOR, 'suffix'>, s: string): stri
 /**
  * Prints formatted grid.
  */
-export function debug(
+export function gridDebug(
 	g: Grid | GridBox | GridWithPossibleValues,
 	o?: Partial<{ hilightIdxs: number[]; displayIdxMatrix: boolean; activeIdx: number }>,
 ): string {

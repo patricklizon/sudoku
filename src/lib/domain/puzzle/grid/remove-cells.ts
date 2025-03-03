@@ -18,13 +18,13 @@ import {
 	type Grid,
 	type GridCellCoordinates,
 	type GridFilled,
-} from '@/lib/domain/puzzle/grid';
-import { isEven } from '@/lib/utils/is-even';
-import { isNil } from '@/lib/utils/is-nil';
-import { toShuffledArray } from '@/lib/utils/to-shuffled-array';
-import type { DeepReadonly } from '@/lib/utils/types/deep-readonly';
-import type { Option } from '@/lib/utils/types/option';
-import type { Range } from '@/lib/utils/types/range';
+} from '$lib/domain/puzzle/grid';
+import { isEven } from '$lib/utils/is-even';
+import { isNil } from '$lib/utils/is-nil';
+import { toShuffledArray } from '$lib/utils/to-shuffled-array';
+import type { DeepReadonly } from '$lib/utils/types/deep-readonly';
+import type { Option } from '$lib/utils/types/option';
+import type { Range } from '$lib/utils/types/range';
 
 export type Config = DeepReadonly<{
 	minimumGivenCells: {

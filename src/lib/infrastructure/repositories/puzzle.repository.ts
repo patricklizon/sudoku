@@ -1,9 +1,9 @@
-import { mapPuzzleToDB, type DBPuzzle, type Puzzle } from '@/lib/domain/puzzle';
-import { mapDateToTimeISOString } from '@/lib/domain/time';
-import type { DB } from '@/lib/infrastructure/persistence';
-import { puzzleTbl } from '@/lib/infrastructure/persistence/tables/puzzle';
-import { isNil } from '@/lib/utils/is-nil';
-import type { Option } from '@/lib/utils/types/option';
+import { mapPuzzleToDB, type DBPuzzle, type Puzzle } from '$lib/domain/puzzle';
+import { mapDateToTimeISOString } from '$lib/domain/time';
+import type { DB } from '$lib/infrastructure/persistence';
+import { puzzleTbl } from '$lib/infrastructure/persistence/client/tables/puzzle';
+import { isNil } from '$lib/utils/is-nil';
+import type { Option } from '$lib/utils/types/option';
 
 export class PuzzleRepository {
 	constructor(db: DB) {

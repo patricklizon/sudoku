@@ -8,5 +8,5 @@ export * from './errors';
 export * from './grid';
 export type * from './types';
 export * from './debug';
-export * from './remove-cell-strategies';
+export * from './remove-cells';
 export * from './solve';

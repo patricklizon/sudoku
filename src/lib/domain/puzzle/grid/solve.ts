@@ -14,10 +14,10 @@ import type {
 	GridCellEmptyWithPossibleValues,
 } from './types';
 
-import { isDefined } from '@/lib/utils/is-defined';
-import { isNil } from '@/lib/utils/is-nil';
-import { isNumber } from '@/lib/utils/is-number';
-import type { Option } from '@/lib/utils/types/option';
+import { isDefined } from '$lib/utils/is-defined';
+import { isNil } from '$lib/utils/is-nil';
+import { isNumber } from '$lib/utils/is-number';
+import type { Option } from '$lib/utils/types/option';
 
 
 /**
@@ -81,7 +81,7 @@ export function hasUniqueSolution(g: Readonly<Grid>): boolean {
 		// TODO: Add errors
 		if (isNil(cell)) throw new Error('shouod never happen');
 		if (isNumber(cell)) {
-			solutionCount += 1;
+			solutionCount++;
 			if (solutionCount > 1) shouldContinue = false;
 			return;
 		}

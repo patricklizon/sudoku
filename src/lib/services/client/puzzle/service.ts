@@ -1,12 +1,13 @@
-import worker from './create-puzzle.worker?worker&url';
 import type { CreatePuzzleWorkerRequest, CreatePuzzleWorkerResponse } from './types';
 
-import { createRandomStringId } from '@/lib/domain/id';
-import type { Puzzle } from '@/lib/domain/puzzle';
+import { createRandomStringId } from '$lib/domain/id';
+import type { Puzzle } from '$lib/domain/puzzle';
 
-export class CreatePuzzleService {
+export class PuzzleService {
 	constructor() {
-		this.worker = new Worker(worker, { type: 'module' });
+		this.worker = new Worker(new URL('./create-puzzle.worker', import.meta.url), {
+			type: 'module',
+		});
 	}
 
 	private worker: Worker;
@@ -30,7 +31,7 @@ export class CreatePuzzleService {
 			};
 
 			const onError = (): void => {
-				// TODO: implement
+				// TODO: implement error
 				reject(new Error('adio'));
 				this.isProcessing = false;
 				this.processNextTask();

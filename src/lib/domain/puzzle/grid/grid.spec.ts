@@ -7,9 +7,7 @@ import {
 	GRID_BOX_CELLS_COUNT,
 	GRID_BOX_SIZE,
 } from './constants';
-
-import type { Grid, GridCellCoordinates, GridFilled, GridRow } from './types';
-
+import { ValueOutOfRangeError } from './errors';
 import {
 	assertGridCellCoordinateIsWithinRange,
 	assertGridCellIndexIsWithinRange,
@@ -27,8 +25,7 @@ import {
 	mapGridCellIndexToCoordinates,
 	readGridCellIndexesOfGridBoxAt,
 } from './grid';
-
-import { ValueOutOfRangeError } from './errors';
+import type { Grid, GridCellCoordinates, GridFilled, GridRow } from './types';
 
 describe(isGridCellEmpty.name, () => {
 	test.each([undefined, null])('returns true when cell is empty', (value) => {

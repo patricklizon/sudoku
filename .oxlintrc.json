@@ -212,7 +212,7 @@
 			}
 		},
 		{
-			"files": ["*.config.ts"],
+			"files": ["*.config.{ts,js}"],
 			"rules": {
 				"import/no-default-export": "off"
 			}

@@ -1,11 +1,10 @@
 {
+	"$schema": "https://json.schemastore.org/tsconfig",
 	"extends": "./tsconfig.app.json",
-	"include": ["src/**/*.spec.ts", "src/**/*.spec.tsx", "env.d.ts"],
+	"include": ["src/**/*.spec.ts", "env.d.ts"],
 	"exclude": [],
 	"compilerOptions": {
-		"tsBuildInfoFile": "./node_modules/.tmp/tsconfig.vitest.tsbuildinfo",
-		"jsx": "preserve",
-		"jsxImportSource": "vue",
+		"noEmit": true,
 		"lib": ["ESNEXT", "DOM"],
 		"types": ["node", "jsdom"]
 	}

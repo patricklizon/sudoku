@@ -1,4 +1,3 @@
-
 import {
 	GRID_CELL_ALLOWED_VALUES,
 	GRID_CELL_COUNT,
@@ -21,10 +20,10 @@ import type {
 	GridWithPossibleValues,
 } from './types';
 
-import { isNil } from '@/lib/utils/is-nil';
-import { shuffleArray } from '@/lib/utils/to-shuffled-array';
-import type { Option } from '@/lib/utils/types/option';
-import type { Range } from '@/lib/utils/types/range';
+import { isNil } from '$lib/utils/is-nil';
+import { shuffleArray } from '$lib/utils/to-shuffled-array';
+import type { Option } from '$lib/utils/types/option';
+import type { Range } from '$lib/utils/types/range';
 
 /**
  * Mutates passed grid.
