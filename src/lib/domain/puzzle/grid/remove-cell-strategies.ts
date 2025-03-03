@@ -5,28 +5,26 @@
  * Different ways of removing cells from {@link PuzzleSolution}.
  */
 
-import type { Option } from '@/lib/utils/types/option';
-import { shuffleArray, toShuffledArray } from '@/lib/utils/to-shuffled-array';
 import {
-	type Grid,
 	GRID_CELL_COUNT,
 	GRID_CELL_INDEXES,
 	GRID_SIZE,
-	type GridCellCoordinates,
-	type GridFilled,
+	GRID_SIZE_INDEXES,
+	hasUniqueSolution,
 	isGridCellFilled,
 	mapGridCellIndexToCoordinates,
 	readGridColumnAt,
 	readGridRowCellsAt,
-	GRID_SIZE_INDEXES,
-	hasUniqueSolution,
-	debug,
+	type Grid,
+	type GridCellCoordinates,
+	type GridFilled,
 } from '@/lib/domain/puzzle/grid';
-import type { Range } from '@/lib/utils/types/range';
-import type { DeepReadonly } from '@/lib/utils/types/deep-readonly';
-import { isNil } from '@/lib/utils/is-nil';
 import { isEven } from '@/lib/utils/is-even';
-import { isDefined } from '@/lib/utils/is-defined';
+import { isNil } from '@/lib/utils/is-nil';
+import { toShuffledArray } from '@/lib/utils/to-shuffled-array';
+import type { DeepReadonly } from '@/lib/utils/types/deep-readonly';
+import type { Option } from '@/lib/utils/types/option';
+import type { Range } from '@/lib/utils/types/range';
 
 export type Config = DeepReadonly<{
 	minimumGivenCells: {

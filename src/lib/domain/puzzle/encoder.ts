@@ -1,4 +1,3 @@
-import { isNil } from '@/lib/utils/is-nil';
 import { ENCODED_EMPTY_FIELD_CODE_POINT_OFFSET } from '@/lib/domain/puzzle/constants';
 import { isGridCellFilled } from '@/lib/domain/puzzle/grid';
 import type {
@@ -7,6 +6,7 @@ import type {
 	PuzzleProblem,
 	PuzzleSolution,
 } from '@/lib/domain/puzzle/types';
+import { isNil } from '@/lib/utils/is-nil';
 
 /**
  * Encodes a solvable puzzle into a string format

@@ -1,6 +1,7 @@
+import type { GRID_CELL_COUNT, GRID_SIZE, GRID_BOX_CELLS_COUNT } from './constants';
+
 import type { FixedSizeCollection } from '@/lib/utils/types/collection';
 import type { Nil } from '@/lib/utils/types/option';
-import type { GRID_CELL_COUNT, GRID_SIZE, GRID_BOX_CELLS_COUNT } from './constants';
 
 export type GridCellFilled = number;
 export type GridCellEmpty = Nil;

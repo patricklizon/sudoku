@@ -1,6 +1,6 @@
 import { GRID_SIZE, GRID_BOX_CELLS_COUNT, GRID_BOX_SIZE } from './constants';
-import type { Grid, GridBox, GridWithPossibleValues } from './types';
 import { isGridCellFilled } from './grid';
+import type { Grid, GridBox, GridWithPossibleValues } from './types';
 
 const COLOR = {
 	blue: '\u001B[38;5;69m',

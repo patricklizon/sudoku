@@ -1,12 +1,4 @@
-import { isNumber } from '@/lib/utils/is-number';
-import { isDefined } from '@/lib/utils/is-defined';
-import type {
-	Grid,
-	GridFilled,
-	GridCellFilled,
-	GridCellCoordinates,
-	GridCellEmptyWithPossibleValues,
-} from './types';
+import { UnableToPopulateGridWithValuesError } from './errors';
 import {
 	mapGridCellIndexToCoordinates,
 	getAllowedGridCellValuesAt,
@@ -14,9 +6,19 @@ import {
 	readGridRowCellIndexesAt,
 	readGridCellIndexesOfGridBoxAt,
 } from './grid';
+import type {
+	Grid,
+	GridFilled,
+	GridCellFilled,
+	GridCellCoordinates,
+	GridCellEmptyWithPossibleValues,
+} from './types';
+
+import { isDefined } from '@/lib/utils/is-defined';
 import { isNil } from '@/lib/utils/is-nil';
+import { isNumber } from '@/lib/utils/is-number';
 import type { Option } from '@/lib/utils/types/option';
-import { UnableToPopulateGridWithValuesError } from './errors';
+
 
 /**
  * Creates filled grid.

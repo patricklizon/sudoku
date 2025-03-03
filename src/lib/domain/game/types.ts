@@ -1,8 +1,8 @@
 import type { GameId } from '@/lib/domain/id';
 import type { PuzzleEncoded, PuzzleDifficultyLevel } from '@/lib/domain/puzzle';
+import type { TimeISOString } from '@/lib/domain/time';
 import type { Option } from '@/lib/utils/types/option';
 
-import type { TimeISOString } from '@/lib/domain/time';
 
 export type Game = {
 	difficulty: PuzzleDifficultyLevel;

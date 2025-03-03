@@ -1,7 +1,8 @@
-import type { Puzzle } from '@/lib/domain/puzzle';
-import type { CreatePuzzleWorkerRequest, CreatePuzzleWorkerResponse } from './types';
 import worker from './create-puzzle.worker?worker&url';
+import type { CreatePuzzleWorkerRequest, CreatePuzzleWorkerResponse } from './types';
+
 import { createRandomStringId } from '@/lib/domain/id';
+import type { Puzzle } from '@/lib/domain/puzzle';
 
 export class CreatePuzzleService {
 	constructor() {

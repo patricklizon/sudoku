@@ -1,9 +1,9 @@
-import { isNil } from '@/lib/utils/is-nil';
-import type { DB } from '@/lib/infrastructure/persistence';
-import { gameTimerTbl } from '@/lib/infrastructure/persistence/tables/game-timer';
 import type { GameHistoryEntry, DBGameHistoryEntry } from '@/lib/domain/game-history';
 import { createRandomStringId } from '@/lib/domain/id';
 import { mapDateToTimeISOString } from '@/lib/domain/time';
+import type { DB } from '@/lib/infrastructure/persistence';
+import { gameTimerTbl } from '@/lib/infrastructure/persistence/tables/game-timer';
+import { isNil } from '@/lib/utils/is-nil';
 
 export class GameHistoryEntryRepository {
 	constructor(db: DB) {

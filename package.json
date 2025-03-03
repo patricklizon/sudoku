@@ -36,6 +36,7 @@
 		"@vue/test-utils": "^2.4.6",
 		"@vue/tsconfig": "^0.7.0",
 		"eslint": "^9.20.0",
+		"eslint-plugin-import": "^2.31.0",
 		"eslint-plugin-oxlint": "^0.15.10",
 		"eslint-plugin-vue": "^9.32.0",
 		"globals": "^15.14.0",

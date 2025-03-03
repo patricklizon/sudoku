@@ -1,5 +1,6 @@
-import type { PuzzleDifficultyLevel } from '@/lib/domain/puzzle/types';
 import { DIFFICULTY_LEVEL } from './constants';
+
+import type { PuzzleDifficultyLevel } from '@/lib/domain/puzzle/types';
 
 export function isPuzzleDifficultyLevel(it: string | number): it is PuzzleDifficultyLevel {
 	if (typeof it === 'string') {

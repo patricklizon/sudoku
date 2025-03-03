@@ -1,7 +1,8 @@
-import type { Range } from '@/lib/utils/types/range';
 
 import { debug } from './debug';
 import type { Grid, GridWithPossibleValues } from './types';
+
+import type { Range } from '@/lib/utils/types/range';
 
 export class ValueOutOfRangeError extends Error {
 	constructor(range: Range<number>, value: number) {

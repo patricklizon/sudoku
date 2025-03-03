@@ -2,6 +2,7 @@ import pluginVue from 'eslint-plugin-vue';
 import vueTsEslintConfig from '@vue/eslint-config-typescript';
 import pluginVitest from '@vitest/eslint-plugin';
 import oxlint from 'eslint-plugin-oxlint';
+import importPlugin from 'eslint-plugin-import';
 import skipFormatting from '@vue/eslint-config-prettier/skip-formatting';
 
 export default [
@@ -28,6 +29,27 @@ export default [
 			'strictTypeChecked',
 		],
 	}),
+
+	{
+		files: ['src/**/*.vue', 'src/**/*.ts', './*.ts'],
+		ignores: ['src/helpers/tests/**/*.ts'],
+
+		plugins: {
+			import: importPlugin,
+		},
+		rules: {
+			...importPlugin.configs.rules,
+			'import/no-unresolved': 'off', // check done by typescript
+			'import/order': [
+				'warn',
+				{
+					'newlines-between': 'always',
+					alphabetize: { order: 'asc', caseInsensitive: true },
+				},
+			],
+			'import/no-default-export': 'warn',
+		},
+	},
 
 	{
 		name: 'typescript/overrides',

@@ -1,7 +1,4 @@
-import { isNil } from '@/lib/utils/is-nil';
-import type { Range } from '@/lib/utils/types/range';
 
-import { GridHasWrongSizeError, ValueOutOfRangeError } from './errors';
 import {
 	GRID_CELL_ALLOWED_VALUES,
 	GRID_CELL_COUNT,
@@ -9,6 +6,7 @@ import {
 	GRID_BOX_CELLS_COUNT,
 	GRID_BOX_SIZE,
 } from './constants';
+import { GridHasWrongSizeError, ValueOutOfRangeError } from './errors';
 import type {
 	Grid,
 	GridCellCoordinates,
@@ -23,8 +21,10 @@ import type {
 	GridWithPossibleValues,
 } from './types';
 
-import type { Option } from '@/lib/utils/types/option';
+import { isNil } from '@/lib/utils/is-nil';
 import { shuffleArray } from '@/lib/utils/to-shuffled-array';
+import type { Option } from '@/lib/utils/types/option';
+import type { Range } from '@/lib/utils/types/range';
 
 /**
  * Mutates passed grid.
