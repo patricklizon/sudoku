@@ -8,6 +8,7 @@ on:
 
 env:
   CACHE_KEY_PREFIX: deps-v1
+  PLAYWRIGHT_BROWSERS_PATH: ${{ github.workspace }}/pw-browsers
 
 jobs:
   dependencies:
@@ -28,23 +29,16 @@ jobs:
           path: |
             node_modules
 
-  browsers:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Install Nix
-        uses: cachix/install-nix-action@v20
-
       - name: Cache Playwright browsers
         uses: actions/cache@v4
         with:
-          key: ${{ runner.os }}-playwright-${{ env.CACHE_KEY_PREFIX }}
+          key: ${{ runner.os }}-playwright-browsers-${{ env.CACHE_KEY_PREFIX }}
           path: |
-            /tmp/nix-shell*/tmp*/ms-playwright
+            ${{ github.workspace }}/pw-browsers
 
       - name: Install browsers
-        run: nix develop --command npm run install-browsers
+        run: |
+          PLAYWRIGHT_BROWSERS_PATH=${{ env.PLAYWRIGHT_BROWSERS_PATH }} nix develop --command npx playwright install chromium
 
   check:
     needs: dependencies
@@ -72,7 +66,7 @@ jobs:
       #   run: nix develop --command npm run check:lint
 
   test:
-    needs: [dependencies, browsers]
+    needs: dependencies
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -87,7 +81,6 @@ jobs:
           path: |
             node_modules
 
-      - name: Build
         run: nix develop --command npm run test:unit
 
   build:
@@ -126,6 +119,13 @@ jobs:
       - name: Install Nix
         uses: cachix/install-nix-action@v20
 
+      - name: Restore node modules
+        uses: actions/cache@v4
+        with:
+          key: ${{ runner.os }}-node-${{ env.CACHE_KEY_PREFIX }}-${{ hashFiles('package-lock.json') }}
+          path: |
+            node_modules
+
       - name: Download build
         uses: actions/download-artifact@v4
         with:
@@ -144,7 +144,7 @@ jobs:
       - name: Install Nix
         uses: cachix/install-nix-action@v20
 
-      - name: Restore cache
+      - name: Restore node modules
         uses: actions/cache@v4
         with:
           key: ${{ runner.os }}-node-${{ env.CACHE_KEY_PREFIX }}-${{ hashFiles('package-lock.json') }}
@@ -154,9 +154,9 @@ jobs:
       - name: Restore Playwright browsers
         uses: actions/cache@v4
         with:
-          key: ${{ runner.os }}-playwright-${{ env.CACHE_KEY_PREFIX }}
+          key: ${{ runner.os }}-playwright-browsers-${{ env.CACHE_KEY_PREFIX }}
           path: |
-            /tmp/nix-shell*/tmp*/ms-playwright
+            ${{ github.workspace }}/pw-browsers
 
       - name: Download build
         uses: actions/download-artifact@v4
@@ -165,4 +165,6 @@ jobs:
           path: .svelte-kit/output
 
       - name: Run E2E tests
+        env:
+          PLAYWRIGHT_BROWSERS_PATH: ${{ env.PLAYWRIGHT_BROWSERS_PATH }}
         run: nix develop --command npm run test:e2e
