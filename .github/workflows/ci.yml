@@ -1,0 +1,190 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+
+env:
+  CACHE_KEY_PREFIX: deps-v1
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install Nix
+        uses: cachix/install-nix-action@v20
+        with:
+          nix_path: nixpkgs=channel:nixos-unstable
+          extra_nix_config: |
+            experimental-features = nix-command flakes
+
+      - name: Cache Nix store
+        uses: actions/cache@v3
+        with:
+          path: |
+            /nix/store
+            /nix/var/nix/db
+          key: ${{ runner.os }}-nix-${{ hashFiles('flake.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-nix-
+
+      - name: Install all dependencies
+        run: |
+          nix develop --command bash -c '
+            # Install npm dependencies
+            npm ci
+
+            # TODO:
+            # Install browser dependencies for E2E and vitest browser tests
+            # npx playwright install --with-deps
+          '
+
+      - name: Cache dependencies
+        uses: actions/cache@v3
+        with:
+          path: |
+            node_modules
+            ~/.cache/ms-playwright
+          key: ${{ runner.os }}-${{ env.CACHE_KEY_PREFIX }}-${{ hashFiles('package-lock.json') }}
+
+  check:
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install Nix
+        uses: cachix/install-nix-action@v20
+        with:
+          nix_path: nixpkgs=channel:nixos-unstable
+          extra_nix_config: |
+            experimental-features = nix-command flakes
+
+      - name: Cache Nix store
+        uses: actions/cache@v3
+        with:
+          path: |
+            /nix/store
+            /nix/var/nix/db
+          key: ${{ runner.os }}-nix-${{ hashFiles('flake.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-nix-
+
+      - name: Restore cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            node_modules
+            ~/.cache/ms-playwright
+          key: ${{ runner.os }}-${{ env.CACHE_KEY_PREFIX }}-${{ hashFiles('package-lock.json') }}
+
+      - name: Run checks
+        run: |
+          nix develop --command bash -c '
+            echo "Running import check..."
+            npm run check:imports
+
+            echo "Running format check..."
+            npm run check:format
+
+            echo "Running type check..."
+            npm run check:types
+
+            echo "Running lint check..."
+            npm run check:lint
+
+            echo "Running unit tests..."
+            npm test:unit
+          '
+
+  build:
+    needs: check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install Nix
+        uses: cachix/install-nix-action@v20
+        with:
+          nix_path: nixpkgs=channel:nixos-unstable
+          extra_nix_config: |
+            experimental-features = nix-command flakes
+
+      - name: Cache Nix store
+        uses: actions/cache@v3
+        with:
+          path: |
+            /nix/store
+            /nix/var/nix/db
+          key: ${{ runner.os }}-nix-${{ hashFiles('flake.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-nix-
+
+      - name: Restore cache
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-${{ env.CACHE_KEY_PREFIX }}-${{ hashFiles('package-lock.json') }}
+
+      - name: Build
+        run: nix build
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: dist
+          path: result/dist/
+
+  # e2e:
+  #   needs: [setup, build]
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v3
+
+  #     - name: Install Nix
+  #       uses: cachix/install-nix-action@v20
+  #       with:
+  #         nix_path: nixpkgs=channel:nixos-unstable
+  #         extra_nix_config: |
+  #           experimental-features = nix-command flakes
+
+  #     - name: Cache Nix store
+  #       uses: actions/cache@v3
+  #       with:
+  #         path: |
+  #           /nix/store
+  #           /nix/var/nix/db
+  #         key: ${{ runner.os }}-nix-${{ hashFiles('flake.lock') }}
+  #         restore-keys: |
+  #           ${{ runner.os }}-nix-
+
+  #     - name: Restore cache
+  #       uses: actions/cache@v3
+  #       with:
+  #         path: |
+  #           node_modules
+  #           ~/.cache/ms-playwright
+  #         key: ${{ runner.os }}-${{ env.CACHE_KEY_PREFIX }}-${{ hashFiles('package-lock.json') }}
+
+  #     - name: Download build
+  #       uses: actions/download-artifact@v3
+  #       with:
+  #         name: dist
+  #         path: dist
+
+  #     - name: Run E2E tests
+  #       run: |
+  #         nix develop --command bash -c '
+  #           # Start server with built files
+  #           npx http-server ./dist -p 3000 &
+
+  #           # Wait for server to start
+  #           sleep 3
+
+  #           # Run E2E tests
+  #           npm run test:e2e
+  #         '
