@@ -10,7 +10,7 @@ env:
   CACHE_KEY_PREFIX: deps-v1
 
 jobs:
-  setup:
+  dependencies:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -41,13 +41,13 @@ jobs:
         with:
           key: ${{ runner.os }}-playwright-${{ env.CACHE_KEY_PREFIX }}
           path: |
-            ~/.cache/ms-playwright
+            /tmp/nix-shell*/tmp*/ms-playwright
 
       - name: Install browsers
         run: nix develop --command npm run install-browsers
 
   check:
-    needs: setup
+    needs: dependencies
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -72,7 +72,7 @@ jobs:
       #   run: nix develop --command npm run check:lint
 
   test:
-    needs: [setup, browsers]
+    needs: [dependencies, browsers]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -147,16 +147,16 @@ jobs:
       - name: Restore cache
         uses: actions/cache@v4
         with:
+          key: ${{ runner.os }}-node-${{ env.CACHE_KEY_PREFIX }}-${{ hashFiles('package-lock.json') }}
           path: |
             node_modules
-          key: ${{ runner.os }}-node-${{ env.CACHE_KEY_PREFIX }}-${{ hashFiles('package-lock.json') }}
 
       - name: Restore Playwright browsers
         uses: actions/cache@v4
         with:
-          path: |
-            ~/.cache/ms-playwright
           key: ${{ runner.os }}-playwright-${{ env.CACHE_KEY_PREFIX }}
+          path: |
+            /tmp/nix-shell*/tmp*/ms-playwright
 
       - name: Download build
         uses: actions/download-artifact@v4
