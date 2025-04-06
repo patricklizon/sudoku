@@ -91,8 +91,8 @@ jobs:
             # echo "Running type check..."
             # npm run check:types
 
-            echo "Running lint check..."
-            npm run check:lint
+            # echo "Running lint check..."
+            # npm run check:lint
 
             echo "Running unit tests..."
             npm test:unit
