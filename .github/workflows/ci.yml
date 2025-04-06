@@ -24,8 +24,9 @@ jobs:
       - name: Cache node_modules
         uses: actions/cache@v4
         with:
-          path: node_modules
           key: ${{ runner.os }}-node-${{ env.CACHE_KEY_PREFIX }}-${{ hashFiles('package-lock.json') }}
+          path: |
+            node_modules
 
   browsers:
     runs-on: ubuntu-latest
@@ -38,8 +39,9 @@ jobs:
       - name: Cache Playwright browsers
         uses: actions/cache@v4
         with:
-          path: ~/.cache/ms-playwright
           key: ${{ runner.os }}-playwright-${{ env.CACHE_KEY_PREFIX }}
+          path: |
+            ~/.cache/ms-playwright
 
       - name: Install browsers
         run: nix develop --command npm run install-browsers
@@ -56,9 +58,9 @@ jobs:
       - name: Restore node modules
         uses: actions/cache@v4
         with:
+          key: ${{ runner.os }}-node-${{ env.CACHE_KEY_PREFIX }}-${{ hashFiles('package-lock.json') }}
           path: |
             node_modules
-          key: ${{ runner.os }}-node-${{ env.CACHE_KEY_PREFIX }}-${{ hashFiles('package-lock.json') }}
 
       - name: Check format
         run: nix develop --command npm run check:format
@@ -81,9 +83,9 @@ jobs:
       - name: Restore cache
         uses: actions/cache@v4
         with:
+          key: ${{ runner.os }}-node-${{ env.CACHE_KEY_PREFIX }}-${{ hashFiles('package-lock.json') }}
           path: |
             node_modules
-          key: ${{ runner.os }}-node-${{ env.CACHE_KEY_PREFIX }}-${{ hashFiles('package-lock.json') }}
 
       - name: Build
         run: nix develop --command npm run test:unit
@@ -100,9 +102,9 @@ jobs:
       - name: Restore cache
         uses: actions/cache@v4
         with:
+          key: ${{ runner.os }}-node-${{ env.CACHE_KEY_PREFIX }}-${{ hashFiles('package-lock.json') }}
           path: |
             node_modules
-          key: ${{ runner.os }}-node-${{ env.CACHE_KEY_PREFIX }}-${{ hashFiles('package-lock.json') }}
 
       - name: Build
         run: nix develop --command npm run build
@@ -115,6 +117,54 @@ jobs:
           path: build/
           if-no-files-found: error
           retention-days: 14
+
+  analyze:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Nix
+        uses: cachix/install-nix-action@v20
+
+      - name: Restore cache
+        uses: actions/cache@v4
+        with:
+          key: ${{ runner.os }}-node-${{ env.CACHE_KEY_PREFIX }}-${{ hashFiles('package-lock.json') }}
+          path: |
+            node_modules
+
+      - name: Download build
+        uses: actions/download-artifact@v4
+        with:
+          name: build
+          path: build/
+
+      - name: Analyze bundle size
+        run: nix develop --command npx source-map-explorer build/**/*.js --html bundle-analysis.html
+
+      - name: Upload bundle analysis
+        uses: actions/upload-artifact@v4
+        with:
+          name: bundle-analysis
+          path: bundle-analysis.html
+
+  performance:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Nix
+        uses: cachix/install-nix-action@v20
+
+      - name: Download build
+        uses: actions/download-artifact@v4
+        with:
+          name: build
+          path: build/
+
+      - name: Run Lighthouse CI
+        run: nix develop --command npm run lighthouse
 
   e2e:
     needs: build
