@@ -5,7 +5,7 @@
 	"type": "module",
 	"scripts": {
 		"build": "vite build",
-		"build:preview": "vite preview",
+		"preview": "vite preview",
 		"check:format": "prettier ./src --check",
 		"check:lint": "run-s lint:*",
 		"check:types": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.app.json",

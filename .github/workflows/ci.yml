@@ -103,7 +103,7 @@ jobs:
         if: ${{ !cancelled() }}
         with:
           name: app
-          path: dist/
+          path: build/
           retention-days: 14
 
   # TODO:
