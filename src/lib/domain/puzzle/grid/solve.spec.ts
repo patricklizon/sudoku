@@ -1,11 +1,7 @@
 import { describe, expect, test } from 'vitest';
 
-import {
-	createEmptyGridCell,
-	createEmptyGrid,
-	fillDiagonalGridBoxesWithValues,
-	mapGridToGridWithPossibleValues,
-} from './grid';
+import { createEmptyGridCell, createEmptyGrid, fillDiagonalGridBoxesWithValues } from './grid';
+import { mapGridToGridWithPossibleValues } from './mappers';
 import { findCellIdxWithSmallestCountOfPossibleValues, hasUniqueSolution, solve } from './solve';
 import type { Grid, GridFilled } from './types';
 

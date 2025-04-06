@@ -1,4 +1,4 @@
-import { gridDebug } from './debug';
+import { gridDebugFormatter } from './debug-formatter';
 import type { Grid, GridWithPossibleValues } from './types';
 
 import type { Range } from '$lib/utils/types/range';
@@ -13,18 +13,20 @@ export class ValueOutOfRangeError extends Error {
 
 export class GridHasWrongSizeError extends Error {
 	constructor(grid: Grid) {
-		super(`Incorrect grid: ${gridDebug(grid)}`);
+		super(`Incorrect grid: ${gridDebugFormatter(grid)}`);
 	}
 }
 
-export class UnableToPopulateGridWithValuesError extends Error {
+export class UnableToFillGridWithValuesError extends Error {
 	constructor(grid: Grid | GridWithPossibleValues) {
-		super(`Unable to populate grid with values: ${gridDebug(grid)}`);
+		super(`Unable to populate grid with values: ${gridDebugFormatter(grid)}`);
 	}
 }
 
 export class UnableToRemoveGridCellsError extends Error {
 	constructor(grid: Grid | GridWithPossibleValues) {
-		super(`Unable to remove grid cells from grid: ${gridDebug(grid)}`);
+		super(
+			`Unable to remove grid cells, according to constrains, from grid: ${gridDebugFormatter(grid)}`,
+		);
 	}
 }

@@ -1,6 +1,3 @@
-import type { GRID_CELL_COUNT, GRID_SIZE, GRID_BOX_CELLS_COUNT } from './constants';
-
-import type { FixedSizeCollection } from '$lib/utils/types/collection';
 import type { Nil } from '$lib/utils/types/option';
 
 export type GridCellFilled = number;
@@ -12,8 +9,7 @@ export type GridCellCoordinates = {
 	colIdx: number;
 };
 
-export type Grid<T extends GridCell | GridCellEmptyWithPossibleValues = GridCell> =
-	FixedSizeCollection<T, typeof GRID_CELL_COUNT>;
+export type Grid<T extends GridCell | GridCellEmptyWithPossibleValues = GridCell> = T[];
 export type GridFilled = Grid<number>;
 
 export type GridWithPossibleValues = Grid<GridCellEmptyWithPossibleValues | GridCellFilled>;
@@ -29,8 +25,7 @@ export type GridBoxWithPossibleValues = GridBox<GridCellEmptyWithPossibleValues 
  * |_, _, _|
  * ```
  */
-export type GridRow<T extends GridCell | GridCellEmptyWithPossibleValues = GridCell> =
-	FixedSizeCollection<T, typeof GRID_SIZE>;
+export type GridRow<T extends GridCell | GridCellEmptyWithPossibleValues = GridCell> = T[];
 
 /**
  * One of 9 columns containing {@link GridCell}s
@@ -42,8 +37,7 @@ export type GridRow<T extends GridCell | GridCellEmptyWithPossibleValues = GridC
  * |_, D, _|
  * ```
  */
-export type GridColumn<T extends GridCell | GridCellEmptyWithPossibleValues = GridCell> =
-	FixedSizeCollection<T, typeof GRID_SIZE>;
+export type GridColumn<T extends GridCell | GridCellEmptyWithPossibleValues = GridCell> = T[];
 
 /**
  * One of 9 sub grids containing {@link GridCell}s
@@ -55,5 +49,4 @@ export type GridColumn<T extends GridCell | GridCellEmptyWithPossibleValues = Gr
  * |_, _, _|
  * ```
  */
-export type GridBox<T extends GridCell | GridCellEmptyWithPossibleValues = GridCell> =
-	FixedSizeCollection<T, typeof GRID_BOX_CELLS_COUNT>;
+export type GridBox<T extends GridCell | GridCellEmptyWithPossibleValues = GridCell> = T[];

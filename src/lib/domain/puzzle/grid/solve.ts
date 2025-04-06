@@ -1,11 +1,11 @@
-import { UnableToPopulateGridWithValuesError } from './errors';
+import { UnableToFillGridWithValuesError } from './errors';
 import {
-	mapGridCellIndexToCoordinates,
 	getAllowedGridCellValuesAt,
 	readGridColumnCellIndexesAt,
 	readGridRowCellIndexesAt,
 	readGridCellIndexesOfGridBoxAt,
 } from './grid';
+import { mapGridCellIndexToCoordinates } from './mappers';
 import type {
 	Grid,
 	GridFilled,
@@ -19,7 +19,6 @@ import { isNil } from '$lib/utils/is-nil';
 import { isNumber } from '$lib/utils/is-number';
 import type { Option } from '$lib/utils/types/option';
 
-
 /**
  * Creates filled grid.
  */
@@ -30,7 +29,7 @@ export function solve(g: Readonly<Grid>): GridFilled {
 
 	if (execute(grid)) return grid;
 
-	throw new UnableToPopulateGridWithValuesError(grid);
+	throw new UnableToFillGridWithValuesError(grid);
 
 	function execute(cg: Grid<GridCellEmptyWithPossibleValues | GridCellFilled>): cg is GridFilled {
 		const idx = findCellIdxWithSmallestCountOfPossibleValues(cg) ?? 0;

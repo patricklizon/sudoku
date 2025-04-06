@@ -4,7 +4,7 @@ import { createPuzzleSolution } from '$lib/domain/puzzle/solution/create-puzzle-
 import type { Puzzle, PuzzleDifficultyLevel } from '$lib/domain/puzzle/types';
 
 export function createPuzzle(difficulty: PuzzleDifficultyLevel): Puzzle {
-	const solution = Object.freeze(createPuzzleSolution());
+	const solution = createPuzzleSolution();
 	const problem = createPuzzleProblem(solution, difficulty);
 	const id = encodePuzzle(problem, solution, difficulty);
 

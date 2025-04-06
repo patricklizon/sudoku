@@ -2,7 +2,7 @@ import type { GameHistoryEntry, DBGameHistoryEntry } from '$lib/domain/game-hist
 import { createRandomStringId } from '$lib/domain/id';
 import { mapDateToTimeISOString } from '$lib/domain/time';
 import type { DB } from '$lib/infrastructure/persistence';
-import { gameTimerTbl } from '$lib/infrastructure/persistence/client/tables/game-timer';
+import { gameTimerTbl } from '$lib/infrastructure/persistence/db/tables/game-timer';
 import { isNil } from '$lib/utils/is-nil';
 
 export class GameHistoryEntryRepository {
@@ -49,7 +49,7 @@ export class GameHistoryEntryRepository {
 			});
 
 			_txn.addEventListener('complete', () => {
-				console.log('Transaction completed.');
+
 			});
 		});
 	}
@@ -74,7 +74,7 @@ export class GameHistoryEntryRepository {
 			});
 
 			_txn.addEventListener('complete', () => {
-				console.log('Transaction completed.');
+
 			});
 		});
 	}

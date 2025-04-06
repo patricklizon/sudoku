@@ -12,9 +12,9 @@ import { isNil } from '$lib/utils/is-nil';
  * Encodes a solvable puzzle into a string format
  */
 export function encodePuzzle(
-	problem: PuzzleProblem,
-	solution: PuzzleSolution,
-	difficulty: PuzzleDifficultyLevel,
+	problem: Readonly<PuzzleProblem>,
+	solution: Readonly<PuzzleSolution>,
+	difficulty: Readonly<PuzzleDifficultyLevel>,
 ): PuzzleEncoded {
 	const codePointOffset = ENCODED_EMPTY_FIELD_CODE_POINT_OFFSET;
 	let result = '';

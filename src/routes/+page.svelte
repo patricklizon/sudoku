@@ -7,7 +7,7 @@
 	import { PuzzleService } from '$lib/services/client/puzzle';
 	import type { Option } from '$lib/utils/types/option';
 
-	let puzzleService: Option<InstanceType<typeof PuzzleService>>;
+	let puzzleService: InstanceType<typeof PuzzleService>;
 
 	onMount(() => {
 		puzzleService = new PuzzleService();
@@ -15,17 +15,17 @@
 
 	let puzzlePromise = $state<Option<Promise<Puzzle>>>();
 	function requestPuzzle(): void {
-		puzzlePromise = puzzleService?.create(difficultyLevel).then((r) => r.payload.puzzle);
+		puzzlePromise = puzzleService.create(difficultyLevel).then((r) => r.payload.puzzle);
 	}
 
 	let difficultyLevel = $state<PuzzleDifficultyLevel>(DIFFICULTY_LEVEL[1]);
-	let puzzleDifficultyLevelEntries = $state<[string, PuzzleDifficultyLevel][]>(
+	let difficultyOptions = $state<[string, PuzzleDifficultyLevel][]>(
 		Object.entries(DIFFICULTY_LEVEL_BY_NAME),
 	);
 </script>
 
 <select bind:value={difficultyLevel}>
-	{#each puzzleDifficultyLevelEntries as [name, level] (name + level)}
+	{#each difficultyOptions as [name, level] (name + level)}
 		<option value={level}>{name}</option>
 	{/each}
 </select>
@@ -35,11 +35,11 @@
 <div>
 	{#await puzzlePromise}
 		<p transition:fade={{ delay: 200, duration: 200 }}>loading</p>
-	{:then result}
+	{:then puzzle}
 		<div transition:fade={{ delay: 200, duration: 200 }}>
-			{#each result?.problem ?? [] as cell, idx (idx)}
+			{#each puzzle?.problem ?? [] as cell, idx (idx)}
 				<span>{cell ?? '_'}</span>
-				{#if !((idx + 1) % 9)}
+				{#if (idx + 1) % 9 === 0}
 					<br />
 				{/if}
 			{/each}

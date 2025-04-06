@@ -1,3 +1,4 @@
+import { assertGridCellCoordinateIsWithinRange } from './assertions';
 import {
 	GRID_CELL_ALLOWED_VALUES,
 	GRID_CELL_COUNT,
@@ -5,7 +6,8 @@ import {
 	GRID_BOX_CELLS_COUNT,
 	GRID_BOX_SIZE,
 } from './constants';
-import { GridHasWrongSizeError, ValueOutOfRangeError } from './errors';
+import { GridHasWrongSizeError } from './errors';
+import { isGridCellFilled } from './predicates';
 import type {
 	Grid,
 	GridCellCoordinates,
@@ -20,10 +22,8 @@ import type {
 	GridWithPossibleValues,
 } from './types';
 
-import { isNil } from '$lib/utils/is-nil';
 import { shuffleArray } from '$lib/utils/to-shuffled-array';
 import type { Option } from '$lib/utils/types/option';
-import type { Range } from '$lib/utils/types/range';
 
 /**
  * Mutates passed grid.
@@ -196,15 +196,6 @@ export function readGridCellIndexesOfGridBoxAt(
 	return result;
 }
 
-/**
- * @throws {ValueOutOfRangeError} when number is out of allowed range.
- */
-export function assertGridCellCoordinateIsWithinRange(it: number): void {
-	const range: [start: number, end: number] = [0, GRID_SIZE - 1];
-	if (range[0] <= it && it <= range[1]) return;
-	throw new ValueOutOfRangeError(range, it);
-}
-
 export function createEmptyGridCell(): GridCellEmpty {
 	return undefined;
 }
@@ -225,54 +216,4 @@ export function createEmptyGrid(): Grid {
 
 export function createEmptyGridBox(): GridBox<GridCell | GridCellEmptyWithPossibleValues> {
 	return Array.from({ length: GRID_BOX_CELLS_COUNT }, createEmptyGridCell) as GridBox;
-}
-
-export function isGridCellEmpty(it: unknown): it is GridCellEmpty {
-	return isNil(it);
-}
-
-export function isGridCellFilled(
-	it: GridCell | GridCellEmptyWithPossibleValues,
-): it is GridCellFilled {
-	if (isNil(it) || it instanceof Set) return false;
-	return GRID_CELL_ALLOWED_VALUES.has(it);
-}
-
-/**
- * @throws {ValueOutOfRangeError} when number is out of allowed range.
- */
-export function assertGridCellIndexIsWithinRange(idx: number): void {
-	const range = [0, GRID_CELL_COUNT - 1] satisfies Range<number>;
-	if (idx < range[0] || range[1] < idx) {
-		throw new ValueOutOfRangeError(range, idx);
-	}
-}
-
-export function mapGridCellIndexToCoordinates(idx: number): GridCellCoordinates {
-	assertGridCellIndexIsWithinRange(idx);
-
-	return {
-		rowIdx: Math.floor(idx / GRID_SIZE),
-		colIdx: idx % GRID_SIZE,
-	};
-}
-
-export function mapGridCellIndexToRowIndex(idx: number): number {
-	assertGridCellIndexIsWithinRange(idx);
-
-	return Math.floor(idx / GRID_SIZE);
-}
-
-export function mapGridCellIndexToColIndex(idx: number): number {
-	assertGridCellIndexIsWithinRange(idx);
-
-	return Math.floor(idx % GRID_SIZE);
-}
-
-export function mapGridToGridWithPossibleValues(g: Readonly<Grid>): GridWithPossibleValues {
-	return g.map((it, idx) => {
-		return isGridCellFilled(it)
-			? it
-			: getAllowedGridCellValuesAt(g, mapGridCellIndexToCoordinates(idx));
-	}) as GridWithPossibleValues;
 }

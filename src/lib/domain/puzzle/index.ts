@@ -1,5 +1,5 @@
 export * from './create';
-export * from './types';
+export type * from './types';
 export * from './encoder';
 export * from './decoder';
 export * from './mappers';

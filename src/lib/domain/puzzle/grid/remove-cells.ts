@@ -38,7 +38,7 @@ export type Config = DeepReadonly<{
 export function removeGridCells(grid: Readonly<GridFilled>, config: Config): Grid {
 	_assertConfigCorrectness(config);
 
-	const gridCopy = structuredClone<Grid>(grid);
+	const gridCopy = structuredClone(grid as Grid);
 	let removedCount = 0;
 	const targetEmptyCellCount = GRID_CELL_COUNT - config.minimumGivenCells.total.count;
 

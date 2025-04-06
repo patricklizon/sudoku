@@ -1,4 +1,4 @@
-import { tables } from './client/tables';
+import { tables } from './db/tables';
 
 export type DB = IDBDatabase;
 

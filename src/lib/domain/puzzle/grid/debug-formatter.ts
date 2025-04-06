@@ -1,5 +1,5 @@
-import { GRID_SIZE, GRID_BOX_CELLS_COUNT, GRID_BOX_SIZE } from './constants';
-import { isGridCellFilled } from './grid';
+import { GRID_BOX_CELLS_COUNT, GRID_BOX_SIZE, GRID_SIZE } from './constants';
+import { isGridCellFilled } from './predicates';
 import type { Grid, GridBox, GridWithPossibleValues } from './types';
 
 const COLOR = {
@@ -16,7 +16,7 @@ function colorLog(color: Exclude<keyof typeof COLOR, 'suffix'>, s: string): stri
 /**
  * Prints formatted grid.
  */
-export function gridDebug(
+export function gridDebugFormatter(
 	g: Grid | GridBox | GridWithPossibleValues,
 	o?: Partial<{ hilightIdxs: number[]; displayIdxMatrix: boolean; activeIdx: number }>,
 ): string {
@@ -30,7 +30,7 @@ export function gridDebug(
 			if (o?.hilightIdxs?.includes(idx)) value = colorLog('orange', value);
 			if (o?.activeIdx === idx) value = colorLog('blue', value);
 
-			return idx > 0 && !(idx % breakAtIdx) ? `\n${value}` : value;
+			return idx > 0 && idx % breakAtIdx === 0 ? `\n${value}` : value;
 		})
 		.join(', ');
 
@@ -41,7 +41,7 @@ export function gridDebug(
 			if (o?.hilightIdxs?.includes(idx)) value = colorLog('orange', value);
 			if (o?.activeIdx === idx) value = colorLog('blue', value);
 
-			return idx > 0 && !(idx % breakAtIdx) ? `\n${value}` : value;
+			return idx > 0 && idx % breakAtIdx === 0 ? `\n${value}` : value;
 		})
 		.join(', ');
 
