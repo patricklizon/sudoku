@@ -95,7 +95,7 @@ jobs:
             # npm run check:lint
 
             echo "Running unit tests..."
-            npm test:unit
+            npm run test:unit
           '
 
   build:
