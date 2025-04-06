@@ -24,26 +24,28 @@
 	);
 </script>
 
-<select bind:value={difficultyLevel}>
+<select bind:value={difficultyLevel} data-testid="difficulty-level-selector">
 	{#each difficultyOptions as [name, level] (name + level)}
-		<option value={level}>{name}</option>
+		<option value={level} data-testid="option">{name}</option>
 	{/each}
 </select>
 
-<button onclick={requestPuzzle}>Go</button>
+<button onclick={requestPuzzle} data-testid="action-generate-puzzle">Go</button>
 
 <div>
 	{#await puzzlePromise}
 		<p transition:fade={{ delay: 200, duration: 200 }}>loading</p>
 	{:then puzzle}
-		<div transition:fade={{ delay: 200, duration: 200 }}>
-			{#each puzzle?.problem ?? [] as cell, idx (idx)}
-				<span>{cell ?? '_'}</span>
-				{#if (idx + 1) % 9 === 0}
-					<br />
-				{/if}
-			{/each}
-		</div>
+		{#if puzzle}
+			<div transition:fade={{ delay: 200, duration: 200 }} data-testid="game-board">
+				{#each puzzle.problem as cell, idx (idx)}
+					<span data-testid="game-board.cell">{cell ?? '_'}</span>
+					{#if (idx + 1) % 9 === 0}
+						<br />
+					{/if}
+				{/each}
+			</div>
+		{/if}
 	{:catch error}
 		<p transition:fade={{ delay: 200, duration: 200 }}>{error.message}</p>
 	{/await}
