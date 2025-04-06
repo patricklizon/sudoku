@@ -48,9 +48,7 @@ export class GameHistoryEntryRepository {
 				reject(request.error);
 			});
 
-			_txn.addEventListener('complete', () => {
-
-			});
+			_txn.addEventListener('complete', () => {});
 		});
 	}
 
@@ -73,9 +71,7 @@ export class GameHistoryEntryRepository {
 				reject(request.error);
 			});
 
-			_txn.addEventListener('complete', () => {
-
-			});
+			_txn.addEventListener('complete', () => {});
 		});
 	}
 }

@@ -49,9 +49,7 @@ export class GameRepository {
 				reject(request.error);
 			});
 
-			_txn.addEventListener('complete', () => {
-
-			});
+			_txn.addEventListener('complete', () => {});
 		});
 	}
 
@@ -70,9 +68,7 @@ export class GameRepository {
 				reject(request.error);
 			});
 
-			_txn.addEventListener('complete', () => {
-
-			});
+			_txn.addEventListener('complete', () => {});
 		});
 	}
 }

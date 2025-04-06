@@ -55,9 +55,7 @@ export class GameTimerRepository {
 				reject(request.error);
 			});
 
-			_txn.addEventListener('complete', () => {
-
-			});
+			_txn.addEventListener('complete', () => {});
 		});
 	}
 
@@ -80,9 +78,7 @@ export class GameTimerRepository {
 				reject(request.error);
 			});
 
-			_txn.addEventListener('complete', () => {
-
-			});
+			_txn.addEventListener('complete', () => {});
 		});
 	}
 }

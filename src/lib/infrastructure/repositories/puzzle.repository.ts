@@ -31,9 +31,7 @@ export class PuzzleRepository {
 				reject(request.error);
 			});
 
-			_txn.addEventListener('complete', () => {
-
-			});
+			_txn.addEventListener('complete', () => {});
 		});
 	}
 
@@ -52,9 +50,7 @@ export class PuzzleRepository {
 				reject(request.error);
 			});
 
-			_txn.addEventListener('complete', () => {
-
-			});
+			_txn.addEventListener('complete', () => {});
 		});
 	}
 }
