@@ -6,7 +6,7 @@
 	"scripts": {
 		"build": "vite build",
 		"build:preview": "vite preview",
-		"check:format": "prettier --check --log-level=silent --list-different src/",
+		"check:format": "prettier ./src --check",
 		"check:lint": "run-s lint:*",
 		"check:types": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.app.json",
 		"check:types:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.app.json --watch",
