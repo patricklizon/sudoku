@@ -102,8 +102,8 @@ jobs:
         uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:
-          name: app
-          path: build/
+          name: .svelte-kit
+          path: ./.svelte-kit
           retention-days: 14
 
   # TODO:
@@ -144,8 +144,6 @@ jobs:
         uses: cachix/install-nix-action@v20
         with:
           nix_path: nixpkgs=channel:nixos-unstable
-          extra_nix_config: |
-            experimental-features = nix-command flakes
 
       - name: Restore cache
         uses: actions/cache@v3
@@ -162,10 +160,10 @@ jobs:
           key: ${{ runner.os }}-playwright-${{ env.CACHE_KEY_PREFIX }}
 
       - name: Download build
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
-          name: dist
-          path: dist
+          name: .svelte-kit
+          path: ./.svelte-kit
 
       - name: Run E2E tests
         run: nix develop --command npm run test:e2e
