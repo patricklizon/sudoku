@@ -19,7 +19,6 @@ jobs:
         uses: cachix/install-nix-action@v20
         with:
           nix_path: nixpkgs=channel:nixos-unstable
-          nix_conf: ./nix.conf
 
       - name: Cache Nix store
         uses: actions/cache@v3
@@ -60,7 +59,6 @@ jobs:
         uses: cachix/install-nix-action@v20
         with:
           nix_path: nixpkgs=channel:nixos-unstable
-          nix_conf: ./nix.conf
 
       - name: Cache Nix store
         uses: actions/cache@v3
@@ -93,6 +91,7 @@ jobs:
         run: nix develop --command npm run test:unit
 
   build:
+    needs: setup
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -101,7 +100,6 @@ jobs:
         uses: cachix/install-nix-action@v20
         with:
           nix_path: nixpkgs=channel:nixos-unstable
-          nix_conf: ./nix.conf
 
       - name: Cache Nix store
         uses: actions/cache@v3
@@ -138,7 +136,6 @@ jobs:
   #       uses: cachix/install-nix-action@v20
   #       with:
   #         nix_path: nixpkgs=channel:nixos-unstable
-  #         nix_conf: ./nix.conf
 
   #     - name: Cache Nix store
   #       uses: actions/cache@v3
