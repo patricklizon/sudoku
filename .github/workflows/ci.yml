@@ -13,57 +13,52 @@ jobs:
   setup:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Install Nix
         uses: cachix/install-nix-action@v20
-        with:
-          nix_path: nixpkgs=channel:nixos-unstable
 
       - name: Install npm dependencies
         run: nix develop --command npm ci
 
-      # TODO: enable, probably could be extracted and be exclusive dependency for test and e2e steps
-      - name: Install browsers
-        run: nix develop --command npm run install-browsers
-
       - name: Cache node_modules
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: node_modules
           key: ${{ runner.os }}-node-${{ env.CACHE_KEY_PREFIX }}-${{ hashFiles('package-lock.json') }}
 
-      # TODO:
+  browsers:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Nix
+        uses: cachix/install-nix-action@v20
+
       - name: Cache Playwright browsers
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ~/.cache/ms-playwright
           key: ${{ runner.os }}-playwright-${{ env.CACHE_KEY_PREFIX }}
+
+      - name: Install browsers
+        run: nix develop --command npm run install-browsers
 
   check:
     needs: setup
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Install Nix
         uses: cachix/install-nix-action@v20
-        with:
-          nix_path: nixpkgs=channel:nixos-unstable
 
-      # Restore node_modules cache
       - name: Restore node modules
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
-          path: node_modules
+          path: |
+            node_modules
           key: ${{ runner.os }}-node-${{ env.CACHE_KEY_PREFIX }}-${{ hashFiles('package-lock.json') }}
-
-      # TODO: move to test stage
-      - name: Restore Playwright browsers
-        uses: actions/cache@v3
-        with:
-          path: ~/.cache/ms-playwright
-          key: ${{ runner.os }}-playwright-${{ env.CACHE_KEY_PREFIX }}
 
       - name: Check format
         run: nix develop --command npm run check:format
@@ -74,25 +69,39 @@ jobs:
       # - name: Lint check
       #   run: nix develop --command npm run check:lint
 
-      # TODO: move to test stage
-      - name: Run unit tests
-        run: nix develop --command npm run test:unit
-
-  build:
-    needs: setup
+  test:
+    needs: [setup, browsers]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Install Nix
         uses: cachix/install-nix-action@v20
-        with:
-          nix_path: nixpkgs=channel:nixos-unstable
 
       - name: Restore cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
-          path: node_modules
+          path: |
+            node_modules
+          key: ${{ runner.os }}-node-${{ env.CACHE_KEY_PREFIX }}-${{ hashFiles('package-lock.json') }}
+
+      - name: Build
+        run: nix develop --command npm run test:unit
+
+  build:
+    needs: [check, test]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Nix
+        uses: cachix/install-nix-action@v20
+
+      - name: Restore cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            node_modules
           key: ${{ runner.os }}-node-${{ env.CACHE_KEY_PREFIX }}-${{ hashFiles('package-lock.json') }}
 
       - name: Build
@@ -107,57 +116,27 @@ jobs:
           if-no-files-found: error
           retention-days: 14
 
-  # TODO:
-  # test:
-  #   needs: [setup, browsers]
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v3
-
-  #     - name: Install Nix
-  #       uses: cachix/install-nix-action@v20
-  #       with:
-  #         nix_path: nixpkgs=channel:nixos-unstable
-
-  #     - name: Restore cache
-  #       uses: actions/cache@v3
-  #       with:
-  #         path: node_modules
-  #         key: ${{ runner.os }}-node-${{ env.CACHE_KEY_PREFIX }}-${{ hashFiles('package-lock.json') }}
-
-  #     - name: Build
-  #       run: nix develop --command npm run test:unit
-
-  #     - name: Upload build artifact
-  #       uses: actions/upload-artifact@v4
-  #       with:
-  #         name: dist
-  #         path: result/dist/
-
-  # TODO:
   e2e:
-    needs: [setup, build]
+    needs: build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Install Nix
         uses: cachix/install-nix-action@v20
-        with:
-          nix_path: nixpkgs=channel:nixos-unstable
 
       - name: Restore cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             node_modules
-            ~/.cache/ms-playwright
           key: ${{ runner.os }}-node-${{ env.CACHE_KEY_PREFIX }}-${{ hashFiles('package-lock.json') }}
 
       - name: Restore Playwright browsers
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
-          path: ~/.cache/ms-playwright
+          path: |
+            ~/.cache/ms-playwright
           key: ${{ runner.os }}-playwright-${{ env.CACHE_KEY_PREFIX }}
 
       - name: Download build
