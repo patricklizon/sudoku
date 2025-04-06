@@ -113,41 +113,10 @@ jobs:
         uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:
-          name: build
-          path: build/
+          name: output
+          path: .svelte-kit/output
           if-no-files-found: error
           retention-days: 14
-
-  analyze:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Install Nix
-        uses: cachix/install-nix-action@v20
-
-      - name: Restore cache
-        uses: actions/cache@v4
-        with:
-          key: ${{ runner.os }}-node-${{ env.CACHE_KEY_PREFIX }}-${{ hashFiles('package-lock.json') }}
-          path: |
-            node_modules
-
-      - name: Download build
-        uses: actions/download-artifact@v4
-        with:
-          name: build
-          path: build/
-
-      - name: Analyze bundle size
-        run: nix develop --command npx source-map-explorer build/**/*.js --html bundle-analysis.html
-
-      - name: Upload bundle analysis
-        uses: actions/upload-artifact@v4
-        with:
-          name: bundle-analysis
-          path: bundle-analysis.html
 
   performance:
     needs: build
@@ -160,8 +129,8 @@ jobs:
       - name: Download build
         uses: actions/download-artifact@v4
         with:
-          name: build
-          path: build/
+          name: output
+          path: .svelte-kit/output
 
       - name: Run Lighthouse CI
         run: nix develop --command npm run lighthouse
@@ -192,8 +161,8 @@ jobs:
       - name: Download build
         uses: actions/download-artifact@v4
         with:
-          name: build
-          path: build/
+          name: output
+          path: .svelte-kit/output
 
       - name: Run E2E tests
         run: nix develop --command npm run test:e2e
