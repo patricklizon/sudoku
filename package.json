@@ -17,6 +17,7 @@
         "lint:eslint": "eslint .",
         "lint:oxlint": "oxlint ./src --ignore-path .gitignore",
         "prepare": "svelte-kit sync || echo ''",
+        "install-browsers": "playwright install",
         "start:build": "vite preview",
         "start:dev": "vite",
         "test:unit": "vitest run",

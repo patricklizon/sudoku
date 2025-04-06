@@ -24,8 +24,8 @@ jobs:
         run: nix develop --command npm ci
 
       # TODO: enable, probably could be extracted and be exclusive dependency for test and e2e steps
-      # - name: Install browsers
-      #   run: nix develop --command npm run install-browsers
+      - name: Install browsers
+        run: nix develop --command npm run install-browsers
 
       - name: Cache node_modules
         uses: actions/cache@v3
@@ -34,11 +34,11 @@ jobs:
           key: ${{ runner.os }}-node-${{ env.CACHE_KEY_PREFIX }}-${{ hashFiles('package-lock.json') }}
 
       # TODO:
-      # - name: Cache Playwright browsers
-      #   uses: actions/cache@v3
-      #   with:
-      #       path: ~/.cache/ms-playwright
-      #       key: ${{ runner.os }}-playwright-${{ env.CACHE_KEY_PREFIX }}
+      - name: Cache Playwright browsers
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ env.CACHE_KEY_PREFIX }}
 
   check:
     needs: setup
@@ -59,11 +59,11 @@ jobs:
           key: ${{ runner.os }}-node-${{ env.CACHE_KEY_PREFIX }}-${{ hashFiles('package-lock.json') }}
 
       # TODO: move to test stage
-      # - name: Restore Playwright browsers
-      #   uses: actions/cache@v3
-      #   with:
-      #     path: ~/.cache/ms-playwright
-      #     key: ${{ runner.os }}-playwright-${{ env.CACHE_KEY_PREFIX }}
+      - name: Restore Playwright browsers
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ env.CACHE_KEY_PREFIX }}
 
       - name: Check format
         run: nix develop --command npm run check:format
@@ -134,42 +134,38 @@ jobs:
   #         path: result/dist/
 
   # TODO:
-  # e2e:
-  #   needs: [setup, browsers, build]
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v3
+  e2e:
+    needs: [setup, build]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
 
-  #     - name: Install Nix
-  #       uses: cachix/install-nix-action@v20
-  #       with:
-  #         nix_path: nixpkgs=channel:nixos-unstable
-  #         extra_nix_config: |
-  #           experimental-features = nix-command flakes
+      - name: Install Nix
+        uses: cachix/install-nix-action@v20
+        with:
+          nix_path: nixpkgs=channel:nixos-unstable
+          extra_nix_config: |
+            experimental-features = nix-command flakes
 
-  #     - name: Restore cache
-  #       uses: actions/cache@v3
-  #       with:
-  #         path: |
-  #           node_modules
-  #           ~/.cache/ms-playwright
-  #         key: ${{ runner.os }}-node-${{ env.CACHE_KEY_PREFIX }}-${{ hashFiles('package-lock.json') }}
+      - name: Restore cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            node_modules
+            ~/.cache/ms-playwright
+          key: ${{ runner.os }}-node-${{ env.CACHE_KEY_PREFIX }}-${{ hashFiles('package-lock.json') }}
 
-  #     - name: Download build
-  #       uses: actions/download-artifact@v3
-  #       with:
-  #         name: dist
-  #         path: dist
+      - name: Restore Playwright browsers
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ env.CACHE_KEY_PREFIX }}
 
-  #     - name: Run E2E tests
-  #       run: |
-  #         nix develop --command bash -c '
-  #           # Start server with built files
-  #           npx http-server ./dist -p 3000 &
+      - name: Download build
+        uses: actions/download-artifact@v3
+        with:
+          name: dist
+          path: dist
 
-  #           # Wait for server to start
-  #           sleep 3
-
-  #           # Run E2E tests
-  #           npm run test:e2e
-  #         '
+      - name: Run E2E tests
+        run: nix develop --command npm run test:e2e
