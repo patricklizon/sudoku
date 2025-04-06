@@ -13,7 +13,7 @@
     "fix:lint": "run-s fix:lint:*",
     "fix:lint:eslint": "eslint ./src --fix",
     "fix:lint:oxlint": "oxlint ./src --fix --fix-suggestions --ignore-path .gitignore",
-    "install-browsers": "playwright install chromium",
+    "install-browsers": "npx playwright install chromium",
     "lint:eslint": "eslint .",
     "lint:oxlint": "oxlint ./src --ignore-path .gitignore",
     "prepare": "svelte-kit sync || echo ''",
