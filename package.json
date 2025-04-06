@@ -10,7 +10,7 @@
 		"check:lint": "run-s lint:*",
 		"check:types": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.app.json",
 		"check:types:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.app.json --watch",
-		"fix:format": "prettier --list-different src/",
+		"fix:format": "prettier ./src --list-different --write",
 		"fix:lint": "run-s fix:lint:*",
 		"fix:lint:eslint": "eslint ./src --fix",
 		"fix:lint:oxlint": "oxlint ./src --fix --fix-suggestions --ignore-path .gitignore",
