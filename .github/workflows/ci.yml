@@ -25,10 +25,9 @@ jobs:
         with:
           path: |
             /nix/store
-            /nix/var/nix/db
-          key: ${{ runner.os }}-nix-${{ hashFiles('flake.lock') }}
+          key: ${{ runner.os }}-nix-store-${{ hashFiles('flake.lock') }}
           restore-keys: |
-            ${{ runner.os }}-nix-
+            ${{ runner.os }}-nix-store-
 
       - name: Install all dependencies
         run: |
