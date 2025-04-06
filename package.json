@@ -46,6 +46,7 @@
     "jsdom": "^26.0.0",
     "npm-run-all2": "^7.0.1",
     "oxlint": "^0.15.13",
+    "playwright": "^1.51.1",
     "prettier": "^3.3.3",
     "prettier-plugin-svelte": "^3.3.3",
     "svelte": "^5.20.5",
