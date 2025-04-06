@@ -58,8 +58,8 @@ jobs:
             ~/.cache/ms-playwright
           key: ${{ runner.os }}-${{ env.CACHE_KEY_PREFIX }}-${{ hashFiles('package-lock.json') }}
 
-      # - name: Check format
-      #   run: nix develop --command npm run check:format
+      - name: Check format
+        run: nix develop --command npm run check:format
 
       # - name: Check types
       #   run: nix develop --command npm run check:types
