@@ -1,5 +1,5 @@
 {
-  description = "Node.js project with Playwright";
+  description = "Node.js project";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
@@ -17,7 +17,7 @@
         formatter = pkgs.nixfmt;
 
         devShells.default = pkgs.mkShell {
-          buildInputs = with pkgs; [ nodejs ];
+          buildInputs = [ nodejs ];
 
           shellHook = ''
             export HOME=$(mktemp -d)
@@ -26,7 +26,7 @@
             # Generate .nvmrc file if it doesn't exist or major version doesn't match
             if [ ! -f ${nodeVersionFileName} ] || ! grep -q "^${nodeMajor}\|^v${nodeMajor}" ${nodeVersionFileName}; then
               echo "${nodeMajor}" > ${nodeVersionFileName}
-              echo "Generated .nvmrc with Node.js version ${nodeMajor}"
+              echo "Generated ${nodeVersionFileName} with Node.js version ${nodeMajor}"
             fi
 
             echo "Node.js $(node --version)"

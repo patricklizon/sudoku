@@ -32,6 +32,35 @@ jobs:
           path: |
             node_modules
 
+  browsers:
+    needs: dependencies
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: ${{ env.NODE_VERSION_FILE }}
+          cache: "npm"
+
+      - name: Restore node modules
+        uses: actions/cache@v4
+        with:
+          key: ${{ runner.os }}-node-${{ env.CACHE_KEY_PREFIX }}-${{ hashFiles('package-lock.json') }}
+          path: |
+            node_modules
+
+      - name: Install Playwright browsers
+        run: npm run install-browsers -- --with-deps
+
+      - name: Cache browsers
+        uses: actions/cache@v4
+        with:
+          key: ${{ runner.os }}-browsers-${{ env.CACHE_KEY_PREFIX }}-${{ hashFiles('package.json') }}
+          path: |
+            ~/.cache/ms-playwright
+
   check:
     needs: dependencies
     runs-on: ubuntu-latest
@@ -132,8 +161,12 @@ jobs:
           path: |
             node_modules
 
-      - name: Install Playwright browsers
-        run: npm run install-browsers -- --with-deps
+      - name: Restore browsers
+        uses: actions/cache@v4
+        with:
+          key: ${{ runner.os }}-browsers-${{ env.CACHE_KEY_PREFIX }}-${{ hashFiles('package.json') }}
+          path: |
+            ~/.cache/ms-playwright
 
       - name: Download build
         uses: actions/download-artifact@v4
