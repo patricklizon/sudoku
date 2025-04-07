@@ -69,9 +69,6 @@ jobs:
           path: |
             node_modules
 
-      - name: Install browsers for tests
-        run: npx playwright install --with-deps chromium
-
       - name: Run unit tests
         run: nix develop --command npm run test:unit
 
@@ -151,7 +148,7 @@ jobs:
           path: .svelte-kit/output
 
       - name: Install browsers for E2E tests
-        run: npx playwright install --with-deps chromium
+        run: nix develop --command npm run install-browsers -- --with-deps
 
       - name: Run E2E tests
         run: nix develop --command npm run test:e2e
