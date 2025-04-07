@@ -46,11 +46,8 @@
             export HOME=$(mktemp -d)
             export npm_config_cache=$HOME/.npm
 
-            # Use the system browsers directly
-            export PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1
-
-            # Use system Chromium
-            export PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=${pkgs.chromium}/bin/chromium
+            echo "Installing Playwright browsers..."
+            npx playwright install --with-deps chromium
 
             echo "Node.js $(node --version)"
             echo "npm $(npm --version)"
