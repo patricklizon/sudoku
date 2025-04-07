@@ -11,28 +11,6 @@
       let
         pkgs = nixpkgs.legacyPackages.${system};
         nodejs = pkgs.nodejs_22;
-
-        browserDeps = with pkgs; [
-          xvfb-run
-          chromium
-          firefox
-          xorg.libX11
-          xorg.libXcomposite
-          xorg.libXcursor
-          xorg.libXdamage
-          xorg.libXext
-          xorg.libXi
-          xorg.libXtst
-          xorg.libXrandr
-          xorg.libXScrnSaver
-          xorg.libxshmfence
-          libGLU
-          mesa
-          nss
-          nspr
-          fontconfig
-          freetype
-        ];
       in {
         formatter = pkgs.nixfmt;
 
@@ -40,14 +18,18 @@
           buildInputs = with pkgs; [
             nodejs
             playwright-test
-          ] ++ browserDeps;
+            xvfb-run # it's needed for browser's headless operation
+          ];
+
+          nativeBuildInputs = with pkgs; [
+            playwright-driver.browsers
+          ];
 
           shellHook = ''
             export HOME=$(mktemp -d)
             export npm_config_cache=$HOME/.npm
-
-            echo "Installing Playwright browsers..."
-            npx playwright install --with-deps chromium
+            export PLAYWRIGHT_BROWSERS_PATH=${pkgs.playwright-driver.browsers}
+            export PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1
 
             echo "Node.js $(node --version)"
             echo "npm $(npm --version)"
