@@ -69,9 +69,6 @@ jobs:
           path: |
             node_modules
 
-      - name: Install browsers for unit tests
-        run: nix develop --command npm run install-browsers
-
       - name: Run unit tests
         run: nix develop --command npm run test:unit
 
@@ -131,6 +128,8 @@ jobs:
   e2e:
     needs: build
     runs-on: ubuntu-latest
+    env:
+      PLAYWRIGHT_BROWSERS_PATH: ${{ github.workspace }}/pw-browsers
     steps:
       - uses: actions/checkout@v4
 
@@ -144,8 +143,12 @@ jobs:
           path: |
             node_modules
 
-      - name: Install browsers for E2E tests
-        run: nix develop --command npm run install-browsers
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        with:
+          key: ${{ runner.os }}-playwright-browsers-${{ env.CACHE_KEY_PREFIX }}
+          path: |
+            ${{ github.workspace }}/pw-browsers
 
       - name: Download build
         uses: actions/download-artifact@v4
@@ -153,5 +156,10 @@ jobs:
           name: output
           path: .svelte-kit/output
 
+      - name: Install browsers if needed
+        run: |
+          mkdir -p $PLAYWRIGHT_BROWSERS_PATH
+          nix develop --command bash -c "PLAYWRIGHT_BROWSERS_PATH=$PLAYWRIGHT_BROWSERS_PATH npx playwright install chromium"
+
       - name: Run E2E tests
-        run: nix develop --command npm run test:e2e
+        run: nix develop --command bash -c "PLAYWRIGHT_BROWSERS_PATH=$PLAYWRIGHT_BROWSERS_PATH npm run test:e2e"
