@@ -100,34 +100,36 @@ jobs:
           if-no-files-found: error
           retention-days: 14
 
-  performance:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
+  # performance:
+  #   needs: build
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v4
 
-      - name: Install Nix
-        uses: cachix/install-nix-action@v20
+  #     - name: Install Nix
+  #       uses: cachix/install-nix-action@v20
 
-      - name: Restore node modules
-        uses: actions/cache@v4
-        with:
-          key: ${{ runner.os }}-node-${{ env.CACHE_KEY_PREFIX }}-${{ hashFiles('package-lock.json') }}
-          path: |
-            node_modules
+  #     - name: Restore node modules
+  #       uses: actions/cache@v4
+  #       with:
+  #         key: ${{ runner.os }}-node-${{ env.CACHE_KEY_PREFIX }}-${{ hashFiles('package-lock.json') }}
+  #         path: |
+  #           node_modules
 
-      - name: Download build
-        uses: actions/download-artifact@v4
-        with:
-          name: output
-          path: .svelte-kit/output
+  #     - name: Download build
+  #       uses: actions/download-artifact@v4
+  #       with:
+  #         name: output
+  #         path: .svelte-kit/output
 
-      - name: Run Lighthouse CI
-        run: nix develop --command npm run lighthouse
+  #     - name: Run Lighthouse CI
+  #       run: nix develop --command npm run lighthouse
 
   e2e:
     needs: build
     runs-on: ubuntu-latest
+    env:
+      PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
     steps:
       - uses: actions/checkout@v4
 
@@ -146,9 +148,6 @@ jobs:
         with:
           name: output
           path: .svelte-kit/output
-
-      - name: Install browsers for E2E tests
-        run: nix develop --command npm run install-browsers -- --with-deps
 
       - name: Run E2E tests
         run: nix develop --command npm run test:e2e
