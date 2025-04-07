@@ -14,6 +14,8 @@
 
         browserDeps = with pkgs; [
           xvfb-run
+          chromium
+          firefox
           xorg.libX11
           xorg.libXcomposite
           xorg.libXcursor
@@ -43,8 +45,12 @@
           shellHook = ''
             export HOME=$(mktemp -d)
             export npm_config_cache=$HOME/.npm
-            export PLAYWRIGHT_BROWSERS_PATH=${pkgs.playwright-driver.browsers}
+
+            # Use the system browsers directly
             export PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1
+
+            # Use system Chromium
+            export PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=${pkgs.chromium}/bin/chromium
 
             echo "Node.js $(node --version)"
             echo "npm $(npm --version)"
