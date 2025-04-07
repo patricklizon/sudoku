@@ -8,6 +8,7 @@ on:
 
 env:
   CACHE_KEY_PREFIX: deps-v1
+  PLAYWRIGHT_BROWSERS_PATH: ${{ github.workspace }}/pw-browsers
 
 jobs:
   dependencies:
@@ -27,6 +28,23 @@ jobs:
           key: ${{ runner.os }}-node-${{ env.CACHE_KEY_PREFIX }}-${{ hashFiles('package-lock.json') }}
           path: |
             node_modules
+
+  browsers:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        with:
+          key: ${{ runner.os }}-playwright-browsers-${{ env.CACHE_KEY_PREFIX }}
+          path: |
+            ${{ github.workspace }}/pw-browsers
+
+      - name: Install browsers with dependencies
+        run: |
+          mkdir -p $PLAYWRIGHT_BROWSERS_PATH
+          PLAYWRIGHT_BROWSERS_PATH=$PLAYWRIGHT_BROWSERS_PATH npx playwright install --with-deps chromium
 
   check:
     needs: dependencies
@@ -54,7 +72,7 @@ jobs:
       #   run: nix develop --command npm run check:lint
 
   test:
-    needs: dependencies
+    needs: [dependencies, browsers]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -62,14 +80,23 @@ jobs:
       - name: Install Nix
         uses: cachix/install-nix-action@v20
 
-      - name: Restore cache
+      - name: Restore node modules cache
         uses: actions/cache@v4
         with:
           key: ${{ runner.os }}-node-${{ env.CACHE_KEY_PREFIX }}-${{ hashFiles('package-lock.json') }}
           path: |
             node_modules
 
+      - name: Restore Playwright browsers
+        uses: actions/cache@v4
+        with:
+          key: ${{ runner.os }}-playwright-browsers-${{ env.CACHE_KEY_PREFIX }}
+          path: |
+            ${{ github.workspace }}/pw-browsers
+
       - name: Run unit tests
+        env:
+          PLAYWRIGHT_BROWSERS_PATH: ${{ env.PLAYWRIGHT_BROWSERS_PATH }}
         run: nix develop --command npm run test:unit
 
   build:
@@ -126,10 +153,8 @@ jobs:
         run: nix develop --command npm run lighthouse
 
   e2e:
-    needs: build
+    needs: [build, browsers]
     runs-on: ubuntu-latest
-    env:
-      PLAYWRIGHT_BROWSERS_PATH: ${{ github.workspace }}/pw-browsers
     steps:
       - uses: actions/checkout@v4
 
@@ -143,7 +168,7 @@ jobs:
           path: |
             node_modules
 
-      - name: Cache Playwright browsers
+      - name: Restore Playwright browsers
         uses: actions/cache@v4
         with:
           key: ${{ runner.os }}-playwright-browsers-${{ env.CACHE_KEY_PREFIX }}
@@ -156,10 +181,7 @@ jobs:
           name: output
           path: .svelte-kit/output
 
-      - name: Install browsers if needed
-        run: |
-          mkdir -p $PLAYWRIGHT_BROWSERS_PATH
-          nix develop --command bash -c "PLAYWRIGHT_BROWSERS_PATH=$PLAYWRIGHT_BROWSERS_PATH npx playwright install chromium"
-
       - name: Run E2E tests
-        run: nix develop --command bash -c "PLAYWRIGHT_BROWSERS_PATH=$PLAYWRIGHT_BROWSERS_PATH npm run test:e2e"
+        env:
+          PLAYWRIGHT_BROWSERS_PATH: ${{ env.PLAYWRIGHT_BROWSERS_PATH }}
+        run: nix develop --command npm run test:e2e
