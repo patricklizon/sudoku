@@ -8,19 +8,19 @@ on:
 
 env:
   CACHE_KEY_PREFIX: deps-v1
-  PLAYWRIGHT_BROWSERS_PATH: ${{ github.workspace }}/pw-browsers
+  PLAYWRIGHT_BROWSERS_PATH: /github/workspace/pw-browsers
 
 jobs:
   dependencies:
     runs-on: ubuntu-latest
+    container:
+      image: nixos/nix:latest
+      options: --privileged
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install Nix
-        uses: cachix/install-nix-action@v20
-
       - name: Install npm dependencies
-        run: nix develop --command npm ci
+        run: nix-shell --run "npm ci"
 
       - name: Cache node_modules
         uses: actions/cache@v4
@@ -34,20 +34,21 @@ jobs:
         with:
           key: ${{ runner.os }}-playwright-browsers-${{ env.CACHE_KEY_PREFIX }}
           path: |
-            ${{ github.workspace }}/pw-browsers
+            /github/workspace/pw-browsers
 
       - name: Install browsers
-        run: |
-          PLAYWRIGHT_BROWSERS_PATH=${{ env.PLAYWRIGHT_BROWSERS_PATH }} nix develop --command npx playwright install chromium
+        env:
+          PLAYWRIGHT_BROWSERS_PATH: ${{ env.PLAYWRIGHT_BROWSERS_PATH }}
+        run: nix-shell --run "npx playwright install chromium"
 
   check:
     needs: dependencies
     runs-on: ubuntu-latest
+    container:
+      image: nixos/nix:latest
+      options: --privileged
     steps:
       - uses: actions/checkout@v4
-
-      - name: Install Nix
-        uses: cachix/install-nix-action@v20
 
       - name: Restore node modules
         uses: actions/cache@v4
@@ -57,22 +58,22 @@ jobs:
             node_modules
 
       - name: Check format
-        run: nix develop --command npm run check:format
+        run: nix-shell --run "npm run check:format"
 
       # - name: Check types
-      #   run: nix develop --command npm run check:types
+      #   run: nix-shell --run "npm run check:types"
 
       # - name: Lint check
-      #   run: nix develop --command npm run check:lint
+      #   run: nix-shell --run "npm run check:lint"
 
   test:
     needs: dependencies
     runs-on: ubuntu-latest
+    container:
+      image: nixos/nix:latest
+      options: --privileged
     steps:
       - uses: actions/checkout@v4
-
-      - name: Install Nix
-        uses: cachix/install-nix-action@v20
 
       - name: Restore cache
         uses: actions/cache@v4
@@ -81,16 +82,26 @@ jobs:
           path: |
             node_modules
 
-        run: nix develop --command npm run test:unit
+      - name: Restore Playwright browsers
+        uses: actions/cache@v4
+        with:
+          key: ${{ runner.os }}-playwright-browsers-${{ env.CACHE_KEY_PREFIX }}
+          path: |
+            /github/workspace/pw-browsers
+
+      - name: Run unit tests
+        env:
+          PLAYWRIGHT_BROWSERS_PATH: ${{ env.PLAYWRIGHT_BROWSERS_PATH }}
+        run: nix-shell --run "npm run test:unit"
 
   build:
     needs: [check, test]
     runs-on: ubuntu-latest
+    container:
+      image: nixos/nix:latest
+      options: --privileged
     steps:
       - uses: actions/checkout@v4
-
-      - name: Install Nix
-        uses: cachix/install-nix-action@v20
 
       - name: Restore cache
         uses: actions/cache@v4
@@ -100,7 +111,7 @@ jobs:
             node_modules
 
       - name: Build
-        run: nix develop --command npm run build
+        run: nix-shell --run "npm run build"
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
@@ -114,10 +125,11 @@ jobs:
   performance:
     needs: build
     runs-on: ubuntu-latest
+    container:
+      image: nixos/nix:latest
+      options: --privileged
     steps:
       - uses: actions/checkout@v4
-      - name: Install Nix
-        uses: cachix/install-nix-action@v20
 
       - name: Restore node modules
         uses: actions/cache@v4
@@ -133,18 +145,18 @@ jobs:
           path: .svelte-kit/output
 
       - name: Run Lighthouse CI
-        run: nix develop --command npm run lighthouse
+        run: nix-shell --run "npm run lighthouse"
 
   e2e:
     needs: build
     runs-on: ubuntu-latest
+    container:
+      image: nixos/nix:latest
+      options: --privileged
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install Nix
-        uses: cachix/install-nix-action@v20
-
-      - name: Restore node modules
+      - name: Restore cache
         uses: actions/cache@v4
         with:
           key: ${{ runner.os }}-node-${{ env.CACHE_KEY_PREFIX }}-${{ hashFiles('package-lock.json') }}
@@ -156,7 +168,7 @@ jobs:
         with:
           key: ${{ runner.os }}-playwright-browsers-${{ env.CACHE_KEY_PREFIX }}
           path: |
-            ${{ github.workspace }}/pw-browsers
+            /github/workspace/pw-browsers
 
       - name: Download build
         uses: actions/download-artifact@v4
@@ -167,4 +179,4 @@ jobs:
       - name: Run E2E tests
         env:
           PLAYWRIGHT_BROWSERS_PATH: ${{ env.PLAYWRIGHT_BROWSERS_PATH }}
-        run: nix develop --command npm run test:e2e
+        run: nix-shell --run "npm run test:e2e"
