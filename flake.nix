@@ -10,26 +10,24 @@
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = nixpkgs.legacyPackages.${system};
-        nodejs = pkgs.nodejs_22;
+        nodeVersionFileName = ".nvmrc";
+        nodeMajor = "22";
+        nodejs = pkgs."nodejs_${nodeMajor}";
       in {
         formatter = pkgs.nixfmt;
 
         devShells.default = pkgs.mkShell {
-          buildInputs = with pkgs; [
-            nodejs
-            playwright-test
-            xvfb-run # it's needed for browser's headless operation
-          ];
-
-          nativeBuildInputs = with pkgs; [
-            playwright-driver.browsers
-          ];
+          buildInputs = with pkgs; [ nodejs ];
 
           shellHook = ''
             export HOME=$(mktemp -d)
             export npm_config_cache=$HOME/.npm
-            export PLAYWRIGHT_BROWSERS_PATH=${pkgs.playwright-driver.browsers}
-            export PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1
+
+            # Generate .nvmrc file if it doesn't exist or major version doesn't match
+            if [ ! -f ${nodeVersionFileName} ] || ! grep -q "^${nodeMajor}\|^v${nodeMajor}" ${nodeVersionFileName}; then
+              echo "${nodeMajor}" > ${nodeVersionFileName}
+              echo "Generated .nvmrc with Node.js version ${nodeMajor}"
+            fi
 
             echo "Node.js $(node --version)"
             echo "npm $(npm --version)"
