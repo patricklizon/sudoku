@@ -4,26 +4,26 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     flake-utils.url = "github:numtide/flake-utils";
-    nixd.url = "github:nix-community/nixd";
   };
 
-  outputs = { self, nixpkgs, flake-utils, nixd }:
+  outputs = { self, nixpkgs, flake-utils }:
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = nixpkgs.legacyPackages.${system};
         nodejs = pkgs.nodejs_22;
-        playWrightBrowserDeps = with pkgs; [
+
+        browserDeps = with pkgs; [
           xvfb-run
-          libX11
-          libXcomposite
-          libXcursor
-          libXdamage
-          libXext
-          libXi
-          libXtst
-          libXrandr
-          libXScrnSaver
-          libxshmfence
+          xorg.libX11
+          xorg.libXcomposite
+          xorg.libXcursor
+          xorg.libXdamage
+          xorg.libXext
+          xorg.libXi
+          xorg.libXtst
+          xorg.libXrandr
+          xorg.libXScrnSaver
+          xorg.libxshmfence
           libGLU
           mesa
           nss
@@ -31,12 +31,14 @@
           fontconfig
           freetype
         ];
-
       in {
         formatter = pkgs.nixfmt;
 
         devShells.default = pkgs.mkShell {
-          buildInputs = with pkgs; [ nodejs playwright-test ] ++ playWrightBrowserDeps;
+          buildInputs = with pkgs; [
+            nodejs
+            playwright-test
+          ] ++ browserDeps;
 
           shellHook = ''
             export HOME=$(mktemp -d)
