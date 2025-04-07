@@ -8,7 +8,6 @@ on:
 
 env:
   CACHE_KEY_PREFIX: deps-v1
-  PLAYWRIGHT_BROWSERS_PATH: ${{ github.workspace }}/pw-browsers
 
 jobs:
   dependencies:
@@ -18,8 +17,6 @@ jobs:
 
       - name: Install Nix
         uses: cachix/install-nix-action@v20
-        with:
-          nix_path: nixpkgs=channel:nixos-unstable
 
       - name: Install npm dependencies
         run: nix develop --command npm ci
@@ -31,18 +28,6 @@ jobs:
           path: |
             node_modules
 
-      - name: Cache Playwright browsers
-        uses: actions/cache@v4
-        with:
-          key: ${{ runner.os }}-playwright-browsers-${{ env.CACHE_KEY_PREFIX }}
-          path: |
-            ${{ github.workspace }}/pw-browsers
-
-      - name: Install browsers
-        env:
-          PLAYWRIGHT_BROWSERS_PATH: ${{ env.PLAYWRIGHT_BROWSERS_PATH }}
-        run: nix develop --command npx playwright install chromium
-
   check:
     needs: dependencies
     runs-on: ubuntu-latest
@@ -51,8 +36,6 @@ jobs:
 
       - name: Install Nix
         uses: cachix/install-nix-action@v20
-        with:
-          nix_path: nixpkgs=channel:nixos-unstable
 
       - name: Restore node modules
         uses: actions/cache@v4
@@ -78,8 +61,6 @@ jobs:
 
       - name: Install Nix
         uses: cachix/install-nix-action@v20
-        with:
-          nix_path: nixpkgs=channel:nixos-unstable
 
       - name: Restore cache
         uses: actions/cache@v4
@@ -88,16 +69,10 @@ jobs:
           path: |
             node_modules
 
-      - name: Restore Playwright browsers
-        uses: actions/cache@v4
-        with:
-          key: ${{ runner.os }}-playwright-browsers-${{ env.CACHE_KEY_PREFIX }}
-          path: |
-            ${{ github.workspace }}/pw-browsers
+      - name: Install browsers for unit tests
+        run: nix develop --command npm run install-browsers
 
       - name: Run unit tests
-        env:
-          PLAYWRIGHT_BROWSERS_PATH: ${{ env.PLAYWRIGHT_BROWSERS_PATH }}
         run: nix develop --command npm run test:unit
 
   build:
@@ -108,8 +83,6 @@ jobs:
 
       - name: Install Nix
         uses: cachix/install-nix-action@v20
-        with:
-          nix_path: nixpkgs=channel:nixos-unstable
 
       - name: Restore cache
         uses: actions/cache@v4
@@ -138,8 +111,6 @@ jobs:
 
       - name: Install Nix
         uses: cachix/install-nix-action@v20
-        with:
-          nix_path: nixpkgs=channel:nixos-unstable
 
       - name: Restore node modules
         uses: actions/cache@v4
@@ -165,8 +136,6 @@ jobs:
 
       - name: Install Nix
         uses: cachix/install-nix-action@v20
-        with:
-          nix_path: nixpkgs=channel:nixos-unstable
 
       - name: Restore cache
         uses: actions/cache@v4
@@ -175,12 +144,8 @@ jobs:
           path: |
             node_modules
 
-      - name: Restore Playwright browsers
-        uses: actions/cache@v4
-        with:
-          key: ${{ runner.os }}-playwright-browsers-${{ env.CACHE_KEY_PREFIX }}
-          path: |
-            ${{ github.workspace }}/pw-browsers
+      - name: Install browsers for E2E tests
+        run: nix develop --command npm run install-browsers
 
       - name: Download build
         uses: actions/download-artifact@v4
@@ -189,6 +154,4 @@ jobs:
           path: .svelte-kit/output
 
       - name: Run E2E tests
-        env:
-          PLAYWRIGHT_BROWSERS_PATH: ${{ env.PLAYWRIGHT_BROWSERS_PATH }}
         run: nix develop --command npm run test:e2e
