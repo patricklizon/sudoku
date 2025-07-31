@@ -10,7 +10,8 @@ env:
   CACHE_KEY_PREFIX: deps-v1
   BUN_VERSION_FILE: '.bun-version'
   NODE_VERSION_FILE: '.node-version'
-  PLAYWRIGHT_CACHE_PATH: '~/.cache/ms-playwright'
+  PLAYWRIGHT_CACHE_PATH: '.cache/ms-playwright'
+  ARTIFACTS_OUTPUT_PATH: '.svelte-kit/cloudflare'
 
 jobs:
   install-dependencies:
@@ -130,7 +131,7 @@ jobs:
         if: ${{ !cancelled() }}
         with:
           name: output
-          path: .svelte-kit/output
+          path: ${{ env.ARTIFACTS_OUTPUT_PATH }}
           if-no-files-found: error
           retention-days: 14
 
@@ -161,7 +162,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: output
-          path: .svelte-kit/output
+          path: ${{ env.ARTIFACTS_OUTPUT_PATH }}
 
       - name: Run E2E tests
         run: bun run test:e2e
