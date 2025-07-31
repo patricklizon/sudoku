@@ -1,5 +1,5 @@
 {
-  description = "Node.js project";
+  description = "Bun.js project";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
@@ -10,27 +10,25 @@
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = nixpkgs.legacyPackages.${system};
-        nodeVersionFileName = ".nvmrc";
-        nodeMajor = "22";
-        nodejs = pkgs."nodejs_${nodeMajor}";
+        bunVersionFileName = ".bun-version";
+        bunjs = pkgs.bun;
+        nixd = pkgs.nixd;
       in {
         formatter = pkgs.nixfmt;
 
         devShells.default = pkgs.mkShell {
-          buildInputs = [ nodejs ];
+          buildInputs = [ bunjs nixd ];
 
           shellHook = ''
             export HOME=$(mktemp -d)
-            export npm_config_cache=$HOME/.npm
 
-            # Generate .nvmrc file if it doesn't exist or major version doesn't match
-            if [ ! -f ${nodeVersionFileName} ] || ! grep -q "^${nodeMajor}\|^v${nodeMajor}" ${nodeVersionFileName}; then
-              echo "${nodeMajor}" > ${nodeVersionFileName}
-              echo "Generated ${nodeVersionFileName} with Node.js version ${nodeMajor}"
+            local_bun_version=$(bun --version)
+
+            if [ ! -f ${bunVersionFileName} ] || ! grep -q "^$bun_major_version" ${bunVersionFileName}; then
+              echo "$local_bun_version" > ${bunVersionFileName}
             fi
 
-            echo "Node.js $(node --version)"
-            echo "npm $(npm --version)"
+            echo "Bun $(bun --version)"
           '';
         };
       });
