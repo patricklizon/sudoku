@@ -14,7 +14,7 @@
         nodeVersionFileName = ".node-version";
         bunjs = pkgs.bun;
         nixd = pkgs.nixd;
-        nodejs = pkgs.nodejs-22_x;
+        nodejs = pkgs.nodejs_22;
 
       in {
         formatter = pkgs.nixfmt;
@@ -36,17 +36,23 @@
             echo "Using Bun version: ''$nix_bun_version"
 
             # --- Node.js Version Management ---
-            nix_node_full_version=$(${nodejs}/bin/node --version | xargs)
-            nix_node_major_version=$(echo "''$nix_node_full_version" | cut -d'v' -f2 | cut -d'.' -f1)
+            # Get the full version string directly from the Nix package
+            nix_node_full_version="${nodejs.version}"
+            # Use shell parameter expansion to get the major version (e.g., "22.17.1" -> "22")
+            nix_node_major_version=''${nix_node_full_version%%.*}
+
             file_node_version=""
             if [ -f "${nodeVersionFileName}" ]; then
                 file_node_version=$(cat "${nodeVersionFileName}" | xargs)
             fi
+
             if [ "''$nix_node_major_version" != "''$file_node_version" ]; then
                 echo "Updating .node-version: ' ''$file_node_version ' -> ' ''$nix_node_major_version '"
                 printf "%s" "''$nix_node_major_version" > "${nodeVersionFileName}"
+            else
+                echo ".node-version is already up to date."
             fi
-            echo "Using Node.js version: ''$nix_node_full_version (LTS)"
+            echo "Using Node.js version: $(${nodejs}/bin/node --version | xargs)"
           '';
         };
       });
