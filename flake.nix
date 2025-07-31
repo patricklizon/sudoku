@@ -14,7 +14,7 @@
         nodeVersionFileName = ".node-version";
         bunjs = pkgs.bun;
         nixd = pkgs.nixd;
-        nodejs = pkgs.nodejs_22;
+        nodejs = pkgs.nodejs_24;
 
       in {
         formatter = pkgs.nixfmt;
