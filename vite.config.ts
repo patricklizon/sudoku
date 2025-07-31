@@ -32,7 +32,6 @@ export default defineConfig({
 				extends: './vite.config.ts',
 				test: {
 					name: 'lib',
-					environment: 'node',
 					clearMocks: true,
 					include: ['src/lib/**/*.{test,spec}.{js,ts}'],
 					exclude: ['src/**/*.svelte.{test,spec}.{js,ts}'],
