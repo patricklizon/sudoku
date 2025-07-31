@@ -13,7 +13,7 @@ env:
   PLAYWRIGHT_CACHE_PATH: '.cache/ms-playwright'
   ARTIFACTS_OUTPUT_PATH: |
     '.svelte-kit/cloudflare'
-    '.svelte-kit/ouptput'
+    '.svelte-kit/output'
 
 jobs:
   install-dependencies:
