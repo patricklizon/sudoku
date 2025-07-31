@@ -13,7 +13,7 @@ env:
   PLAYWRIGHT_CACHE_PATH: '~/.cache/ms-playwright'
 
 jobs:
-  dependencies:
+  install-dependencies:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -23,16 +23,19 @@ jobs:
         with:
           bun-version-file: ${{ env.BUN_VERSION_FILE }}
 
-      - name: Install dependencies
-        run: bun install --frozen-lockfile
-
       - name: Cache node_modules
         uses: actions/cache@v4
+        id: bun-cache
         with:
           key: ${{ runner.os }}-node-modules-${{ hashFiles('bun.lock') }}
           path: node_modules
 
+      - name: Install dependencies
+        if: steps.bun-cache.outputs.cache-hit != 'true'
+        run: bun install --frozen-lockfile
+
   install-browsers:
+    needs: install-dependencies
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -42,8 +45,11 @@ jobs:
         with:
           bun-version-file: ${{ env.BUN_VERSION_FILE }}
 
-      - name: Install dependencies
-        run: bun install --frozen-lockfile
+      - name: Restore node_modules
+        uses: actions/cache@v4
+        with:
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('bun.lock') }}
+          path: node_modules
 
       - name: Cache Playwright browsers
         uses: actions/cache@v4
@@ -57,6 +63,7 @@ jobs:
         run: bun run install-browsers -- --with-deps
 
   check:
+    needs: install-dependencies
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -66,8 +73,11 @@ jobs:
         with:
           bun-version-file: ${{ env.BUN_VERSION_FILE }}
 
-      - name: Install dependencies
-        run: bun install --frozen-lockfile
+      - name: Restore node_modules
+        uses: actions/cache@v4
+        with:
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('bun.lock') }}
+          path: node_modules
 
       - name: Check format
         run: bun run check:format
@@ -75,11 +85,8 @@ jobs:
       - name: Check types
         run: bun run check:types
 
-      # - name: Lint check
-      #   run: bun run check:lint
-
   test:
-    needs: dependencies
+    needs: install-dependencies
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -99,7 +106,7 @@ jobs:
         run: npm run test:unit
 
   build:
-    needs: [check, test]
+    needs: [install-dependencies, check, test]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -109,8 +116,11 @@ jobs:
         with:
           bun-version-file: ${{ env.BUN_VERSION_FILE }}
 
-      - name: Install dependencies
-        run: bun install --frozen-lockfile
+      - name: Restore node_modules
+        uses: actions/cache@v4
+        with:
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('bun.lock') }}
+          path: node_modules
 
       - name: Build
         run: bun run build
@@ -125,7 +135,7 @@ jobs:
           retention-days: 14
 
   e2e:
-    needs: [install-browsers, build]
+    needs: [install-dependencies, install-browsers, build]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -135,8 +145,11 @@ jobs:
         with:
           bun-version-file: ${{ env.BUN_VERSION_FILE }}
 
-      - name: Install dependencies
-        run: bun install --frozen-lockfile
+      - name: Restore node_modules
+        uses: actions/cache@v4
+        with:
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('bun.lock') }}
+          path: node_modules
 
       - name: Restore browsers
         uses: actions/cache@v4
