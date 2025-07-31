@@ -11,7 +11,7 @@ env:
   BUN_VERSION_FILE: '.bun-version'
   NODE_VERSION_FILE: '.node-version'
   PLAYWRIGHT_CACHE_PATH: '.cache/ms-playwright'
-  ARTIFACTS_OUTPUT_PATH: |
+  BUILD_ARTIFACTS_OUTPUT: |
     '.svelte-kit/cloudflare'
     '.svelte-kit/output'
 
@@ -133,7 +133,7 @@ jobs:
         if: ${{ !cancelled() }}
         with:
           name: output
-          path: ${{ env.ARTIFACTS_OUTPUT_PATH }}
+          path: ${{ env.BUILD_ARTIFACTS_OUTPUT }}
           if-no-files-found: error
           retention-days: 14
 
@@ -164,7 +164,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: output
-          path: ${{ env.ARTIFACTS_OUTPUT_PATH }}
+          path: ${{ env.BUILD_ARTIFACTS_OUTPUT }}
 
       - name: Run E2E tests
         run: bun run test:e2e
