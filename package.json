@@ -25,8 +25,8 @@
 		"test:e2e:dev": "playwright test --config=playwright.dev.config.ts",
 		"test:e2e:dev:ui": "playwright test --ui --config=playwright.dev.config.ts",
 		"test:e2e:ui": "playwright test --ui",
-		"test:unit": "bunx vitest run",
-		"test:unit:watch": "bunx vitest"
+		"test:unit": "vitest run",
+		"test:unit:watch": "vitest"
 	},
 	"devDependencies": {
 		"@eslint/compat": "^1.2.7",
