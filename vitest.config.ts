@@ -8,6 +8,7 @@ export default mergeConfig(
 		test: {
 			exclude: [...configDefaults.exclude, 'e2e/**'],
 			root: fileURLToPath(new URL('./', import.meta.url)),
+			environment: 'node',
 		},
 	}),
 );
