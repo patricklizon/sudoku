@@ -9,6 +9,7 @@ on:
 env:
   CACHE_KEY_PREFIX: deps-v1
   BUN_VERSION_FILE: '.bun-version'
+  NODE_VERSION_FILE: '.node-version'
   PLAYWRIGHT_CACHE_PATH: '~/.cache/ms-playwright'
 
 jobs:
