@@ -20,15 +20,23 @@
           buildInputs = [ bunjs nixd ];
 
           shellHook = ''
-            export HOME=$(mktemp -d)
+            # Get the version from the bun package and trim whitespace
+            nix_bun_version=$(${bunjs}/bin/bun --version | xargs)
+            file_bun_version=""
 
-            local_bun_version=$(bun --version)
-
-            if [ ! -f ${bunVersionFileName} ] || ! grep -q "^$bun_major_version" ${bunVersionFileName}; then
-              echo "$local_bun_version" > ${bunVersionFileName}
+            # If the file exists, read it and trim whitespace
+            if [ -f "${bunVersionFileName}" ]; then
+              file_bun_version=$(cat "${bunVersionFileName}" | xargs)
             fi
 
-            echo "Bun $(bun --version)"
+            # Compare the clean versions and update if they differ.
+            # ''$ escapes the $ for Nix, so the shell sees $file_bun_version.
+            if [ "''$nix_bun_version" != "''$file_bun_version" ]; then
+              echo "Updating .bun-version: ' ''$file_bun_version ' -> ' ''$nix_bun_version '"
+              printf "%s" "''$nix_bun_version" > "${bunVersionFileName}"
+            fi
+
+            echo "Using Bun version: ''$nix_bun_version"
           '';
         };
       });
