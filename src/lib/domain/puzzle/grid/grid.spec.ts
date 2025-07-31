@@ -14,28 +14,6 @@ import {
 } from './grid';
 import { isGridCellEmpty, isGridCellFilled } from './predicates';
 import type { Grid, GridCellCoordinates, GridFilled, GridRow } from './types';
-// At the top of your failing test file
-console.log('=== RUNTIME DEBUG ===');
-console.log('Process:', {
-	isBun: typeof Bun !== 'undefined',
-	nodeVersion: process.versions?.node,
-	bunVersion: process.versions?.bun,
-});
-console.log('Set methods:', {
-	difference: typeof Set.prototype.difference,
-	intersection: typeof Set.prototype.intersection,
-	union: typeof Set.prototype.union,
-});
-
-// Test with a fresh Set
-const testSet = new Set([1, 2, 3]);
-console.log('Fresh set difference method:', typeof testSet.difference);
-
-// Test GRID_CELL_ALLOWED_VALUES specifically
-console.log(
-	'GRID_CELL_ALLOWED_VALUES difference method:',
-	typeof GRID_CELL_ALLOWED_VALUES.difference,
-);
 
 describe(readGridBoxCellsAt.name, () => {
 	type TestData = Record<'middle' | 'left' | 'right', GridRow>;
