@@ -95,7 +95,7 @@ jobs:
           path: node_modules
 
       - name: Run unit tests
-        run: bun run test:unit
+        run: npm run test:unit
 
   build:
     needs: [check, test]
