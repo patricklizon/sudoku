@@ -1,6 +1,6 @@
 import { defineConfig, devices } from '@playwright/test';
 
-const baseURL = 'http://localhost:4173'
+const baseURL = 'http://localhost:8787';
 
 export default defineConfig({
 	testDir: './tests',
@@ -24,8 +24,8 @@ export default defineConfig({
 	],
 
 	webServer: {
-		command: 'npm run preview',
+		command: 'bun run preview',
 		url: baseURL,
 		timeout: 60 * 2 * 1000,
-	}
+	},
 });

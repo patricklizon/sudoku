@@ -10,7 +10,7 @@ export default defineConfig({
 		baseURL,
 	},
 	webServer: {
-		command: 'npm run dev',
+		command: 'bun run dev',
 		url: baseURL,
 		reuseExistingServer: true,
 		timeout: 30_000,
