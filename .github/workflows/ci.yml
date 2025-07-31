@@ -11,7 +11,9 @@ env:
   BUN_VERSION_FILE: '.bun-version'
   NODE_VERSION_FILE: '.node-version'
   PLAYWRIGHT_CACHE_PATH: '.cache/ms-playwright'
-  ARTIFACTS_OUTPUT_PATH: '.svelte-kit/cloudflare'
+  ARTIFACTS_OUTPUT_PATH: |
+    '.svelte-kit/cloudflare'
+    '.svelte-kit/ouptput'
 
 jobs:
   install-dependencies:
