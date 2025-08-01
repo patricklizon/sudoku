@@ -12,9 +12,9 @@ env:
   NODE_VERSION_FILE: '.node-version'
   PLAYWRIGHT_CACHE_PATH: '.cache/ms-playwright'
   BUILD_ARTIFACTS_OUTPUT: |
-    '.svelte-kit/cloudflare'
-    '.svelte-kit/output/server'
-    '.svelte-kit/output/client'
+    .svelte-kit/output/client/**
+    .svelte-kit/output/server/**
+    .svelte-kit/cloudflare/**
 
 jobs:
   install-dependencies:
