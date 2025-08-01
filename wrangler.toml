@@ -1,0 +1,34 @@
+name = "sudoku"
+main = "./.output/server/index.mjs"
+compatibility_date = "2025-07-31"
+compatibility_flags = ["nodejs_compat"]
+
+[assets]
+binding = "ASSETS"
+directory = "./.output/public"
+
+[observability]
+enabled = true
+
+# placement = { mode = "smart" } # Uncomment if you want Smart Placement
+
+# Example environment variables (non-sensitive)
+# [vars]
+# MY_VARIABLE = "production_value"
+
+# --- Environments ---
+
+[env.staging]
+name = "staging"
+vars = { API_URL = "https://staging.api.sudoku.com" }
+# Optional: you could point to a staging DB here
+# [[env.staging.kv_namespaces]]
+# binding = "SESSION_KV"
+# id = "xxxxxxxxxxxxxxxxxxxxxxxx"
+
+[env.prod]
+name = "sudoku"
+vars = { API_URL = "https://api.sudoku.com" }
+# [[env.prod.kv_namespaces]]
+# binding = "SESSION_KV"
+# id = "xxxxxxxxxxxxxxxxxxxxxxxx"
