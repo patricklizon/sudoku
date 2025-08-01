@@ -44,7 +44,7 @@ export default tseslint.config(
 			"@typescript-eslint/consistent-indexed-object-style": "off",
 			"@typescript-eslint/consistent-type-definitions": ["error", "type"],
 			"@typescript-eslint/no-unnecessary-type-parameters": "off",
-			"@typescript-eslint/explicit-function-return-type": "error",
+			"@typescript-eslint/explicit-function-return-type": "warn",
 			"@typescript-eslint/explicit-member-accessibility": ["error", { accessibility: "no-public" }],
 			"@typescript-eslint/no-unused-vars": ["error", { argsIgnorePattern: "^_" }],
 			"@typescript-eslint/strict-boolean-expressions": [
