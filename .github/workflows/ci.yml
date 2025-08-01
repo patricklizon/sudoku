@@ -15,7 +15,7 @@ env:
     .svelte-kit/cloudflare/**
     .svelte-kit/output/server/**
     .svelte-kit/output/client/**
-  BUILD_DIR: '.svelte-kit'
+  BUILD_DIR: '.'
 
 jobs:
   install-dependencies:
@@ -134,7 +134,6 @@ jobs:
         uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:
-          name: output
           path: ${{ env.BUILD_ARTIFACTS }}
           if-no-files-found: error
           retention-days: 14
