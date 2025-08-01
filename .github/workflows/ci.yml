@@ -11,7 +11,7 @@ env:
   BUN_VERSION_FILE: '.bun-version'
   NODE_VERSION_FILE: '.node-version'
   PLAYWRIGHT_CACHE_PATH: '.cache/ms-playwright'
-  BUILD_ARTIFACTS_NAME: 'output'
+  BUILD_ARTIFACTS_NAME: '.svelte-kit'
   BUILD_ARTIFACTS: |
     .svelte-kit/cloudflare/**
     .svelte-kit/cloudflare-tmp/**
@@ -168,7 +168,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: ${{ env.BUILD_ARTIFACTS_NAME }}
-          path: ~/.svelte-kit
+          path: .
 
       - name: Display structure of downloaded files
         run: ls -R
