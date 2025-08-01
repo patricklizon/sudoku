@@ -1,46 +1,17 @@
-name: Deploy Staging (Manual)
+name: Deploy Staging via PR Comment
 
 on:
-  workflow_dispatch:
-    inputs:
-      branch:
-        description: "Branch to deploy"
-        required: true
-
-env:
-  BUILD_ARTIFACTS_NAME: "build-output"
-  BUILD_ARTIFACTS_DIR_NAME: ".output"
-  BUN_VERSION_FILE: ".bun-version"
+  issue_comment:
+    types: [created]
 
 jobs:
-  deploy-preprod:
+  dispatch:
+    if: github.event.issue.pull_request != '' && startsWith(github.event.comment.body, '/deploy-staging')
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Dispatch Deploy Workflow
+        uses: peter-evans/slash-command-dispatch@v4
         with:
-          ref: ${{ github.event.inputs.branch }}
-
-      - name: Setup Bun
-        uses: oven-sh/setup-bun@v2
-        with:
-          bun-version-file: ${{ env.BUN_VERSION_FILE }}
-
-      - name: Restore node_modules
-        uses: actions/cache@v4
-        with:
-          key: ${{ runner.os }}-node-modules-${{ hashFiles('bun.lock') }}
-          path: node_modules
-
-      - name: Download artifact from latest CI run
-        uses: dawidd6/action-download-artifact@v2
-        with:
-          workflow: ci.yml
-          branch: ${{ github.event.inputs.branch }}
-          name: ${{ env.BUILD_ARTIFACTS_NAME }}
-          path: ${{ env.BUILD_ARTIFACTS_DIR_NAME }}
-
-      - name: Deploy to Staging
-        run: bun wrangler deploy --env staging --name pr
-        env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          command: deploy-staging
+          issue-type: pull-request
