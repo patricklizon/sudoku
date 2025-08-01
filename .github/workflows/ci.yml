@@ -169,7 +169,7 @@ jobs:
           key: ${{ runner.os }}-browsers-${{ env.CACHE_KEY_PREFIX }}-${{ hashFiles('bun.lock') }}
           path: ${{ env.PLAYWRIGHT_CACHE_PATH }}
 
-      - name: Download build
+      - name: Restore build
         uses: actions/download-artifact@v4
         with:
           name: ${{ env.BUILD_ARTIFACTS_NAME }}
@@ -185,3 +185,41 @@ jobs:
           name: playwright-report
           path: playwright-report/
           retention-days: 30
+
+  deploy:
+    needs: [build, e2e]
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Restore build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ env.BUILD_ARTIFACTS_NAME }}
+          path: ${{ env.BUILD_ARTIFACTS_DIR_NAME }}
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version-file: ${{ env.BUN_VERSION_FILE }}
+
+      - name: Restore node_modules
+        uses: actions/cache@v4
+        with:
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('bun.lock') }}
+          path: node_modules
+
+      - name: Extract project name from wrangler configuration
+        id: project
+        run: echo "PROJECT_NAME=$(jq -r .name wrangler.jsonc)" >> $GITHUB_ENV
+
+      - name: Deploy to Cloudflare
+        run: |
+          bun wrangler deploy ${{ env.BUILD_ARTIFACTS_DIR_NAME }}/public \
+            --project-name=${{ env.PROJECT_NAME }} \
+            --branch=main
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
