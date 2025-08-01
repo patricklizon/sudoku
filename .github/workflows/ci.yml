@@ -13,6 +13,7 @@ env:
   PLAYWRIGHT_CACHE_PATH: '.cache/ms-playwright'
   BUILD_ARTIFACTS: |
     .svelte-kit/cloudflare/**
+    .svelte-kit/cloudflare-tmp/**
     .svelte-kit/output/server/**
     .svelte-kit/output/client/**
   BUILD_DIR: '.'
