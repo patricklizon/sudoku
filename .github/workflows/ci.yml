@@ -12,6 +12,7 @@ env:
   NODE_VERSION_FILE: ".node-version"
   PLAYWRIGHT_CACHE_PATH: "~/.cache/ms-playwright"
   BUILD_ARTIFACTS_NAME: "build-output"
+  BUILD_ARTIFACTS_DIR_NAME: ".output"
   BUILD_ARTIFACTS: |
     .output/public/**
     .output/server/**
@@ -19,7 +20,6 @@ env:
     .output/nitro.json
     .output/package.json
     .output/package-lock.json
-  BUILD_ARTIFACTS_DIR_NAME: ".output"
 
 jobs:
   install-dependencies:
