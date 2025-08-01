@@ -1,7 +1,7 @@
-import type { Opaque } from './opaque';
-import type { AnyRecord } from './record';
+import type { Opaque } from "./opaque";
+import type { AnyRecord } from "./record";
 
-export type WorkerRequestId = Opaque<'worker-request-id', string>;
+export type WorkerRequestId = Opaque<"worker-request-id", string>;
 
 export type WorkerRequest<Type extends string, Payload extends AnyRecord> = {
 	type: Type;

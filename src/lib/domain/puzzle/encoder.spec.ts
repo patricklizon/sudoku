@@ -1,9 +1,9 @@
-import { describe, expect, test } from 'vitest';
+import { describe, expect, test } from "vitest";
 
-import { DIFFICULTY_LEVEL } from '$lib/domain/puzzle/difficulty';
-import { encodePuzzle } from '$lib/domain/puzzle/encoder';
-import { createEmptyGridCell } from '$lib/domain/puzzle/grid';
-import type { PuzzleProblem, PuzzleSolution } from '$lib/domain/puzzle/types';
+import { DIFFICULTY_LEVEL } from "#src/lib/domain/puzzle/difficulty";
+import { encodePuzzle } from "#src/lib/domain/puzzle/encoder";
+import { createEmptyGridCell } from "#src/lib/domain/puzzle/grid";
+import type { PuzzleProblem, PuzzleSolution } from "#src/lib/domain/puzzle/types";
 
 describe(encodePuzzle.name, () => {
 	const _ = createEmptyGridCell();
@@ -33,10 +33,10 @@ describe(encodePuzzle.name, () => {
 
 	const difficultyLevel = DIFFICULTY_LEVEL[4];
 	const encoded =
-		'24651379H31I28G5DF75849F12319482EFCG83G1F925DEFB3748A99B1GC8465483F529G167E941382' +
+		"24651379H31I28G5DF75849F12319482EFCG83G1F925DEFB3748A99B1GC8465483F529G167E941382" +
 		difficultyLevel;
 
-	test('encodes puzzle and solution into an URL safe string', () => {
+	test("encodes puzzle and solution into an URL safe string", () => {
 		const result = encodePuzzle(puzzle, solution, difficultyLevel);
 
 		expect(result).to.equal(encoded);

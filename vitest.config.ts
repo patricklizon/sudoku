@@ -1,13 +1,11 @@
-import { fileURLToPath } from 'node:url';
-import { configDefaults, defineConfig, mergeConfig } from 'vitest/config';
-import viteConfig from './vite.config';
+import { fileURLToPath } from "node:url";
+import { configDefaults, defineConfig } from "vitest/config";
+import tsConfigPaths from "vite-tsconfig-paths";
 
-export default mergeConfig(
-	viteConfig,
-	defineConfig({
-		test: {
-			exclude: [...configDefaults.exclude, 'e2e/**'],
-			root: fileURLToPath(new URL('./', import.meta.url)),
-		},
-	}),
-);
+export default defineConfig({
+	test: {
+		exclude: [...configDefaults.exclude, "tests/**"],
+		root: fileURLToPath(new URL("./", import.meta.url)),
+	},
+	plugins: [tsConfigPaths()],
+});

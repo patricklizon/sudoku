@@ -1,19 +1,19 @@
-import type { DBGameHistoryEntry } from '$lib/domain/game-history';
-import type { ObjectStoreIndexRecord } from '$lib/utils/types/object-store';
+import type { DBGameHistoryEntry } from "#src/lib/domain/game-history";
+import type { ObjectStoreIndexRecord } from "#src/lib/utils/types/object-store";
 
 export const gameHistoryTbl = {
-	name: 'game-history',
+	name: "game-history",
 	index: {
 		gameId: {
-			name: 'gameId',
-			keyPath: 'gameId',
+			name: "gameId",
+			keyPath: "gameId",
 			options: {
 				unique: false,
 			},
 		},
 		gameId_createdAt: {
-			name: 'gameId_createdAt',
-			keyPath: ['gameId', 'createdAt'],
+			name: "gameId_createdAt",
+			keyPath: ["gameId", "createdAt"],
 			options: {
 				unique: false,
 			},

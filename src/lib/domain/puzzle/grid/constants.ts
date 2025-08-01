@@ -1,4 +1,4 @@
-import type { GridCellFilled } from './types';
+import type { GridCellFilled } from "./types";
 
 export const GRID_SIZE = 9;
 export const GRID_SIZE_INDEXES: readonly number[] = Array.from(

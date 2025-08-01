@@ -1,10 +1,10 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from "@playwright/test";
 
-test('can generate game', async ({ page }) => {
-	await page.goto('/');
-	const difficultyLevelSelector = page.getByTestId('difficulty-level-selector');
-	const buttonActionGeneratePuzzle = page.getByTestId('action-generate-puzzle');
-	const gameBoard = page.getByTestId('game-board');
+test("can generate game", async ({ page }) => {
+	await page.goto("/");
+	const difficultyLevelSelector = page.getByTestId("difficulty-level-selector");
+	const buttonActionGeneratePuzzle = page.getByTestId("action-generate-puzzle");
+	const gameBoard = page.getByTestId("game-board");
 
 	await expect(gameBoard).not.toBeInViewport();
 	await expect(buttonActionGeneratePuzzle).toBeInViewport();
@@ -12,10 +12,10 @@ test('can generate game', async ({ page }) => {
 
 	await buttonActionGeneratePuzzle.click();
 
-	await page.waitForLoadState('networkidle');
+	await page.waitForLoadState("networkidle");
 	await expect(gameBoard).toBeInViewport();
 
-	const filledCells = page.getByTestId('game-board.cell').filter({ hasText: /^[1-9]$/ });
+	const filledCells = page.getByTestId("game-board.cell").filter({ hasText: /^[1-9]$/ });
 	const count = await filledCells.count();
 
 	expect(count).toBeGreaterThanOrEqual(50);

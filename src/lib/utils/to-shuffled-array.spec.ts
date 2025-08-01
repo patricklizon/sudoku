@@ -1,9 +1,9 @@
-import { describe, expect, test } from 'vitest';
+import { describe, expect, test } from "vitest";
 
-import { shuffleArray, toShuffledArray } from './to-shuffled-array';
+import { shuffleArray, toShuffledArray } from "./to-shuffled-array";
 
 describe(shuffleArray.name, () => {
-	test('mutates original array', () => {
+	test("mutates original array", () => {
 		const input = Array.from({ length: 18 }, (_, idx) => idx);
 		const copy = structuredClone(input);
 		const result = shuffleArray(input);
@@ -12,7 +12,7 @@ describe(shuffleArray.name, () => {
 		expect(result).to.equal(input);
 	});
 
-	test('preserves all elements', () => {
+	test("preserves all elements", () => {
 		const input = Array.from({ length: 18 }, (_, idx) => idx);
 		const copy = structuredClone(input);
 
@@ -21,14 +21,14 @@ describe(shuffleArray.name, () => {
 });
 
 describe(toShuffledArray.name, () => {
-	test('does not mutate original array', () => {
+	test("does not mutate original array", () => {
 		const input = Array.from({ length: 18 }, (_, idx) => idx);
 		const result = toShuffledArray(input);
 
 		expect(result).not.to.be.deep.equal(input);
 	});
 
-	test('preserves all elements', () => {
+	test("preserves all elements", () => {
 		const input = Array.from({ length: 18 }, (_, idx) => idx);
 		const copy = structuredClone(input);
 

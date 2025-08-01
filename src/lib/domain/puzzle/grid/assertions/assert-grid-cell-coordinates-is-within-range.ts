@@ -1,5 +1,5 @@
-import { GRID_SIZE } from '../constants';
-import { ValueOutOfRangeError } from '../errors';
+import { GRID_SIZE } from "../constants";
+import { ValueOutOfRangeError } from "../errors";
 
 /**
  * @throws {ValueOutOfRangeError} when number is out of allowed range.

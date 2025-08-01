@@ -1,9 +1,9 @@
-import type { GameHistoryEntry, DBGameHistoryEntry } from '$lib/domain/game-history';
-import { createRandomStringId } from '$lib/domain/id';
-import { mapDateToTimeISOString } from '$lib/domain/time';
-import type { DB } from '$lib/infrastructure/persistence';
-import { gameTimerTbl } from '$lib/infrastructure/persistence/db/tables/game-timer';
-import { isNil } from '$lib/utils/is-nil';
+import type { GameHistoryEntry, DBGameHistoryEntry } from "#src/lib/domain/game-history";
+import { createRandomStringId } from "#src/lib/domain/id";
+import { mapDateToTimeISOString } from "#src/lib/domain/time";
+import type { DB } from "#src/lib/infrastructure/persistence";
+import { gameTimerTbl } from "#src/lib/infrastructure/persistence/db/tables/game-timer";
+import { isNil } from "#src/lib/utils/is-nil";
 
 export class GameHistoryEntryRepository {
 	constructor(db: DB) {
@@ -16,10 +16,10 @@ export class GameHistoryEntryRepository {
 
 	async save(
 		payload: {
-			gameId: GameHistoryEntry['gameId'];
-			colIdx: GameHistoryEntry['colIdx'];
-			rowIdx: GameHistoryEntry['rowIdx'];
-			value: GameHistoryEntry['value'];
+			gameId: GameHistoryEntry["gameId"];
+			colIdx: GameHistoryEntry["colIdx"];
+			rowIdx: GameHistoryEntry["rowIdx"];
+			value: GameHistoryEntry["value"];
 		},
 		txn?: IDBTransaction,
 	): Promise<DBGameHistoryEntry> {
@@ -35,43 +35,43 @@ export class GameHistoryEntryRepository {
 				id: createRandomStringId(),
 			} satisfies DBGameHistoryEntry;
 
-			const _txn = txn ?? this.db.transaction(GameHistoryEntryRepository.tableName, 'readwrite');
+			const _txn = txn ?? this.db.transaction(GameHistoryEntryRepository.tableName, "readwrite");
 			const store = _txn.objectStore(GameHistoryEntryRepository.tableName);
 			const request = store.add(result);
 
-			request.addEventListener('success', () => {
+			request.addEventListener("success", () => {
 				resolve(result);
 			});
 
-			request.addEventListener('error', () => {
+			request.addEventListener("error", () => {
 				if (isNil(request.error)) return;
 				reject(request.error);
 			});
 
-			_txn.addEventListener('complete', () => {});
+			_txn.addEventListener("complete", () => {});
 		});
 	}
 
 	async getByGameId(
-		payload: { id: GameHistoryEntry['gameId'] },
+		payload: { id: GameHistoryEntry["gameId"] },
 		txn?: IDBTransaction,
 	): Promise<GameHistoryEntry[]> {
 		return await new Promise<GameHistoryEntry[]>((resolve, reject) => {
-			const _txn = txn ?? this.db.transaction(GameHistoryEntryRepository.tableName, 'readonly');
+			const _txn = txn ?? this.db.transaction(GameHistoryEntryRepository.tableName, "readonly");
 			const store = _txn.objectStore(GameHistoryEntryRepository.tableName);
 			const idx = store.index(GameHistoryEntryRepository.tableIdx.gameId.name);
 			const request = idx.getAll(payload.id);
 
-			request.addEventListener('success', () => {
+			request.addEventListener("success", () => {
 				resolve(request.result);
 			});
 
-			request.addEventListener('error', () => {
+			request.addEventListener("error", () => {
 				if (isNil(request.error)) return;
 				reject(request.error);
 			});
 
-			_txn.addEventListener('complete', () => {});
+			_txn.addEventListener("complete", () => {});
 		});
 	}
 }

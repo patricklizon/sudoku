@@ -1,23 +1,23 @@
-import { UnableToFillGridWithValuesError } from './errors';
+import { UnableToFillGridWithValuesError } from "./errors";
 import {
 	getAllowedGridCellValuesAt,
 	readGridColumnCellIndexesAt,
 	readGridRowCellIndexesAt,
 	readGridCellIndexesOfGridBoxAt,
-} from './grid';
-import { mapGridCellIndexToCoordinates } from './mappers';
+} from "./grid";
+import { mapGridCellIndexToCoordinates } from "./mappers";
 import type {
 	Grid,
 	GridFilled,
 	GridCellFilled,
 	GridCellCoordinates,
 	GridCellEmptyWithPossibleValues,
-} from './types';
+} from "./types";
 
-import { isDefined } from '$lib/utils/is-defined';
-import { isNil } from '$lib/utils/is-nil';
-import { isNumber } from '$lib/utils/is-number';
-import type { Option } from '$lib/utils/types/option';
+import { isDefined } from "#src/lib/utils/is-defined";
+import { isNil } from "#src/lib/utils/is-nil";
+import { isNumber } from "#src/lib/utils/is-number";
+import type { Option } from "#src/lib/utils/types/option";
 
 /**
  * Creates filled grid.
@@ -36,7 +36,7 @@ export function solve(g: Readonly<Grid>): GridFilled {
 		const cell = cg[idx];
 
 		// TODO: Add errors
-		if (isNil(cell)) throw new Error('shouod never happen');
+		if (isNil(cell)) throw new Error("shouod never happen");
 		if (isNumber(cell)) return true;
 
 		const coordinates = mapGridCellIndexToCoordinates(idx);
@@ -78,7 +78,7 @@ export function hasUniqueSolution(g: Readonly<Grid>): boolean {
 		const cell = cg[idx];
 
 		// TODO: Add errors
-		if (isNil(cell)) throw new Error('shouod never happen');
+		if (isNil(cell)) throw new Error("shouod never happen");
 		if (isNumber(cell)) {
 			solutionCount++;
 			if (solutionCount > 1) shouldContinue = false;
@@ -134,7 +134,7 @@ export function _updateCellsPossibleValuesAffectedByCellValueAt(
 	for (const aIdx of affectedIdxs) {
 		cell = cg.at(aIdx);
 		// TODO: add errors
-		if (isNil(cell)) throw new Error('should never happen');
+		if (isNil(cell)) throw new Error("should never happen");
 		if (isNumber(cell)) continue;
 
 		cell.clear();

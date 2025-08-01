@@ -1,12 +1,12 @@
-import { describe, expect, test } from 'vitest';
+import { describe, expect, test } from "vitest";
 
-import { createEmptyGridCell, createEmptyGrid, fillDiagonalGridBoxesWithValues } from './grid';
-import { mapGridToGridWithPossibleValues } from './mappers';
-import { findCellIdxWithSmallestCountOfPossibleValues, hasUniqueSolution, solve } from './solve';
-import type { Grid, GridFilled } from './types';
+import { createEmptyGridCell, createEmptyGrid, fillDiagonalGridBoxesWithValues } from "./grid";
+import { mapGridToGridWithPossibleValues } from "./mappers";
+import { findCellIdxWithSmallestCountOfPossibleValues, hasUniqueSolution, solve } from "./solve";
+import type { Grid, GridFilled } from "./types";
 
 describe(solve.name, () => {
-	test('fills only empty fields of grid producing solution, without mutating input', () => {
+	test("fills only empty fields of grid producing solution, without mutating input", () => {
 		const _ = createEmptyGridCell();
 		const input = [
 			[1, 3, 8, _, _, _, _, _, _],
@@ -38,7 +38,7 @@ describe(solve.name, () => {
 	});
 
 	test.each(Array.from({ length: 10 }, () => [createEmptyGrid()]))(
-		'should not throw an error when filling a randomly generated grid',
+		"should not throw an error when filling a randomly generated grid",
 		(grid) => {
 			fillDiagonalGridBoxesWithValues(grid);
 
@@ -86,7 +86,7 @@ describe(hasUniqueSolution.name, () => {
 });
 
 describe(findCellIdxWithSmallestCountOfPossibleValues.name, () => {
-	test('returns first index when all cells are empty', () => {
+	test("returns first index when all cells are empty", () => {
 		const expectedIdx = 0;
 		const grid = mapGridToGridWithPossibleValues(createEmptyGrid());
 		const left = findCellIdxWithSmallestCountOfPossibleValues(grid);
@@ -94,7 +94,7 @@ describe(findCellIdxWithSmallestCountOfPossibleValues.name, () => {
 		expect(left).to.equal(expectedIdx);
 	});
 
-	test('returns correct index when some cells have less possibilities', () => {
+	test("returns correct index when some cells have less possibilities", () => {
 		const expectedIdx = 33;
 		const grid = mapGridToGridWithPossibleValues(createEmptyGrid());
 

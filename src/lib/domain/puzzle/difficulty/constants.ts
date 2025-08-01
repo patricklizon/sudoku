@@ -16,10 +16,13 @@ import {
 	pickIndexOrderLeftToRightThenTopToBottom,
 	pickIndexOrderRandomly,
 	pickIndexOrderWanderingAlongS,
-} from '$lib/domain/puzzle/grid';
-import type { PuzzleDifficultyLevelName, PuzzleDifficultyLevel } from '$lib/domain/puzzle/types';
-import type { DeepReadonly } from '$lib/utils/types/deep-readonly';
-import type { Range } from '$lib/utils/types/range';
+} from "#src/lib/domain/puzzle/grid";
+import type {
+	PuzzleDifficultyLevelName,
+	PuzzleDifficultyLevel,
+} from "#src/lib/domain/puzzle/types";
+import type { DeepReadonly } from "#src/lib/utils/types/deep-readonly";
+import type { Range } from "#src/lib/utils/types/range";
 
 export const DIFFICULTY_LEVEL = {
 	[1]: 1 as PuzzleDifficultyLevel,
@@ -36,7 +39,7 @@ export const AVALIABLE_DIFFICULTY_LEVELS = new Set<PuzzleDifficultyLevel>([
 ]) satisfies ReadonlySet<PuzzleDifficultyLevel>;
 
 export const DIFFICULTY_LEVEL_BY_NAME = {
-	'extremely-easy': DIFFICULTY_LEVEL[1],
+	"extremely-easy": DIFFICULTY_LEVEL[1],
 	easy: DIFFICULTY_LEVEL[2],
 	medium: DIFFICULTY_LEVEL[3],
 	difficult: DIFFICULTY_LEVEL[4],
@@ -44,11 +47,11 @@ export const DIFFICULTY_LEVEL_BY_NAME = {
 } as const satisfies Readonly<Record<PuzzleDifficultyLevelName, number>>;
 
 export const NAME_BY_DIFFICULTY_LEVEL = {
-	[DIFFICULTY_LEVEL[1]]: 'extremely-easy',
-	[DIFFICULTY_LEVEL[2]]: 'easy',
-	[DIFFICULTY_LEVEL[3]]: 'medium',
-	[DIFFICULTY_LEVEL[4]]: 'difficult',
-	[DIFFICULTY_LEVEL[5]]: 'evil',
+	[DIFFICULTY_LEVEL[1]]: "extremely-easy",
+	[DIFFICULTY_LEVEL[2]]: "easy",
+	[DIFFICULTY_LEVEL[3]]: "medium",
+	[DIFFICULTY_LEVEL[4]]: "difficult",
+	[DIFFICULTY_LEVEL[5]]: "evil",
 } as const satisfies Readonly<Record<number, PuzzleDifficultyLevelName>>;
 
 /**
