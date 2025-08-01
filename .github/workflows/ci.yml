@@ -170,14 +170,6 @@ jobs:
           name: ${{ env.BUILD_ARTIFACTS_NAME }}
           path: ${{ env.BUILD_ARTIFACTS_DIR_NAME }}
 
-      - name: Display structure of downloaded files
-        run: ls -R
-
-      - run: |
-          echo "Checking for worker:"
-          find . -name _worker.js
-          ls -la
-
       - name: Run E2E tests
         run: bun run test:e2e
 
