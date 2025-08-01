@@ -194,12 +194,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Restore build artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: ${{ env.BUILD_ARTIFACTS_NAME }}
-          path: ${{ env.BUILD_ARTIFACTS_DIR_NAME }}
-
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2
         with:
@@ -211,15 +205,14 @@ jobs:
           key: ${{ runner.os }}-node-modules-${{ hashFiles('bun.lock') }}
           path: node_modules
 
-      - name: Extract project name
-        id: project
-        run: echo "PROJECT_NAME=$(jq -r .name package.json)" >> $GITHUB_ENV
+      - name: Restore build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ env.BUILD_ARTIFACTS_NAME }}
+          path: ${{ env.BUILD_ARTIFACTS_DIR_NAME }}
 
       - name: Deploy to Cloudflare
-        run: |
-          bun wrangler deploy ${{ env.BUILD_ARTIFACTS_DIR_NAME }}/public \
-            --project-name=${{ env.PROJECT_NAME }} \
-            --branch=main
+        run: bun wrangler deploy
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
