@@ -170,6 +170,11 @@ jobs:
           name: ${{ env.BUILD_ARTIFACTS_NAME }}
           path: .
 
+      - run: |
+          echo "Checking for worker:"
+          find . -name _worker.js
+          ls -l
+
       - name: Run E2E tests
         run: bun run test:e2e
 
