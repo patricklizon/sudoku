@@ -167,7 +167,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: ${{ env.BUILD_ARTIFACTS_NAME }}
-          path: .
+          path: ~/.svelte-kit
 
       - name: Display structure of downloaded files
         run: ls -R
