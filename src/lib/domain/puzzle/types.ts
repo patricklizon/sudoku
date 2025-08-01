@@ -1,18 +1,18 @@
-import type { Grid, GridFilled } from './grid';
+import type { Grid, GridFilled } from "./grid";
 
-import type { TimeISOString } from '#src/lib/domain/time';
-import type { Opaque } from '#src/lib/utils/types/opaque';
+import type { TimeISOString } from "#src/lib/domain/time";
+import type { Opaque } from "#src/lib/utils/types/opaque";
 
-export type PuzzleDifficultyLevel = Opaque<'difficulty-level', number>;
+export type PuzzleDifficultyLevel = Opaque<"difficulty-level", number>;
 
-export type PuzzleDifficultyLevelName = 'extremely-easy' | 'easy' | 'medium' | 'difficult' | 'evil';
+export type PuzzleDifficultyLevelName = "extremely-easy" | "easy" | "medium" | "difficult" | "evil";
 
 /**
  * String representation of solved puzzle containing both solution, empty cells, and difficulty.
  * Numbers represent fixed values, letters encoded valid, last digit represents difficulty level.
  * @example `1A3HH6...94A5<difficulty level>`
  */
-export type PuzzleEncoded = Opaque<'encoded-puzzle', string>;
+export type PuzzleEncoded = Opaque<"encoded-puzzle", string>;
 
 export type PuzzleSolution = GridFilled;
 
@@ -27,6 +27,6 @@ export type Puzzle = {
 
 export type DBPuzzle = {
 	createdAt: TimeISOString;
-	difficulty: Puzzle['difficulty'];
-	id: Puzzle['id'];
+	difficulty: Puzzle["difficulty"];
+	id: Puzzle["id"];
 };

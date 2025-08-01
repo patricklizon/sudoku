@@ -1,8 +1,8 @@
-import { describe, expect, test } from 'vitest';
+import { describe, expect, test } from "vitest";
 
-import { type Config, _isRowAndColMinimumCellCountSatisfied } from './remove-cells';
+import { type Config, _isRowAndColMinimumCellCountSatisfied } from "./remove-cells";
 
-import { createEmptyGridCell, type Grid, GRID_SIZE } from '#src/lib/domain/puzzle/grid';
+import { createEmptyGridCell, type Grid, GRID_SIZE } from "#src/lib/domain/puzzle/grid";
 
 const _ = createEmptyGridCell();
 
@@ -27,7 +27,7 @@ describe(_isRowAndColMinimumCellCountSatisfied.name, () => {
 			indexes: [],
 		};
 
-		test.each(diagonalIdxs)('returns true at index %d', (idx) => {
+		test.each(diagonalIdxs)("returns true at index %d", (idx) => {
 			expect(
 				_isRowAndColMinimumCellCountSatisfied(config, puzzle, {
 					colIdx: idx,
@@ -53,12 +53,12 @@ describe(_isRowAndColMinimumCellCountSatisfied.name, () => {
 		});
 	});
 
-	test.each<[config: Config['minimumGivenCells']]>([
+	test.each<[config: Config["minimumGivenCells"]]>([
 		[{ total: { count: 81, range: [80, 81] }, col: 0, row: 0 }],
 		[{ total: { count: 20, range: [19, 20] }, col: 0, row: 0 }],
 		[{ total: { count: -1, range: [-10, 10] }, col: 0, row: 0 }],
 		[{ total: { count: 999, range: [900, 999] }, col: 0, row: 0 }],
-	])('amount of minimal total given fields should not affect the result', (minimumGivenCells) => {
+	])("amount of minimal total given fields should not affect the result", (minimumGivenCells) => {
 		expect(
 			_isRowAndColMinimumCellCountSatisfied({ minimumGivenCells, indexes: [] }, puzzle, {
 				colIdx: 0,

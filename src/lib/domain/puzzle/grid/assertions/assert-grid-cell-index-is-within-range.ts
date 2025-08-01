@@ -1,7 +1,7 @@
-import { GRID_CELL_COUNT } from '../constants';
-import { ValueOutOfRangeError } from '../errors';
+import { GRID_CELL_COUNT } from "../constants";
+import { ValueOutOfRangeError } from "../errors";
 
-import type { Range } from '#src/lib/utils/types/range';
+import type { Range } from "#src/lib/utils/types/range";
 
 /**
  * @throws {ValueOutOfRangeError} when number is out of allowed range.

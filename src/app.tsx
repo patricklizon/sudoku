@@ -5,8 +5,8 @@ import "./app.css";
 import { MetaProvider, Title } from "@solidjs/meta";
 
 export default function App() {
-  return (
-  <Router
+	return (
+		<Router
 			root={(props) => (
 				<MetaProvider>
 					<Title>SolidStart - Basic</Title>
@@ -20,6 +20,5 @@ export default function App() {
 		>
 			<FileRoutes />
 		</Router>
-
-  );
+	);
 }

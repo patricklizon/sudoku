@@ -18,13 +18,13 @@ import {
 	type Grid,
 	type GridCellCoordinates,
 	type GridFilled,
-} from '#src/lib/domain/puzzle/grid';
-import { isEven } from '#src/lib/utils/is-even';
-import { isNil } from '#src/lib/utils/is-nil';
-import { toShuffledArray } from '#src/lib/utils/to-shuffled-array';
-import type { DeepReadonly } from '#src/lib/utils/types/deep-readonly';
-import type { Option } from '#src/lib/utils/types/option';
-import type { Range } from '#src/lib/utils/types/range';
+} from "#src/lib/domain/puzzle/grid";
+import { isEven } from "#src/lib/utils/is-even";
+import { isNil } from "#src/lib/utils/is-nil";
+import { toShuffledArray } from "#src/lib/utils/to-shuffled-array";
+import type { DeepReadonly } from "#src/lib/utils/types/deep-readonly";
+import type { Option } from "#src/lib/utils/types/option";
+import type { Range } from "#src/lib/utils/types/range";
 
 export type Config = DeepReadonly<{
 	minimumGivenCells: {
@@ -59,7 +59,7 @@ export function removeGridCells(grid: Readonly<GridFilled>, config: Config): Gri
 		return gridCopy;
 	}
 
-	throw new Error('Failed to meet the minimum given cell constraint');
+	throw new Error("Failed to meet the minimum given cell constraint");
 
 	function execute(indexes: readonly number[]): void {
 		for (const idx of indexes) {

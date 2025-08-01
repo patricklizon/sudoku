@@ -1,11 +1,11 @@
-import { describe, expect, test } from 'vitest';
+import { describe, expect, test } from "vitest";
 
-import { createPuzzle } from '#src/lib/domain/puzzle/create/create-puzzle';
-import { DIFFICULTY_LEVEL } from '#src/lib/domain/puzzle/difficulty';
+import { createPuzzle } from "#src/lib/domain/puzzle/create/create-puzzle";
+import { DIFFICULTY_LEVEL } from "#src/lib/domain/puzzle/difficulty";
 
 describe(createPuzzle.name, () => {
 	// TODO: enable all
-	test.each(Object.values(DIFFICULTY_LEVEL).slice(0, 4))('creates puzzle', (expectedDifficulty) => {
+	test.each(Object.values(DIFFICULTY_LEVEL).slice(0, 4))("creates puzzle", (expectedDifficulty) => {
 		const left = createPuzzle(expectedDifficulty);
 
 		expect(left.difficulty).to.equal(expectedDifficulty);

@@ -1,8 +1,8 @@
-import { expect, describe, test } from 'vitest';
+import { expect, describe, test } from "vitest";
 
-import { hasPuzzleCellValidValue } from './has-puzzle-cell-valid-value';
+import { hasPuzzleCellValidValue } from "./has-puzzle-cell-valid-value";
 
-import type { GridFilled, GridCellCoordinates } from '#src/lib/domain/puzzle/grid';
+import type { GridFilled, GridCellCoordinates } from "#src/lib/domain/puzzle/grid";
 
 describe(hasPuzzleCellValidValue.name, () => {
 	const puzzleSolved = [
@@ -30,7 +30,7 @@ describe(hasPuzzleCellValidValue.name, () => {
 		[{ rowIdx: 0, colIdx: 0 }, 7, true],
 		[{ rowIdx: 1, colIdx: 1 }, 9, true],
 		[{ rowIdx: 8, colIdx: 3 }, 9, true],
-	])('%j returns correct value when passing %d', (coordinates, val, expected) => {
+	])("%j returns correct value when passing %d", (coordinates, val, expected) => {
 		expect(hasPuzzleCellValidValue(puzzleSolved, coordinates, val)).to.equal(expected);
 	});
 });

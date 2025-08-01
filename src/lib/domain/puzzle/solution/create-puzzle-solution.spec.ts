@@ -1,11 +1,11 @@
-import { describe, expect, test } from 'vitest';
+import { describe, expect, test } from "vitest";
 
-import { createPuzzleSolution } from './create-puzzle-solution';
+import { createPuzzleSolution } from "./create-puzzle-solution";
 
-import { GRID_CELL_COUNT, GRID_SIZE, isGridCellValueCorrectAt } from '#src/lib/domain/puzzle/grid';
+import { GRID_CELL_COUNT, GRID_SIZE, isGridCellValueCorrectAt } from "#src/lib/domain/puzzle/grid";
 
 describe(createPuzzleSolution.name, () => {
-	test('generates correct puzzle', () => {
+	test("generates correct puzzle", () => {
 		const solution = createPuzzleSolution();
 
 		expect(solution).to.have.length(GRID_CELL_COUNT);

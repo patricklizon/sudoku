@@ -1,12 +1,12 @@
-import type { CreatePuzzleWorkerRequest, CreatePuzzleWorkerResponse } from './types';
+import type { CreatePuzzleWorkerRequest, CreatePuzzleWorkerResponse } from "./types";
 
-import { createRandomStringId } from '#src/lib/domain/id';
-import type { Puzzle } from '#src/lib/domain/puzzle';
+import { createRandomStringId } from "#src/lib/domain/id";
+import type { Puzzle } from "#src/lib/domain/puzzle";
 
 export class PuzzleService {
 	constructor() {
-		this.worker = new Worker(new URL('./create-puzzle.worker', import.meta.url), {
-			type: 'module',
+		this.worker = new Worker(new URL("./create-puzzle.worker", import.meta.url), {
+			type: "module",
 		});
 	}
 
@@ -22,7 +22,7 @@ export class PuzzleService {
 		this.isProcessing = true;
 	}
 
-	create(difficulty: Puzzle['difficulty']): Promise<CreatePuzzleWorkerResponse> {
+	create(difficulty: Puzzle["difficulty"]): Promise<CreatePuzzleWorkerResponse> {
 		return new Promise<CreatePuzzleWorkerResponse>((resolve, reject) => {
 			const onMessage = (e: MessageEvent<CreatePuzzleWorkerResponse>): void => {
 				resolve(e.data);
@@ -32,19 +32,19 @@ export class PuzzleService {
 
 			const onError = (): void => {
 				// TODO: implement error
-				reject(new Error('adio'));
+				reject(new Error("adio"));
 				this.isProcessing = false;
 				this.processNextTask();
 			};
 
 			this.tasks.push(() => {
-				this.worker.addEventListener('error', onError, { once: true });
-				this.worker.addEventListener('message', onMessage, { once: true });
+				this.worker.addEventListener("error", onError, { once: true });
+				this.worker.addEventListener("message", onMessage, { once: true });
 
 				this.worker.postMessage({
 					payload: { difficulty },
 					requestId: createRandomStringId(),
-					type: '@sudoku/request/puzzle/create/one',
+					type: "@sudoku/request/puzzle/create/one",
 				} satisfies CreatePuzzleWorkerRequest);
 			});
 

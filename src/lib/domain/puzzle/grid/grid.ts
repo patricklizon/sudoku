@@ -1,13 +1,13 @@
-import { assertGridCellCoordinateIsWithinRange } from './assertions';
+import { assertGridCellCoordinateIsWithinRange } from "./assertions";
 import {
 	GRID_CELL_ALLOWED_VALUES,
 	GRID_CELL_COUNT,
 	GRID_SIZE,
 	GRID_BOX_CELLS_COUNT,
 	GRID_BOX_SIZE,
-} from './constants';
-import { GridHasWrongSizeError } from './errors';
-import { isGridCellFilled } from './predicates';
+} from "./constants";
+import { GridHasWrongSizeError } from "./errors";
+import { isGridCellFilled } from "./predicates";
 import type {
 	Grid,
 	GridCellCoordinates,
@@ -20,10 +20,10 @@ import type {
 	GridBox,
 	GridCellEmptyWithPossibleValues,
 	GridWithPossibleValues,
-} from './types';
+} from "./types";
 
-import { shuffleArray } from '#src/lib/utils/to-shuffled-array';
-import type { Option } from '#src/lib/utils/types/option';
+import { shuffleArray } from "#src/lib/utils/to-shuffled-array";
+import type { Option } from "#src/lib/utils/types/option";
 
 /**
  * Mutates passed grid.
