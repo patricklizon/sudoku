@@ -176,7 +176,7 @@ jobs:
       - run: |
           echo "Checking for worker:"
           find . -name _worker.js
-          ls -l
+          ls -la
 
       - name: Run E2E tests
         run: bun run test:e2e
