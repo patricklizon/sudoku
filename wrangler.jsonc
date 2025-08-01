@@ -15,7 +15,7 @@
 	 * https://developers.cloudflare.com/workers/static-assets/binding/
 	 */
 	"assets": {
-		"directory": ".svelte-kit/cloudflare",
+		"directory": ".svelte-kit/assets",
 		"binding": "MY_ASSETS",
 	},
 	/**
