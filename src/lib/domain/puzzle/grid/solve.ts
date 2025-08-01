@@ -18,7 +18,6 @@ import type {
 	GridCellEmptyWithPossibleValues,
 } from "./types";
 
-
 /**
  * Creates filled grid.
  */

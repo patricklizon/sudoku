@@ -2,7 +2,6 @@ import type { Range } from "#src/lib/utils/types/range";
 import { GRID_CELL_COUNT } from "../constants";
 import { ValueOutOfRangeError } from "../errors";
 
-
 /**
  * @throws {ValueOutOfRangeError} when number is out of allowed range.
  */

@@ -24,7 +24,6 @@ import type {
 	GridWithPossibleValues,
 } from "./types";
 
-
 /**
  * Mutates passed grid.
  *
