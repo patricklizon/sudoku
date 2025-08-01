@@ -8,14 +8,18 @@ export default defineConfig({
 		compatibilityDate: "2025-07-31",
 	},
 	vite: {
-		plugins: [tsConfigPaths()],
+		plugins: [
+			// @ts-expect-error: verify
+			tsConfigPaths(),
+		],
 		worker: {
-			format: 'es',
+			format: "es",
 			rollupOptions: {
 				output: {
 					esModule: true,
 				},
 			},
+			// @ts-expect-error: verify
 			plugins: [tsConfigPaths()],
 		},
 	},

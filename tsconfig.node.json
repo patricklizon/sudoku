@@ -1,12 +1,12 @@
 {
 	"$schema": "https://json.schemastore.org/tsconfig",
 	"extends": "@tsconfig/node22/tsconfig.json",
-	"include": ["sveltekit.config.*", "vitest.config.*", "playwright.config.*"],
+	"include": ["vitest.config.*", "playwright.*.config.*", ""],
 	"exclude": [],
 	"compilerOptions": {
 		"noEmit": true,
 		"module": "ESNext",
 		"moduleResolution": "Bundler",
-		"types": ["node"]
+		"types": ["bun-types"]
 	}
 }

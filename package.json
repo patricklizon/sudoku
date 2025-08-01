@@ -12,7 +12,7 @@
 		"deploy": "echo 'install a server adapter'",
 		"dev": "vinxi dev",
 		"dev:cf": "wrangler dev --local",
-		"fix:format": "prettier ./src ./tests --list-different --write",
+		"fix:format": "prettier . --list-different --write",
 		"fix:lint": "run-s fix:lint:*",
 		"fix:lint:eslint": "eslint ./src --fix",
 		"fix:lint:oxlint": "oxlint ./src --fix --fix-suggestions --ignore-path .gitignore",
