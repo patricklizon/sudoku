@@ -10,14 +10,14 @@ env:
   CACHE_KEY_PREFIX: deps-v1
   BUN_VERSION_FILE: '.bun-version'
   NODE_VERSION_FILE: '.node-version'
-  PLAYWRIGHT_CACHE_PATH: '.cache/ms-playwright'
+  PLAYWRIGHT_CACHE_PATH: '~/.cache/ms-playwright'
   BUILD_ARTIFACTS_NAME: 'build-output'
   BUILD_ARTIFACTS: |
     .svelte-kit/cloudflare/**
     .svelte-kit/cloudflare-tmp/**
     .svelte-kit/output/server/**
     .svelte-kit/output/client/**
-  BUILD_ARTIFACTS_DIR_NAME: '.svelte-kit'
+  BUILD_ARTIFACTS_DIR_NAME: '~/.svelte-kit'
 
 jobs:
   install-dependencies:
