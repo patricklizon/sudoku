@@ -168,7 +168,10 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: ${{ env.BUILD_ARTIFACTS_NAME }}
-          path: .
+          path: ${{ env.BUILD_ARTIFACTS_NAME }}
+
+      - name: Display structure of downloaded files
+        run: ls -R
 
       - run: |
           echo "Checking for worker:"
