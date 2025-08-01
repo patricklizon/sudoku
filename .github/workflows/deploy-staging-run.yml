@@ -8,6 +8,7 @@ env:
   BUILD_ARTIFACTS_NAME: "build-output"
   BUILD_ARTIFACTS_DIR_NAME: ".output"
   BUN_VERSION_FILE: ".bun-version"
+  PR_NUMBER: ${{ github.event.number }}
 
 jobs:
   deploy:
@@ -33,7 +34,7 @@ jobs:
           path: node_modules
 
       - name: Deploy to Staging
-        run: bun wrangler deploy --name ${{ github.event.client_payload.pull_request.number }}
+        run: bun wrangler deploy --name ${{ env.PR_NUMBER }}
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
