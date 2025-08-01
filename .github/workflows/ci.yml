@@ -170,8 +170,11 @@ jobs:
           name: ${{ env.BUILD_ARTIFACTS_NAME }}
           path: ${{ env.BUILD_ARTIFACTS_DIR_NAME }}
 
+      - name: List downloaded files
+        run: ls -R .svelte-kit/output
+
       - name: Run E2E tests
-        run: bun run test:e2e
+        run: DEBUG=pw:webserver bun run test:e2e
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
