@@ -4,7 +4,6 @@
 	"include": ["src/**/*.worker.ts"],
 	"exclude": [],
 	"compilerOptions": {
-		"noEmit": true,
 		"lib": ["ESNext", "WebWorker"],
 		"types": ["node"]
 	}
