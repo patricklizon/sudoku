@@ -15,9 +15,7 @@ env:
     .svelte-kit/cloudflare/**
     .svelte-kit/output/server/**
     .svelte-kit/output/client/**
-    static/**
-    wrangler.jsonc
-  BUILD_DIR: 'output'
+  BUILD_DIR: '.svelte-kit'
 
 jobs:
   install-dependencies:
