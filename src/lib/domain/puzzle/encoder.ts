@@ -28,5 +28,5 @@ export function encodePuzzle(
 		}
 	}
 
-	return encodeURIComponent(result + difficulty) as PuzzleEncoded;
+	return encodeURIComponent(result + difficulty.toString()) as PuzzleEncoded;
 }

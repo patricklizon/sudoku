@@ -1,10 +1,8 @@
 import { expect, describe, test } from "vitest";
-
+import type { GridFilled, GridCellCoordinates } from "#src/lib/domain/puzzle/grid";
 import { hasPuzzleCellValidValue } from "./has-puzzle-cell-valid-value";
 
-import type { GridFilled, GridCellCoordinates } from "#src/lib/domain/puzzle/grid";
-
-describe(hasPuzzleCellValidValue.name, () => {
+describe("#" + hasPuzzleCellValidValue.name, () => {
 	const puzzleSolved = [
 		[7, 6, 5, 1, 2, 8, 3, 4, 9],
 		[3, 9, 1, 4, 5, 6, 2, 8, 7],

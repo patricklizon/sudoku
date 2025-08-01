@@ -1,7 +1,7 @@
+import { isNil } from "#src/lib/utils/is-nil";
 import { GRID_CELL_ALLOWED_VALUES } from "../constants";
 import type { GridCell, GridCellEmptyWithPossibleValues, GridCellFilled } from "../types";
 
-import { isNil } from "#src/lib/utils/is-nil";
 
 export function isGridCellFilled(
 	it: GridCell | GridCellEmptyWithPossibleValues,

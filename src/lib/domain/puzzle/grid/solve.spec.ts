@@ -1,11 +1,10 @@
 import { describe, expect, test } from "vitest";
-
 import { createEmptyGridCell, createEmptyGrid, fillDiagonalGridBoxesWithValues } from "./grid";
 import { mapGridToGridWithPossibleValues } from "./mappers";
 import { findCellIdxWithSmallestCountOfPossibleValues, hasUniqueSolution, solve } from "./solve";
 import type { Grid, GridFilled } from "./types";
 
-describe(solve.name, () => {
+describe("#" + solve.name, () => {
 	test("fills only empty fields of grid producing solution, without mutating input", () => {
 		const _ = createEmptyGridCell();
 		const input = [
@@ -49,7 +48,7 @@ describe(solve.name, () => {
 	);
 });
 
-describe(hasUniqueSolution.name, () => {
+describe("#" + hasUniqueSolution.name, () => {
 	test("returns 'false' when multiple solutions exists", () => {
 		const _ = createEmptyGridCell();
 		const puzzle = [
@@ -85,7 +84,7 @@ describe(hasUniqueSolution.name, () => {
 	});
 });
 
-describe(findCellIdxWithSmallestCountOfPossibleValues.name, () => {
+describe("#" + findCellIdxWithSmallestCountOfPossibleValues.name, () => {
 	test("returns first index when all cells are empty", () => {
 		const expectedIdx = 0;
 		const grid = mapGridToGridWithPossibleValues(createEmptyGrid());

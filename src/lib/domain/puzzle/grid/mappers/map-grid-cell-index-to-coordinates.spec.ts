@@ -1,11 +1,9 @@
 import { describe, test, expect } from "vitest";
-
 import { ValueOutOfRangeError } from "../errors";
 import type { GridCellCoordinates } from "../types";
-
 import { mapGridCellIndexToCoordinates } from "./map-grid-cell-index-to-coordinates";
 
-describe(mapGridCellIndexToCoordinates.name, () => {
+describe("#" + mapGridCellIndexToCoordinates.name, () => {
 	test.each<[index: number, coordinates: GridCellCoordinates][]>([
 		[
 			[0, { rowIdx: 0, colIdx: 0 }],

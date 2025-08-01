@@ -1,10 +1,8 @@
 import { describe, expect, test } from "vitest";
-
+import { GRID_CELL_COUNT, GRID_SIZE, isGridCellValueCorrectAt } from "#src/lib/domain/puzzle/grid";
 import { createPuzzleSolution } from "./create-puzzle-solution";
 
-import { GRID_CELL_COUNT, GRID_SIZE, isGridCellValueCorrectAt } from "#src/lib/domain/puzzle/grid";
-
-describe(createPuzzleSolution.name, () => {
+describe("#" + createPuzzleSolution.name, () => {
 	test("generates correct puzzle", () => {
 		const solution = createPuzzleSolution();
 

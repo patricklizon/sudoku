@@ -69,9 +69,15 @@ export default tseslint.config(
 			...importPlugin.configs.typescript.rules,
 			"import/no-unresolved": "off", // check done by typescript
 			"import/no-default-export": "warn",
+			"import/no-amd": "warn",
+			"import/no-commonjs": "warn",
+			"import/no-import-module-exports": "warn",
+			"import/no-nodejs-modules": "warn",
+			"import/no-mutable-exports": "error",
 			"import/order": [
 				"warn",
 				{
+					"newlines-between": "never",
 					pathGroups: [
 						{
 							pattern: "#*/**",

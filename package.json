@@ -50,6 +50,7 @@
 		"eslint-config-prettier": "^10.0.2",
 		"eslint-plugin-import": "^2.31.0",
 		"eslint-plugin-oxlint": "^0.15.10",
+		"eslint-plugin-playwright": "^2.2.2",
 		"eslint-plugin-solid": "^0.14.5",
 		"globals": "^15.14.0",
 		"jsdom": "^26.0.0",

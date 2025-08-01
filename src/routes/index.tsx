@@ -1,6 +1,5 @@
 import { Title } from "@solidjs/meta";
 import { type JSX, createSignal, createResource, For, Show, onMount } from "solid-js";
-
 import type { PuzzleDifficultyLevel } from "#src/lib/domain/puzzle";
 import { DIFFICULTY_LEVEL, DIFFICULTY_LEVEL_BY_NAME } from "#src/lib/domain/puzzle/difficulty";
 import { PuzzleService } from "#src/lib/services/client/puzzle";
@@ -15,18 +14,20 @@ export default function Home(): JSX.Element {
 	const [difficultyLevel, setDifficultyLevel] = createSignal<PuzzleDifficultyLevel>(
 		DIFFICULTY_LEVEL[1],
 	);
-	const [puzzleParams, setPuzzleParams] = createSignal<PuzzleDifficultyLevel>();
+	const [puzzleReq, setPuzzleReq] = createSignal<{
+		difficulty: PuzzleDifficultyLevel;
+		id: number;
+	}>();
 
-	const [puzzle, { refetch }] = createResource(puzzleParams, async (difficulty) => {
-		const res = await puzzleService.create(difficulty);
+	const [puzzle] = createResource(puzzleReq, async (req) => {
+		const res = await puzzleService.create(req.difficulty);
 		return res.payload.puzzle;
 	});
 
 	const difficultyOptions = Object.entries(DIFFICULTY_LEVEL_BY_NAME);
 
 	function requestPuzzle(): void {
-		setPuzzleParams(difficultyLevel());
-		refetch();
+		setPuzzleReq({ difficulty: difficultyLevel(), id: Date.now() });
 	}
 
 	return (
@@ -57,7 +58,8 @@ export default function Home(): JSX.Element {
 					<p data-testid="loading">loading</p>
 				</Show>
 
-				<Show when={puzzle.error}>
+				{/* TODO: verify */}
+				<Show when={puzzle.error as unknown}>
 					{(error) => <p>{Error.isError(error) ? error.message : "unknown error"}</p>}
 				</Show>
 

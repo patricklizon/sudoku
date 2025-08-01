@@ -1,3 +1,7 @@
+import { isDefined } from "#src/lib/utils/is-defined";
+import { isNil } from "#src/lib/utils/is-nil";
+import { isNumber } from "#src/lib/utils/is-number";
+import type { Option } from "#src/lib/utils/types/option";
 import { UnableToFillGridWithValuesError } from "./errors";
 import {
 	getAllowedGridCellValuesAt,
@@ -14,10 +18,6 @@ import type {
 	GridCellEmptyWithPossibleValues,
 } from "./types";
 
-import { isDefined } from "#src/lib/utils/is-defined";
-import { isNil } from "#src/lib/utils/is-nil";
-import { isNumber } from "#src/lib/utils/is-number";
-import type { Option } from "#src/lib/utils/types/option";
 
 /**
  * Creates filled grid.

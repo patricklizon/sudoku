@@ -1,12 +1,10 @@
 import { describe, expect, test } from "vitest";
-
-import { type Config, _isRowAndColMinimumCellCountSatisfied } from "./remove-cells";
-
 import { createEmptyGridCell, type Grid, GRID_SIZE } from "#src/lib/domain/puzzle/grid";
+import { type Config, _isRowAndColMinimumCellCountSatisfied } from "./remove-cells";
 
 const _ = createEmptyGridCell();
 
-describe(_isRowAndColMinimumCellCountSatisfied.name, () => {
+describe("#" + _isRowAndColMinimumCellCountSatisfied.name, () => {
 	const puzzle = [
 		[9, 2, 6, 5, 7, 1, _, 8, 3],
 		[3, 5, 1, _, 8, 6, 2, 7, 9],

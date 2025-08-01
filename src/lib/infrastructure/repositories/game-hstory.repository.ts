@@ -4,6 +4,7 @@ import { mapDateToTimeISOString } from "#src/lib/domain/time";
 import type { DB } from "#src/lib/infrastructure/persistence";
 import { gameTimerTbl } from "#src/lib/infrastructure/persistence/db/tables/game-timer";
 import { isNil } from "#src/lib/utils/is-nil";
+import { noop } from "#src/lib/utils/noop";
 
 export class GameHistoryEntryRepository {
 	constructor(db: DB) {
@@ -48,7 +49,7 @@ export class GameHistoryEntryRepository {
 				reject(request.error);
 			});
 
-			_txn.addEventListener("complete", () => {});
+			_txn.addEventListener("complete", noop);
 		});
 	}
 
@@ -71,7 +72,7 @@ export class GameHistoryEntryRepository {
 				reject(request.error);
 			});
 
-			_txn.addEventListener("complete", () => {});
+			_txn.addEventListener("complete", noop);
 		});
 	}
 }
