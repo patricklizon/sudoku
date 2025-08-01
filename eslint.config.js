@@ -4,6 +4,7 @@ import prettier from "eslint-config-prettier";
 import importPlugin from "eslint-plugin-import";
 import oxlint from "eslint-plugin-oxlint";
 import playwright from "eslint-plugin-playwright";
+import jsxA11y from "eslint-plugin-jsx-a11y";
 import solid from "eslint-plugin-solid";
 import pluginVitest from "@vitest/eslint-plugin";
 import globals from "globals";
@@ -17,6 +18,7 @@ export default tseslint.config(
 	js.configs.recommended,
 	...tseslint.configs.strictTypeChecked,
 	...tseslint.configs.stylisticTypeChecked,
+	jsxA11y.flatConfigs.recommended,
 	solid.configs["flat/recommended"],
 	solid.configs["flat/typescript"],
 
