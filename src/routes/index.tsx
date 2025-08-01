@@ -57,7 +57,9 @@ export default function Home(): JSX.Element {
 					<p data-testid="loading">loading</p>
 				</Show>
 
-				<Show when={puzzle.error}>{(error) => <p>{error.message}</p>}</Show>
+				<Show when={puzzle.error}>
+					{(error) => <p>{Error.isError(error) ? error.message : "unknown error"}</p>}
+				</Show>
 
 				<Show when={puzzle()} fallback={<p>No puzzle requested yet.</p>}>
 					{(p) => (
