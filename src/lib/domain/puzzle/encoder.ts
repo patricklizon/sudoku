@@ -22,11 +22,11 @@ export function encodePuzzle(
 	for (const [idx, char] of problem.entries()) {
 		if (isGridCellFilled(char)) result += char.toString();
 		else {
-			const p = solution[idx]?.toString().codePointAt(0);
+			const p = solution.at(idx)?.toString().codePointAt(0);
 			if (isNil(p)) throw new Error("Character not defined");
 			result += String.fromCodePoint(p + codePointOffset);
 		}
 	}
 
-	return encodeURIComponent(result + difficulty) as PuzzleEncoded;
+	return encodeURIComponent(result + difficulty.toString()) as PuzzleEncoded;
 }

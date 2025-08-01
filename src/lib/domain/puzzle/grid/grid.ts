@@ -1,3 +1,5 @@
+import { shuffleArray } from "#src/lib/utils/to-shuffled-array";
+import type { Option } from "#src/lib/utils/types/option";
 import { assertGridCellCoordinateIsWithinRange } from "./assertions";
 import {
 	GRID_CELL_ALLOWED_VALUES,
@@ -21,9 +23,6 @@ import type {
 	GridCellEmptyWithPossibleValues,
 	GridWithPossibleValues,
 } from "./types";
-
-import { shuffleArray } from "#src/lib/utils/to-shuffled-array";
-import type { Option } from "#src/lib/utils/types/option";
 
 /**
  * Mutates passed grid.
@@ -50,7 +49,7 @@ export function fillDiagonalGridBoxesWithValues(g: Grid): void {
 		gridCellIdxs = [...readGridCellIndexesOfGridBoxAt({ rowIdx: cIdx, colIdx: cIdx })];
 
 		for (let idx = 0; idx < allowedValues.length; idx++) {
-			g[gridCellIdxs[idx] as unknown as number] = allowedValues[idx];
+			g[gridCellIdxs.at(idx) as unknown as number] = allowedValues.at(idx);
 		}
 	}
 }
@@ -96,7 +95,8 @@ export function readGridColumnAt(
 	coordinates: Readonly<GridCellCoordinates>,
 ): GridColumn {
 	const result = [];
-	for (let idx = coordinates.colIdx; idx < GRID_CELL_COUNT; idx += GRID_SIZE) result.push(g[idx]);
+	for (let idx = coordinates.colIdx; idx < GRID_CELL_COUNT; idx += GRID_SIZE)
+		result.push(g.at(idx));
 	return result as GridColumn;
 }
 
@@ -168,7 +168,7 @@ export function readGridBoxCellsAt(
 	for (let rIdx = 0; rIdx < GRID_BOX_SIZE; rIdx++) {
 		for (let cIdx = 0; cIdx < GRID_BOX_SIZE; cIdx++) {
 			const gridIdx = (gridBoxStartRowIdx + rIdx) * GRID_SIZE + (gridBoxStartColIdx + cIdx);
-			result[resultIdx++] = g[gridIdx];
+			result[resultIdx++] = g.at(gridIdx);
 		}
 	}
 

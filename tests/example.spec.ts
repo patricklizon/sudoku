@@ -12,7 +12,6 @@ test("can generate game", async ({ page }) => {
 
 	await buttonActionGeneratePuzzle.click();
 
-	await page.waitForLoadState("networkidle");
 	await expect(gameBoard).toBeInViewport();
 
 	const filledCells = page.getByTestId("game-board.cell").filter({ hasText: /^[1-9]$/ });

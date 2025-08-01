@@ -1,10 +1,9 @@
 {
 	"$schema": "https://json.schemastore.org/tsconfig",
 	"extends": "@tsconfig/node22/tsconfig.json",
-	"include": ["vitest.config.*", "playwright.*.config.*", ""],
+	"include": ["*.config.*"],
 	"exclude": [],
 	"compilerOptions": {
-		"noEmit": true,
 		"module": "ESNext",
 		"moduleResolution": "Bundler",
 		"types": ["bun-types"]

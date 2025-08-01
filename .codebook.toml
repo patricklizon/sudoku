@@ -1,21 +1,23 @@
 dictionaries = ["en_us"]
 words = [
-	"eslint",
-	"idxs",
-	"jsdom",
-	"mts",
-	"oxc",
-	"oxlint",
-	"oxlint",
-	"readwrite",
-	"ssr",
-	"tx",
-	"upgradeneeded",
-	"vite",
-	"vitest",
-	"vitejs",
-	"trunc",
+    "eslint",
+    "idxs",
+    "jsdom",
+    "mts",
+    "networkidle",
+    "oxc",
+    "oxlint",
+    "readwrite",
+    "ssr",
+    "trunc",
+    "tx",
+    "upgradeneeded",
+    "vite",
+    "vitejs",
+    "vitest",
 ]
-flag_words = []
-ignore_paths = [".git/**/*", "dist/**/*", "node_modules/**/*"]
-ignore_patterns = []
+ignore_paths = [
+    ".git/**/*",
+    "dist/**/*",
+    "node_modules/**/*",
+]

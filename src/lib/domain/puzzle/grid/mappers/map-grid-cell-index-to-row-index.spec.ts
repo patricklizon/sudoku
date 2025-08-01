@@ -1,10 +1,8 @@
 import { describe, test, expect } from "vitest";
-
 import { ValueOutOfRangeError } from "../errors";
-
 import { mapGridCellIndexToRowIndex } from "./map-grid-cell-index-to-row-index";
 
-describe(mapGridCellIndexToRowIndex.name, () => {
+describe("#" + mapGridCellIndexToRowIndex.name, () => {
 	test.each<[gridIdx: number, rowIdx: number][]>([
 		[
 			[0, 0],

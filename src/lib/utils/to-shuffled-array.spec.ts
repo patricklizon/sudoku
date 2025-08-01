@@ -1,8 +1,7 @@
 import { describe, expect, test } from "vitest";
-
 import { shuffleArray, toShuffledArray } from "./to-shuffled-array";
 
-describe(shuffleArray.name, () => {
+describe("#" + shuffleArray.name, () => {
 	test("mutates original array", () => {
 		const input = Array.from({ length: 18 }, (_, idx) => idx);
 		const copy = structuredClone(input);
@@ -20,7 +19,7 @@ describe(shuffleArray.name, () => {
 	});
 });
 
-describe(toShuffledArray.name, () => {
+describe("#" + toShuffledArray.name, () => {
 	test("does not mutate original array", () => {
 		const input = Array.from({ length: 18 }, (_, idx) => idx);
 		const result = toShuffledArray(input);

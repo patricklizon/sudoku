@@ -1,10 +1,9 @@
 import { describe, expect, test } from "vitest";
-
 import { decodePuzzle } from "#src/lib/domain/puzzle/decoder";
 import { createEmptyGridCell } from "#src/lib/domain/puzzle/grid";
 import type { PuzzleEncoded, PuzzleProblem, PuzzleSolution } from "#src/lib/domain/puzzle/types";
 
-describe(decodePuzzle.name, () => {
+describe("#" + decodePuzzle.name, () => {
 	const _ = createEmptyGridCell();
 
 	const solution = [
@@ -35,7 +34,7 @@ describe(decodePuzzle.name, () => {
 
 	const encoded =
 		("24651379H31I28G5DF75849F12319482EFCG83G1F925DEFB3748A99B1GC8465483F529G167E941382" +
-			difficulty) as PuzzleEncoded;
+			difficulty.toString()) as PuzzleEncoded;
 
 	test("decodes string to puzzle and solution", () => {
 		const result = decodePuzzle(encoded);

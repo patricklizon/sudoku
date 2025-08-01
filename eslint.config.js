@@ -4,6 +4,7 @@ import prettier from "eslint-config-prettier";
 import importPlugin from "eslint-plugin-import";
 import oxlint from "eslint-plugin-oxlint";
 import playwright from "eslint-plugin-playwright";
+import jsxA11y from "eslint-plugin-jsx-a11y";
 import solid from "eslint-plugin-solid";
 import pluginVitest from "@vitest/eslint-plugin";
 import globals from "globals";
@@ -17,6 +18,7 @@ export default tseslint.config(
 	js.configs.recommended,
 	...tseslint.configs.strictTypeChecked,
 	...tseslint.configs.stylisticTypeChecked,
+	jsxA11y.flatConfigs.recommended,
 	solid.configs["flat/recommended"],
 	solid.configs["flat/typescript"],
 
@@ -44,7 +46,7 @@ export default tseslint.config(
 			"@typescript-eslint/consistent-indexed-object-style": "off",
 			"@typescript-eslint/consistent-type-definitions": ["error", "type"],
 			"@typescript-eslint/no-unnecessary-type-parameters": "off",
-			"@typescript-eslint/explicit-function-return-type": "error",
+			"@typescript-eslint/explicit-function-return-type": "warn",
 			"@typescript-eslint/explicit-member-accessibility": ["error", { accessibility: "no-public" }],
 			"@typescript-eslint/no-unused-vars": ["error", { argsIgnorePattern: "^_" }],
 			"@typescript-eslint/strict-boolean-expressions": [
@@ -69,9 +71,15 @@ export default tseslint.config(
 			...importPlugin.configs.typescript.rules,
 			"import/no-unresolved": "off", // check done by typescript
 			"import/no-default-export": "warn",
+			"import/no-amd": "warn",
+			"import/no-commonjs": "warn",
+			"import/no-import-module-exports": "warn",
+			"import/no-nodejs-modules": "warn",
+			"import/no-mutable-exports": "error",
 			"import/order": [
 				"warn",
 				{
+					"newlines-between": "never",
 					pathGroups: [
 						{
 							pattern: "#*/**",

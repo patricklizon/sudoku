@@ -1,5 +1,4 @@
 import { describe, expect, test } from "vitest";
-
 import { GRID_SIZE, GRID_BOX_CELLS_COUNT, GRID_BOX_SIZE } from "./constants";
 import { ValueOutOfRangeError } from "./errors";
 import {
@@ -15,7 +14,7 @@ import {
 import { isGridCellEmpty, isGridCellFilled } from "./predicates";
 import type { Grid, GridCellCoordinates, GridFilled, GridRow } from "./types";
 
-describe(readGridBoxCellsAt.name, () => {
+describe("#" + readGridBoxCellsAt.name, () => {
 	type TestData = Record<"middle" | "left" | "right", GridRow>;
 
 	const top = {
@@ -153,7 +152,7 @@ describe(readGridBoxCellsAt.name, () => {
 	});
 });
 
-describe(createEmptyGrid.name, () => {
+describe("#" + createEmptyGrid.name, () => {
 	const grid = createEmptyGrid();
 	const emptyCell = createEmptyGridCell();
 
@@ -166,7 +165,7 @@ describe(createEmptyGrid.name, () => {
 	});
 });
 
-describe(createEmptyGridBox.name, () => {
+describe("#" + createEmptyGridBox.name, () => {
 	const grid = createEmptyGridBox();
 	const emptyCell = createEmptyGridCell();
 
@@ -179,7 +178,7 @@ describe(createEmptyGridBox.name, () => {
 	});
 });
 
-describe(fillDiagonalGridBoxesWithValues.name, () => {
+describe("#" + fillDiagonalGridBoxesWithValues.name, () => {
 	test("fills diagonal subgrids with random digits between 1 and 9", () => {
 		expect.assertions(10);
 
@@ -227,7 +226,7 @@ describe(fillDiagonalGridBoxesWithValues.name, () => {
 	});
 });
 
-describe(isGridCellValueCorrectAt.name, () => {
+describe("#" + isGridCellValueCorrectAt.name, () => {
 	const _ = createEmptyGridCell();
 	const g = [
 		[7, 6, 5, _, _, _, _, _, _], // 1st sub-grid is filled correctly
@@ -293,13 +292,13 @@ describe(isGridCellValueCorrectAt.name, () => {
 	});
 });
 
-describe(createEmptyGridCell.name, () => {
+describe("#" + createEmptyGridCell.name, () => {
 	test("creates allowed values accepted by cell", () => {
 		expect(createEmptyGridCell()).to.equal(undefined);
 	});
 });
 
-describe(getAllowedGridCellValuesAt.name, () => {
+describe("#" + getAllowedGridCellValuesAt.name, () => {
 	const _ = createEmptyGridCell();
 	const g = [
 		[7, 6, 5, _, _, _, _, 4, _],
@@ -322,7 +321,7 @@ describe(getAllowedGridCellValuesAt.name, () => {
 	});
 });
 
-describe(readGridCellIndexesOfGridBoxAt.name, () => {
+describe("#" + readGridCellIndexesOfGridBoxAt.name, () => {
 	test("returns indexes of entire grid box at given coordinate", () => {
 		const left = readGridCellIndexesOfGridBoxAt({ rowIdx: 0, colIdx: 0 });
 		const right = new Set([0, 1, 2, 9, 10, 11, 18, 19, 20]);

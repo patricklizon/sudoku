@@ -1,22 +1,21 @@
 {
 	"$schema": "https://json.schemastore.org/tsconfig",
-	"extends": "./tsconfig.base.json",
-	"compilerOptions": {
-		"target": "ESNext",
-		"module": "ESNext",
-		"moduleResolution": "bundler",
-		"allowSyntheticDefaultImports": true,
-		"esModuleInterop": true,
-		"jsx": "preserve",
-		"jsxImportSource": "solid-js",
-		"allowJs": true,
-		"strict": true,
-		"noEmit": true,
-		"types": ["./worker-configuration.d.ts", "bun-types", "vinxi/types/client"],
-		"isolatedModules": true,
-		"paths": {
-			"#src/*": ["./src/*"]
+	"files": [],
+	"references": [
+		{
+			"path": "./tsconfig.bun.json"
+		},
+		{
+			"path": "./tsconfig.app.json"
+		},
+		{
+			"path": "./tsconfig.e2e.json"
+		},
+		{
+			"path": "./tsconfig.vitest.json"
+		},
+		{
+			"path": "./tsconfig.worker.json"
 		}
-	},
-	"include": ["@types", "src", "test", "./*.d.ts", "./*.config.ts"]
+	]
 }

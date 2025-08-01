@@ -94,6 +94,9 @@ jobs:
       - name: Check types
         run: bun run check:types
 
+      - name: Check types
+        run: bun run check:lint
+
   test:
     needs: install-dependencies
     runs-on: ubuntu-latest

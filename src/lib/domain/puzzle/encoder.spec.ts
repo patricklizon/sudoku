@@ -1,11 +1,10 @@
 import { describe, expect, test } from "vitest";
-
 import { DIFFICULTY_LEVEL } from "#src/lib/domain/puzzle/difficulty";
 import { encodePuzzle } from "#src/lib/domain/puzzle/encoder";
 import { createEmptyGridCell } from "#src/lib/domain/puzzle/grid";
 import type { PuzzleProblem, PuzzleSolution } from "#src/lib/domain/puzzle/types";
 
-describe(encodePuzzle.name, () => {
+describe("#" + encodePuzzle.name, () => {
 	const _ = createEmptyGridCell();
 	const solution = [
 		[2, 4, 6, 5, 1, 3, 7, 9, 8],

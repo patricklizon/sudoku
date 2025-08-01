@@ -1,6 +1,5 @@
-import type { TimeISOString, TimeSecond } from "./types";
-
 import type { Option } from "#src/lib/utils/types/option";
+import type { TimeISOString, TimeSecond } from "./types";
 
 export function mapDateToTimeISOString(d: Date): TimeISOString {
 	return d.toISOString() as TimeISOString;

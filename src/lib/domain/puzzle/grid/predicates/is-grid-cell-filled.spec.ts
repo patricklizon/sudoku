@@ -1,10 +1,8 @@
 import { describe, test, expect } from "vitest";
-
 import { GRID_CELL_ALLOWED_VALUES } from "../constants";
-
 import { isGridCellFilled } from "./is-grid-cell-filled";
 
-describe(isGridCellFilled.name, () => {
+describe("#" + isGridCellFilled.name, () => {
 	test.each([...GRID_CELL_ALLOWED_VALUES])("returns true when cell has allowed value", (value) => {
 		expect(isGridCellFilled(value)).to.equal(true);
 	});

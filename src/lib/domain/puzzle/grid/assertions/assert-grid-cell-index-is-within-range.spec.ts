@@ -1,11 +1,9 @@
 import { describe, test, expect } from "vitest";
-
 import { GRID_CELL_COUNT } from "../constants";
 import { ValueOutOfRangeError } from "../errors";
-
 import { assertGridCellIndexIsWithinRange } from "./assert-grid-cell-index-is-within-range";
 
-describe(assertGridCellIndexIsWithinRange.name, () => {
+describe("#" + assertGridCellIndexIsWithinRange.name, () => {
 	test.each<number>([-Number.MAX_SAFE_INTEGER, -2, -1, GRID_CELL_COUNT, Number.MAX_SAFE_INTEGER])(
 		"throws when out of range",
 		(value) => {

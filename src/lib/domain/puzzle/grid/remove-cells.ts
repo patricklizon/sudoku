@@ -65,7 +65,7 @@ export function removeGridCells(grid: Readonly<GridFilled>, config: Config): Gri
 		for (const idx of indexes) {
 			if (removedCount >= targetEmptyCellCount) break;
 
-			const originalValue = gridCopy[idx];
+			const originalValue = gridCopy.at(idx);
 			gridCopy[idx] = undefined;
 			const coordinates = mapGridCellIndexToCoordinates(idx);
 

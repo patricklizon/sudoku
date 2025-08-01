@@ -1,3 +1,7 @@
+import { isDefined } from "#src/lib/utils/is-defined";
+import { isNil } from "#src/lib/utils/is-nil";
+import { isNumber } from "#src/lib/utils/is-number";
+import type { Option } from "#src/lib/utils/types/option";
 import { UnableToFillGridWithValuesError } from "./errors";
 import {
 	getAllowedGridCellValuesAt,
@@ -14,11 +18,6 @@ import type {
 	GridCellEmptyWithPossibleValues,
 } from "./types";
 
-import { isDefined } from "#src/lib/utils/is-defined";
-import { isNil } from "#src/lib/utils/is-nil";
-import { isNumber } from "#src/lib/utils/is-number";
-import type { Option } from "#src/lib/utils/types/option";
-
 /**
  * Creates filled grid.
  */
@@ -33,7 +32,7 @@ export function solve(g: Readonly<Grid>): GridFilled {
 
 	function execute(cg: Grid<GridCellEmptyWithPossibleValues | GridCellFilled>): cg is GridFilled {
 		const idx = findCellIdxWithSmallestCountOfPossibleValues(cg) ?? 0;
-		const cell = cg[idx];
+		const cell = cg.at(idx);
 
 		// TODO: Add errors
 		if (isNil(cell)) throw new Error("shouod never happen");
@@ -75,10 +74,10 @@ export function hasUniqueSolution(g: Readonly<Grid>): boolean {
 		if (!shouldContinue) return;
 
 		const idx = findCellIdxWithSmallestCountOfPossibleValues(cg) ?? 0;
-		const cell = cg[idx];
+		const cell = cg.at(idx);
 
 		// TODO: Add errors
-		if (isNil(cell)) throw new Error("shouod never happen");
+		if (isNil(cell)) throw new Error("should never happen");
 		if (isNumber(cell)) {
 			solutionCount++;
 			if (solutionCount > 1) shouldContinue = false;

@@ -1,7 +1,4 @@
 import { describe, expect, test } from "vitest";
-
-import { createPuzzleProblem } from "./create-puzzle-problem";
-
 import {
 	DIFFICULTY_LEVEL,
 	MINIMUM_GIVEN_CELLS_COUNT_IN_LINE_BY_DIFFICULTY_LEVEL,
@@ -14,6 +11,7 @@ import {
 	readGridRowCellsAt,
 } from "#src/lib/domain/puzzle/grid";
 import type { PuzzleDifficultyLevel, PuzzleSolution } from "#src/lib/domain/puzzle/types";
+import { createPuzzleProblem } from "./create-puzzle-problem";
 
 // TODO: Object.values(DIFFICULTY_LEVEL)
 describe.each<PuzzleDifficultyLevel>([
@@ -21,7 +19,7 @@ describe.each<PuzzleDifficultyLevel>([
 	DIFFICULTY_LEVEL[2],
 	DIFFICULTY_LEVEL[3],
 	DIFFICULTY_LEVEL[4],
-])(createPuzzleProblem.name, (level) => {
+])("#" + createPuzzleProblem.name, (level) => {
 	const p = structuredClone(
 		[
 			[7, 6, 5, 1, 2, 8, 3, 4, 9],
