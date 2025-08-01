@@ -211,9 +211,9 @@ jobs:
           key: ${{ runner.os }}-node-modules-${{ hashFiles('bun.lock') }}
           path: node_modules
 
-      - name: Extract project name from wrangler configuration
+      - name: Extract project name
         id: project
-        run: echo "PROJECT_NAME=$(jq -r .name wrangler.jsonc)" >> $GITHUB_ENV
+        run: echo "PROJECT_NAME=$(jq -r .name package.json)" >> $GITHUB_ENV
 
       - name: Deploy to Cloudflare
         run: |
