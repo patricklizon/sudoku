@@ -6,17 +6,9 @@
 	"$schema": "node_modules/wrangler/config-schema.json",
 	"name": "sudoku",
 	"compatibility_date": "2025-07-31",
-	"main": ".svelte-kit/cloudflare/_worker.js",
+	"pages_build_output_dir": ".svelte-kit/cloudflare",
 	"observability": {
 		"enabled": true,
-	},
-	/**
-	 * Static Assets
-	 * https://developers.cloudflare.com/workers/static-assets/binding/
-	 */
-	"assets": {
-		"directory": ".svelte-kit/output/client",
-		"binding": "MY_ASSETS",
 	},
 	/**
 	 * Smart Placement
@@ -40,6 +32,12 @@
 	 * Note: Use secrets to store sensitive data.
 	 * https://developers.cloudflare.com/workers/configuration/secrets/
 	 */
+
+	/**
+	 * Static Assets
+	 * https://developers.cloudflare.com/workers/static-assets/binding/
+	 */
+	"assets": { "directory": "./static/", "binding": "STATIC_ASSETS" },
 
 	/**
 	 * Service Bindings (communicate between multiple Workers)

@@ -17,6 +17,7 @@ env:
     .svelte-kit/cloudflare-tmp/**
     .svelte-kit/output/server/**
     .svelte-kit/output/client/**
+  BUILD_ARTIFACTS_DIR_NAME: '.svelte-kit'
 
 jobs:
   install-dependencies:
@@ -167,7 +168,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: ${{ env.BUILD_ARTIFACTS_NAME }}
-          path: ~/.svelte-kit
+          path: ${{ env.BUILD_ARTIFACTS_DIR_NAME }}
 
       - name: Display structure of downloaded files
         run: ls -R
