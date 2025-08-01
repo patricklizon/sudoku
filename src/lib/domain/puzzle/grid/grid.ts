@@ -22,8 +22,8 @@ import type {
 	GridWithPossibleValues,
 } from './types';
 
-import { shuffleArray } from '$lib/utils/to-shuffled-array';
-import type { Option } from '$lib/utils/types/option';
+import { shuffleArray } from '#src/lib/utils/to-shuffled-array';
+import type { Option } from '#src/lib/utils/types/option';
 
 /**
  * Mutates passed grid.

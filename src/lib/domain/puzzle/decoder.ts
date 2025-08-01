@@ -1,11 +1,11 @@
-import { ENCODED_EMPTY_FIELD_CODE_POINT_OFFSET } from '$lib/domain/puzzle/constants';
-import { isPuzzleDifficultyLevel } from '$lib/domain/puzzle/difficulty/predicate';
+import { ENCODED_EMPTY_FIELD_CODE_POINT_OFFSET } from '#src/lib/domain/puzzle/constants';
+import { isPuzzleDifficultyLevel } from '#src/lib/domain/puzzle/difficulty/predicate';
 import type {
 	PuzzleDifficultyLevel,
 	PuzzleEncoded,
 	PuzzleProblem,
 	PuzzleSolution,
-} from '$lib/domain/puzzle/types';
+} from '#src/lib/domain/puzzle/types';
 
 /**
  * Decodes an encoded puzzle string into its solution and initial puzzle state

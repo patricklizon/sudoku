@@ -3,7 +3,7 @@ import {
 	type GridCellCoordinates,
 	readGridCellAt,
 	type GridCell,
-} from '$lib/domain/puzzle/grid';
+} from '#src/lib/domain/puzzle/grid';
 
 export function hasPuzzleCellValidValue(
 	g: GridFilled,

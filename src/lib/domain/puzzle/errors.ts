@@ -1,6 +1,6 @@
 import { type Grid, gridDebugFormatter } from './grid';
 
-import type { AnyRecord } from '$lib/utils/types/record';
+import type { AnyRecord } from '#src/lib/utils/types/record';
 
 export class PuzzleGenerationError extends Error {
 	constructor(grid: Grid, record: AnyRecord, removedCount: number) {

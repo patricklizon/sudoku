@@ -1,10 +1,10 @@
-import { createGameId, type DBGame, type Game } from '$lib/domain/game';
-import type { Puzzle } from '$lib/domain/puzzle';
-import { mapDateToTimeISOString } from '$lib/domain/time';
-import type { DB } from '$lib/infrastructure/persistence';
-import { gameTbl } from '$lib/infrastructure/persistence/db/tables/game';
-import { isNil } from '$lib/utils/is-nil';
-import type { Option } from '$lib/utils/types/option';
+import { createGameId, type DBGame, type Game } from '#src/lib/domain/game';
+import type { Puzzle } from '#src/lib/domain/puzzle';
+import { mapDateToTimeISOString } from '#src/lib/domain/time';
+import type { DB } from '#src/lib/infrastructure/persistence';
+import { gameTbl } from '#src/lib/infrastructure/persistence/db/tables/game';
+import { isNil } from '#src/lib/utils/is-nil';
+import type { Option } from '#src/lib/utils/types/option';
 
 export class GameRepository {
 	constructor(db: DB) {

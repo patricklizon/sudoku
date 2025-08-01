@@ -1,6 +1,6 @@
-import type { GameId } from '$lib/domain/id';
-import type { TimeISOString } from '$lib/domain/time';
-import type { Option } from '$lib/utils/types/option';
+import type { GameId } from '#src/lib/domain/id';
+import type { TimeISOString } from '#src/lib/domain/time';
+import type { Option } from '#src/lib/utils/types/option';
 
 export type GameHistoryEntry = {
 	colIdx: number;

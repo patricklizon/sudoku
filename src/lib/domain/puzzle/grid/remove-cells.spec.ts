@@ -2,7 +2,7 @@ import { describe, expect, test } from 'vitest';
 
 import { type Config, _isRowAndColMinimumCellCountSatisfied } from './remove-cells';
 
-import { createEmptyGridCell, type Grid, GRID_SIZE } from '$lib/domain/puzzle/grid';
+import { createEmptyGridCell, type Grid, GRID_SIZE } from '#src/lib/domain/puzzle/grid';
 
 const _ = createEmptyGridCell();
 

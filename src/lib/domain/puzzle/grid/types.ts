@@ -1,4 +1,4 @@
-import type { Nil } from '$lib/utils/types/option';
+import type { Nil } from '#src/lib/utils/types/option';
 
 export type GridCellFilled = number;
 export type GridCellEmpty = Nil;

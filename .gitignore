@@ -1,13 +1,81 @@
+# dependencies (bun install)
 node_modules
 
-# Output
-.output
-.vercel
-.netlify
-.wrangler
-/.svelte-kit
-/build
-/dist
+# output
+.wrangler/
+.vinxi/
+.output/
+out/
+dist/
+build/
+target/
+output/
+tsc-out/
+*.tgz
+
+# code coverage
+coverage
+*.lcov
+
+# test
+**/__screenshots__
+
+# logs
+logs
+_.log
+report.[0-9]_.[0-9]_.[0-9]_.[0-9]_.json
+
+# dotenv environment variable files
+.env
+.env.development.local
+.env.test.local
+.env.production.local
+.env.local
+
+# caches
+.eslintcache/
+.cache/
+*.tsbuildinfo
+
+# Finder (MacOS) folder config
+.DS_Store
+
+# Bun specific
+.bun/
+
+# Nix store links and build artifacts
+/result
+/result-*
+*.drv
+
+# Flake development artifacts
+flake-profile
+.nix-profile
+
+# Nix build directories (when using nix build --out-link)
+/result
+/result-*
+
+# Direnv / Nix shell-specific environments
+.envrc.bak
+.direnv/
+
+# Temporary Nix directories
+.nix-defexpr/
+.cache/nix/
+.nix-channels/
+
+# Logs / debug traces from Nix
+*.log
+*.trace
+
+# Optional: If using lorri (Nix + direnv integration)
+/lorri/
+
+# General system-specific artifacts (safe inclusion)
+*.swp
+*.swo
+*~
 
 # OS
 .DS_Store
