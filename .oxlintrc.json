@@ -85,7 +85,7 @@
 				"maxDepth": 1
 			}
 		],
-		"import/no-default-export": "error",
+		"import/no-default-export": "warn",
 		"import/no-dynamic-require": "error",
 		"import/no-namespace": "error",
 		"import/no-webapck-loader-syntax": "error",

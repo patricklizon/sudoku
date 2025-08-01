@@ -1,5 +1,5 @@
-import { getRandomInt } from './get-random-int';
-import type { Mutable } from './types/mutable';
+import { getRandomInt } from "./get-random-int";
+import type { Mutable } from "./types/mutable";
 
 /**
  * @returns deeply cloned shuffled array

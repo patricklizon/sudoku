@@ -1,5 +1,5 @@
-import type { Primitive } from './primitive';
-import type { RecordKey } from './record';
+import type { Primitive } from "./primitive";
+import type { RecordKey } from "./record";
 
 /**
  * Creates a deeply readonly version of a type.

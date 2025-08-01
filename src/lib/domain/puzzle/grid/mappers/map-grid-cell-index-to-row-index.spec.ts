@@ -1,8 +1,8 @@
-import { describe, test, expect } from 'vitest';
+import { describe, test, expect } from "vitest";
 
-import { ValueOutOfRangeError } from '../errors';
+import { ValueOutOfRangeError } from "../errors";
 
-import { mapGridCellIndexToRowIndex } from './map-grid-cell-index-to-row-index';
+import { mapGridCellIndexToRowIndex } from "./map-grid-cell-index-to-row-index";
 
 describe(mapGridCellIndexToRowIndex.name, () => {
 	test.each<[gridIdx: number, rowIdx: number][]>([
@@ -11,12 +11,12 @@ describe(mapGridCellIndexToRowIndex.name, () => {
 			[2, 0],
 			[33, 4],
 		],
-	])('returns coorect row index', ([index, coordinates]) => {
+	])("returns coorect row index", ([index, coordinates]) => {
 		expect(mapGridCellIndexToRowIndex(index)).to.deep.equal(coordinates);
 	});
 
 	test.each<number[]>([[-1, Number.POSITIVE_INFINITY]])(
-		'throws error when index is out or range',
+		"throws error when index is out or range",
 		(index) => {
 			expect(() => {
 				mapGridCellIndexToRowIndex(index);
