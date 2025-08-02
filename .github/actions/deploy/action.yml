@@ -64,43 +64,6 @@ runs:
         echo "deploy-env=$DEPLOY_ENV" >> $GITHUB_OUTPUT
         echo "is-production=$IS_PRODUCTION" >> $GITHUB_OUTPUT
 
-    - name: Compute build hash
-      id: build-hash
-      shell: bash
-      run: |
-        HASH=$(find .output -type f -exec sha256sum {} + | sort | sha256sum | cut -d' ' -f1)
-        echo "hash=$HASH" >> $GITHUB_OUTPUT
-        echo "BUILD_HASH=$HASH" >> $GITHUB_ENV
-
-    - name: Restore previous build hash
-      id: restore-hash
-      uses: actions/cache@v3
-      with:
-        path: .last-build-hash
-        key: build-hash-${{ github.head_ref || github.ref_name }}
-
-    - name: Load last build hash
-      id: load-last
-      shell: bash
-      run: |
-        if [ -f .last-build-hash/hash ]; then
-          LAST_HASH=$(cat .last-build-hash/hash)
-          echo "last_hash=$LAST_HASH" >> $GITHUB_OUTPUT
-        else
-          echo "last_hash=" >> $GITHUB_OUTPUT
-        fi
-
-    - name: Skip deploy if no changes
-      id: should-deploy
-      shell: bash
-      run: |
-        if [ "${{ steps.build-hash.outputs.hash }}" = "${{ steps.load-last.outputs.last_hash }}" ]; then
-          echo "changed=false" >> $GITHUB_OUTPUT
-          echo "No build changes detected — skipping deploy."
-        else
-          echo "changed=true" >> $GITHUB_OUTPUT
-        fi
-
     - name: Deploy to prod
       id: deploy
       if: steps.should-deploy.outputs.changed == 'true' && steps.metadata.outputs.is-production == 'true'
@@ -131,13 +94,6 @@ runs:
       env:
         CLOUDFLARE_API_TOKEN: ${{ inputs.cloudflare-api-token }}
         CLOUDFLARE_ACCOUNT_ID: ${{ inputs.cloudflare-account-id }}
-
-    - name: Save new build hash
-      if: steps.should-deploy.outputs.changed == 'true'
-      shell: bash
-      run: |
-        mkdir -p .last-build-hash
-        echo "${{ steps.build-hash.outputs.hash }}" > .last-build-hash/hash
 
     - name: Set deploy-url output
       id: set-url
