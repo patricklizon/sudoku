@@ -10,7 +10,7 @@ inputs:
   playwright-cache-path:
     description: "Playwright cache directory"
     required: false
-    default: ${{ env.HOME }}/.cache/ms-playwright
+    default: "~/.cache/ms-playwright"
 
   install-command:
     description: "Command to install browsers"
