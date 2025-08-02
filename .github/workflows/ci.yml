@@ -5,6 +5,10 @@ on:
   push:
     branches: [main]
 
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
 env:
   CACHE_KEY_PREFIX: deps-v1
   BUN_VERSION_FILE: ".bun-version"
