@@ -1,0 +1,46 @@
+name: "Manage Browsers"
+description: "Cache and install Playwright browsers"
+
+inputs:
+  cache-key-prefix:
+    description: "Prefix for cache key"
+    required: false
+    default: "deps-v1"
+
+  playwright-cache-path:
+    description: "Playwright cache directory"
+    required: false
+    default: "~/.cache/ms-playwright"
+
+  install-command:
+    description: "Command to install browsers"
+    required: false
+    default: "bun run test:install:browsers"
+
+outputs:
+  cache-hit:
+    description: "Whether browser cache was hit"
+    value: ${{ steps.cache-browsers.outputs.cache-hit }}
+
+runs:
+  using: "composite"
+  steps:
+    - name: Cache Playwright browsers
+      uses: actions/cache@v4
+      id: cache-browsers
+      with:
+        key: ${{ runner.os }}-browsers-${{ inputs.cache-key-prefix }}-${{ hashFiles('bun.lock') }}
+        path: ${{ inputs.playwright-cache-path }}
+
+    - name: Install Playwright browsers
+      if: steps.cache-browsers.outputs.cache-hit != 'true'
+      shell: bash
+      run: ${{ inputs.install-command }}
+
+    # - name: Verify browsers
+    #   shell: bash
+    #   run: |
+    #     if [ ! -d "${{ inputs.playwright-cache-path }}" ]; then
+    #       echo "Playwright browsers directory not found: ${{ inputs.playwright-cache-path }}"
+    #       exit 1
+    #     fi
