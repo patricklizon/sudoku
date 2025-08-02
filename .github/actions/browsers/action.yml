@@ -15,7 +15,7 @@ inputs:
   install-command:
     description: "Command to install browsers"
     required: false
-    default: "bun run test:install:deps"
+    default: "bun run test:install:browsers"
 
 outputs:
   cache-hit:
