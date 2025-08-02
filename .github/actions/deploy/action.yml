@@ -49,22 +49,21 @@ runs:
       shell: bash
       run: |
         if [ "${GITHUB_REF}" = "refs/heads/main" ]; then
-          DEPLOYMENT_ID="main-$(date +'%Y-%m-%d-%H-%M-%S')"
+          DEPLOYMENT_ID="release-$(date +'%Y-%m-%d-%H-%M-%S')"
           DEPLOY_ENV="prod"
           IS_PRODUCTION="true"
         else
-          DEPLOYMENT_ID="preview-pr-${{ github.event.pull_request.number || github.run_number }}-$(date +'%Y-%m-%d-%H-%M-%S')"
+          DEPLOYMENT_ID="staging-pr-${{ github.event.pull_request.number || github.run_number }}-$(date +'%Y-%m-%d-%H-%M-%S')"
           DEPLOY_ENV="staging"
           IS_PRODUCTION="false"
         fi
 
-        echo "deployment-id=$DEPLOYMENT_ID" >> $GITHUB_OUTPUT
-        echo "deploy-env=$DEPLOY_ENV" >> $GITHUB_OUTPUT
-        echo "is-production=$IS_PRODUCTION" >> $GITHUB_OUTPUT
-
         echo "DEPLOYMENT_ID=$DEPLOYMENT_ID" >> $GITHUB_ENV
         echo "DEPLOY_ENV=$DEPLOY_ENV" >> $GITHUB_ENV
         echo "IS_PRODUCTION=$IS_PRODUCTION" >> $GITHUB_ENV
+        echo "deployment-id=$DEPLOYMENT_ID" >> $GITHUB_OUTPUT
+        echo "deploy-env=$DEPLOY_ENV" >> $GITHUB_OUTPUT
+        echo "is-production=$IS_PRODUCTION" >> $GITHUB_OUTPUT
 
     - name: Deploy to prod
       id: deploy
@@ -84,23 +83,24 @@ runs:
       if: steps.metadata.outputs.is-production == 'false'
       shell: bash
       run: |
-        PREVIEW_URL=$(${{ inputs.deploy-command }} --env staging --preview --json | jq -r '.url')
-        DEPLOY_URL="$PREVIEW_URL"
-        echo "deploy-url=$DEPLOY_URL" >> $GITHUB_OUTPUT
-        echo "DEPLOY_URL=$DEPLOY_URL" >> $GITHUB_ENV
+        ALIAS="pr-${{ github.event.pull_request.number }}"
+        ${{ inputs.deploy-command }} versions upload --preview-alias $ALIAS --env staging
+        PREVIEW_URL="https://$ALIAS.${{ inputs.workers-subdomain }}.workers.dev"
+        echo "deploy-url=$PREVIEW_URL" >> $GITHUB_OUTPUT
+        echo "DEPLOY_URL=$PREVIEW_URL" >> $GITHUB_ENV
       env:
         CLOUDFLARE_API_TOKEN: ${{ inputs.cloudflare-api-token }}
         CLOUDFLARE_ACCOUNT_ID: ${{ inputs.cloudflare-account-id }}
 
-    - name: Comment preview URL on PR
-      if: steps.metadata.outputs.is-production == 'false' && github.event.pull_request.number
-      uses: peter-evans/create-or-update-comment@v3
-      with:
-        token: ${{ inputs.github-token }}
-        issue-number: ${{ github.event.pull_request.number }}
-        edit-last: true
-        body: |
-          Preview deploy ready!
+    # - name: Comment preview URL on PR
+    #   if: steps.metadata.outputs.is-production == 'false' && github.event.pull_request.number
+    #   uses: peter-evans/create-or-update-comment@v3
+    #   with:
+    #     token: ${{ inputs.github-token }}
+    #     issue-number: ${{ github.event.pull_request.number }}
+    #     edit-last: true
+    #     body: |
+    #       Preview deploy ready! 🎉
 
-          **URL:** ${{ steps.deploy.outputs.deploy-url }}
-          **Deployment ID:** `${{ steps.metadata.outputs.deployment-id }}`
+    #       **URL:** ${{ steps.deploy-staging.outputs.deploy-url }}
+    #       **Deployment ID:** `${{ steps.metadata.outputs.deployment-id }}`
