@@ -3,5 +3,7 @@ node_modules/
 dist/
 public/
 static/
+# auto generated:
+src/worker-configuration.d.ts
 
 package-lock.json
