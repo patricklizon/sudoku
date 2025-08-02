@@ -17,7 +17,7 @@
 		"fix:lint:eslint": "eslint ./src --fix",
 		"fix:lint:oxlint": "oxlint ./src --fix --fix-suggestions --ignore-path .gitignore",
 		"test:install:browsers": "playwright install chromium",
-		"test:install:deps": "playwright install-deps",
+		"test:install:deps": "playwright install-deps chromium",
 		"lighthouse": "lhci autorun --collect.staticDistDir=\"./build\"",
 		"lint:eslint": "eslint \"src/**/*.ts*\" \"tests/**/*.ts*\"",
 		"lint:oxlint": "oxlint \"src/**/*.ts*\" \"test/**/*.ts*\" --ignore-path .gitignore",
