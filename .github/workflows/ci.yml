@@ -60,7 +60,7 @@ jobs:
         run: npm run test:unit
 
   build:
-    needs: [install-dependencies, check, test]
+    needs: [install-dependencies, quality-check, test]
     runs-on: ubuntu-latest
     steps:
       - uses: ./.github/actions/setup-environment
