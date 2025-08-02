@@ -19,11 +19,6 @@ inputs:
     required: false
     default: ${{ github.token }}
 
-  deploy-command:
-    description: "Base deploy command"
-    required: false
-    default: "bun wrangler deploy"
-
 outputs:
   deployment-id:
     description: "Generated deployment ID"
@@ -70,7 +65,7 @@ runs:
       if: steps.metadata.outputs.is-production == 'true'
       shell: bash
       run: |
-        ${{ inputs.deploy-command }} --env prod --var DEPLOYMENT_ID:${{ steps.metadata.outputs.deployment-id }}
+        bun wrangler deploy --env prod --var DEPLOYMENT_ID:${{ steps.metadata.outputs.deployment-id }}
         DEPLOY_URL="https://sudoku.${{ inputs.workers-subdomain }}.workers.dev"
         echo "deploy-url=$DEPLOY_URL" >> $GITHUB_OUTPUT
         echo "DEPLOY_URL=$DEPLOY_URL" >> $GITHUB_ENV
@@ -84,7 +79,7 @@ runs:
       shell: bash
       run: |
         ALIAS="pr-${{ github.event.pull_request.number }}"
-        ${{ inputs.deploy-command }} versions upload --preview-alias $ALIAS --env staging
+        bun wrangler versions upload --preview-alias $ALIAS --env staging
         PREVIEW_URL="https://$ALIAS.${{ inputs.workers-subdomain }}.workers.dev"
         echo "deploy-url=$PREVIEW_URL" >> $GITHUB_OUTPUT
         echo "DEPLOY_URL=$PREVIEW_URL" >> $GITHUB_ENV
