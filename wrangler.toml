@@ -20,7 +20,6 @@ enabled = true
 
 [env.staging]
 name = "staging"
-vars = { API_URL = "https://staging.api.sudoku.com" }
 # Optional: you could point to a staging DB here
 # [[env.staging.kv_namespaces]]
 # binding = "SESSION_KV"
@@ -28,7 +27,6 @@ vars = { API_URL = "https://staging.api.sudoku.com" }
 
 [env.prod]
 name = "sudoku"
-vars = { API_URL = "https://api.sudoku.com" }
 # [[env.prod.kv_namespaces]]
 # binding = "SESSION_KV"
 # id = "xxxxxxxxxxxxxxxxxxxxxxxx"
