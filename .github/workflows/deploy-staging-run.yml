@@ -2,7 +2,7 @@ name: Deploy Staging Run
 
 on:
   repository_dispatch:
-    types: [deploy-staging]
+    types: [deploy-staging-command]
 
 env:
   BUILD_ARTIFACTS_NAME: "build-output"
@@ -54,8 +54,21 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           issue-number: ${{ github.event.client_payload.pull_request.number }}
+          edit-last: true
           body: |
             🚀 Deployed to staging!
 
             **URL:** https://sudoku-pr-${{ github.event.client_payload.pull_request.number }}.lizon-patryk.workers.dev
             **Deployment ID:** `${{ env.DEPLOYMENT_ID }}`
+
+      - name: "Comment: deployment failed"
+        if: failure()
+        uses: peter-evans/create-or-update-comment@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          issue-number: ${{ github.event.client_payload.pull_request.number }}
+          edit-last: true
+          body: |
+            ❌ Staging deployment failed for PR #${{ github.event.client_payload.pull_request.number }}.
+
+            Check the workflow logs: [View Run](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
