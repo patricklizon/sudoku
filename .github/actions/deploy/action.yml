@@ -132,13 +132,21 @@ runs:
         mkdir -p .last-build-hash
         echo "${{ steps.build-hash.outputs.hash }}" > .last-build-hash/hash
 
-    - name: Comment preview URL on PR
+    - name: Check for existing preview comment
       if: ${{ steps.metadata.outputs.is-production == 'false' && github.event_name == 'pull_request' }}
+      id: find-comment
+      uses: peter-evans/find-comment@v3
+      with:
+        issue-number: ${{ github.event.pull_request.number }}
+        comment-author: "github-actions[bot]"
+        body-includes: "🚀 **Preview Deployment Ready!**"
+
+    - name: Post preview comment
+      if: ${{ steps.metadata.outputs.is-production == 'false' && github.event_name == 'pull_request' && steps.find-comment.outputs.comment-id == '' }}
       uses: peter-evans/create-or-update-comment@v3
       with:
         token: ${{ inputs.github-token }}
         issue-number: ${{ github.event.pull_request.number }}
-        edit-last: true
         body: |
           🚀 **Preview Deployment Ready!**
 
