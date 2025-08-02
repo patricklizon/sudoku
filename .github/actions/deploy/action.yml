@@ -126,4 +126,3 @@ runs:
           🚀 **Preview Deployment Ready!**
 
           **🔗 URL:** [View Deployment](${{ steps.set-url.outputs.deploy-url }})
-          **📦 Deployment ID:** `${{ steps.metadata.outputs.deployment-id }}`
