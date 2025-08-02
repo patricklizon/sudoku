@@ -9,21 +9,6 @@ concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: true
 
-env:
-  CACHE_KEY_PREFIX: deps-v1
-  BUN_VERSION_FILE: ".bun-version"
-  NODE_VERSION_FILE: ".node-version"
-  PLAYWRIGHT_CACHE_PATH: "~/.cache/ms-playwright"
-  BUILD_ARTIFACTS_NAME: "build-output"
-  BUILD_ARTIFACTS_DIR_NAME: ".output"
-  BUILD_ARTIFACTS: |
-    .output/public/**
-    .output/server/**
-    .output/_headers
-    .output/nitro.json
-    .output/package.json
-    .output/package-lock.json
-
 jobs:
   # this stem might be removed when all jobs will move to bun,
   # as it's faster to install deps than pulling them from cache
