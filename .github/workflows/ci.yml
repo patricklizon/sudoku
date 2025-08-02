@@ -26,14 +26,14 @@ jobs:
   install-dependencies:
     runs-on: ubuntu-latest
     steps:
-      - uses: .github/actions/setup-environment
+      - uses: ./.github/actions/setup-environment
 
   install-browsers:
     needs: [install-dependencies]
     runs-on: ubuntu-latest
     steps:
-      - uses: .github/actions/setup-environment
-      - uses: .github/actions/browsers
+      - uses: ./.github/actions/setup-environment
+      - uses: ./.github/actions/browsers
 
   quality-checks:
     needs: [install-dependencies]
@@ -43,7 +43,7 @@ jobs:
       matrix:
         check: [format, types, lint]
     steps:
-      - uses: .github/actions/setup-environment
+      - uses: ./.github/actions/setup-environment
       - name: Check ${{ matrix.check }}
         run: bun run check:${{ matrix.check }}
 
@@ -51,7 +51,7 @@ jobs:
     needs: [install-dependencies]
     runs-on: ubuntu-latest
     steps:
-      - uses: .github/actions/setup-environment
+      - uses: ./.github/actions/setup-environment
         with:
           # override runtime due to vitest being incompatible with bun
           runtime: node
@@ -63,8 +63,8 @@ jobs:
     needs: [install-dependencies, quality-checks, test]
     runs-on: ubuntu-latest
     steps:
-      - uses: .github/actions/setup-environment
-      - uses: .github/actions/build-artifacts
+      - uses: ./.github/actions/setup-environment
+      - uses: ./.github/actions/build-artifacts
         with:
           operation: upload
 
@@ -72,9 +72,9 @@ jobs:
     needs: [install-dependencies, install-browsers, build]
     runs-on: ubuntu-latest
     steps:
-      - uses: .github/actions/setup-environment
-      - uses: .github/actions/browsers
-      - uses: .github/actions/build-artifacts
+      - uses: ./.github/actions/setup-environment
+      - uses: ./.github/actions/browsers
+      - uses: ./.github/actions/build-artifacts
         with:
           operation: download
       - name: Run E2E tests
@@ -91,11 +91,11 @@ jobs:
     needs: [build, e2e]
     runs-on: ubuntu-latest
     steps:
-      - uses: .github/actions/setup-environment
-      - uses: .github/actions/build-artifacts
+      - uses: ./.github/actions/setup-environment
+      - uses: ./.github/actions/build-artifacts
         with:
           operation: download
-      - uses: .github/actions/deploy
+      - uses: ./.github/actions/deploy
         with:
           cloudflare-api-token: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           cloudflare-account-id: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
