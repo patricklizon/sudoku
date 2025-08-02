@@ -26,12 +26,14 @@ jobs:
   install-dependencies:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
       - uses: ./.github/actions/setup-environment
 
   install-browsers:
     needs: [install-dependencies]
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
       - uses: ./.github/actions/setup-environment
       - uses: ./.github/actions/browsers
 
@@ -43,6 +45,7 @@ jobs:
       matrix:
         check: [format, types, lint]
     steps:
+      - uses: actions/checkout@v4
       - uses: ./.github/actions/setup-environment
       - name: Check ${{ matrix.check }}
         run: bun run check:${{ matrix.check }}
@@ -51,6 +54,7 @@ jobs:
     needs: [install-dependencies]
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
       - uses: ./.github/actions/setup-environment
         with:
           # override runtime due to vitest being incompatible with bun
@@ -63,6 +67,7 @@ jobs:
     needs: [install-dependencies, quality-checks, test]
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
       - uses: ./.github/actions/setup-environment
       - uses: ./.github/actions/build-artifacts
         with:
@@ -72,6 +77,7 @@ jobs:
     needs: [install-dependencies, install-browsers, build]
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
       - uses: ./.github/actions/setup-environment
       - uses: ./.github/actions/browsers
       - uses: ./.github/actions/build-artifacts
@@ -91,6 +97,7 @@ jobs:
     needs: [build, e2e]
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
       - uses: ./.github/actions/setup-environment
       - uses: ./.github/actions/build-artifacts
         with:
