@@ -65,8 +65,8 @@ runs:
         echo "is-production=$IS_PRODUCTION" >> $GITHUB_OUTPUT
 
     - name: Deploy to prod
-      id: deploy
-      if: steps.should-deploy.outputs.changed == 'true' && steps.metadata.outputs.is-production == 'true'
+      id: deploy-prod
+      if: steps.metadata.outputs.is-production == 'true'
       shell: bash
       run: |
         bun wrangler deploy --env prod --var DEPLOYMENT_ID:${{ steps.metadata.outputs.deployment-id }}
@@ -79,7 +79,7 @@ runs:
 
     - name: Deploy to staging
       id: deploy-staging
-      if: steps.should-deploy.outputs.changed == 'true' && steps.metadata.outputs.is-production == 'false'
+      if: steps.metadata.outputs.is-production == 'false'
       shell: bash
       run: |
         PR_NUMBER="${{ github.event.pull_request.number }}"
@@ -99,10 +99,12 @@ runs:
       id: set-url
       shell: bash
       run: |
-        if [ -n "${{ steps.deploy.outputs.deploy-url }}" ]; then
-          echo "deploy-url=${{ steps.deploy.outputs.deploy-url }}" >> $GITHUB_OUTPUT
-        else
+        if [ -n "${{ steps.deploy-prod.outputs.deploy-url }}" ]; then
+          echo "deploy-url=${{ steps.deploy-prod.outputs.deploy-url }}" >> $GITHUB_OUTPUT
+        elif [ -n "${{ steps.deploy-staging.outputs.deploy-url }}" ]; then
           echo "deploy-url=${{ steps.deploy-staging.outputs.deploy-url }}" >> $GITHUB_OUTPUT
+        else
+          echo "deploy-url=" >> $GITHUB_OUTPUT
         fi
 
     - name: Check for existing preview comment
