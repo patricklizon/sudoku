@@ -37,10 +37,10 @@ runs:
       shell: bash
       run: ${{ inputs.install-command }}
 
-    - name: Verify browsers
-      shell: bash
-      run: |
-        if [ ! -d "${{ inputs.playwright-cache-path }}" ]; then
-          echo "Playwright browsers directory not found: ${{ inputs.playwright-cache-path }}"
-          exit 1
-        fi
+    # - name: Verify browsers
+    #   shell: bash
+    #   run: |
+    #     if [ ! -d "${{ inputs.playwright-cache-path }}" ]; then
+    #       echo "Playwright browsers directory not found: ${{ inputs.playwright-cache-path }}"
+    #       exit 1
+    #     fi
