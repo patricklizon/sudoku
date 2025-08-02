@@ -29,7 +29,7 @@ outputs:
     value: ${{ steps.metadata.outputs.deployment-id }}
 
   deploy-env:
-    description: "Deployment environment (prod or staging)"
+    description: "Deployment environment (production or staging)"
     value: ${{ steps.metadata.outputs.deploy-env }}
 
   is-production:
@@ -49,7 +49,7 @@ runs:
       run: |
         if [ "${GITHUB_REF}" = "refs/heads/main" ]; then
           DEPLOYMENT_ID="release-$(date +'%Y-%m-%d-%H-%M-%S')"
-          DEPLOY_ENV="prod"
+          DEPLOY_ENV="production"
           IS_PRODUCTION="true"
         else
           PR_NUMBER="${{ github.event.pull_request.number }}"
@@ -68,12 +68,12 @@ runs:
         echo "deploy-env=$DEPLOY_ENV" >> $GITHUB_OUTPUT
         echo "is-production=$IS_PRODUCTION" >> $GITHUB_OUTPUT
 
-    - name: Deploy to prod
-      id: deploy-prod
+    - name: Deploy to production
+      id: deploy-production
       if: steps.metadata.outputs.is-production == 'true'
       shell: bash
       run: |
-        bun wrangler deploy --env prod --var DEPLOYMENT_ID:${{ steps.metadata.outputs.deployment-id }}
+        bun wrangler deploy --var DEPLOYMENT_ID:${{ steps.metadata.outputs.deployment-id }}
         DEPLOY_URL="https://sudoku.${{ inputs.workers-subdomain }}.workers.dev"
         echo "deploy-url=$DEPLOY_URL" >> $GITHUB_OUTPUT
         echo "DEPLOY_URL=$DEPLOY_URL" >> $GITHUB_ENV
@@ -103,8 +103,8 @@ runs:
       id: set-url
       shell: bash
       run: |
-        if [ -n "${{ steps.deploy-prod.outputs.deploy-url }}" ]; then
-          echo "deploy-url=${{ steps.deploy-prod.outputs.deploy-url }}" >> $GITHUB_OUTPUT
+        if [ -n "${{ steps.deploy-production.outputs.deploy-url }}" ]; then
+          echo "deploy-url=${{ steps.deploy-production.outputs.deploy-url }}" >> $GITHUB_OUTPUT
         elif [ -n "${{ steps.deploy-staging.outputs.deploy-url }}" ]; then
           echo "deploy-url=${{ steps.deploy-staging.outputs.deploy-url }}" >> $GITHUB_OUTPUT
         else
