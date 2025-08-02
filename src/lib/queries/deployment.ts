@@ -11,6 +11,6 @@ export const getDeploymentInfoQuery = query(async () => {
 	const event = getRequestEvent();
 	if (isNil(event?.request.url)) throw new Error("No request context");
 
-	const baseUrl = new URL(event.request.url).origin;
-	return await repo.getDeploymentInfo(baseUrl);
+	// const baseUrl = new URL(event.request.url).origin;
+	return await repo.getDeploymentInfo();
 }, "deployment-info");
