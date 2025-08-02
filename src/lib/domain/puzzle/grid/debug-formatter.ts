@@ -19,7 +19,7 @@ function colorLog(color: Exclude<keyof typeof COLOR, "suffix">, s: string): stri
  */
 export function gridDebugFormatter(
 	g: Grid | GridBox | GridWithPossibleValues,
-	o: Partial<{ hilightIdxs: number[]; displayIdxMatrix: boolean; activeIdx: number }>,
+	o?: Partial<{ hilightIdxs: number[]; displayIdxMatrix: boolean; activeIdx: number }>,
 ): string {
 	const isGridBox = g.length === GRID_BOX_CELLS_COUNT;
 	const breakAtIdx = isGridBox ? GRID_BOX_SIZE : GRID_SIZE;
@@ -51,7 +51,7 @@ export function gridDebugFormatter(
 
 	let result = `[\n${formattedGrid}\n]`;
 
-	if (o.hilightIdxs) result += `\n[\n${formattedGridOfIndexes}\n]`;
+	if (o?.hilightIdxs) result += `\n[\n${formattedGridOfIndexes}\n]`;
 
 	return result;
 }
