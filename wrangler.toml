@@ -14,5 +14,6 @@ enabled = true
 DEPLOYMENT_ID = "prod"
 
 [env.staging]
+name = "sudoku"
 [env.staging.vars]
 DEPLOYMENT_ID = "staging"
