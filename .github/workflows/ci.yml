@@ -9,6 +9,11 @@ concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: true
 
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+
 jobs:
   # this stem might be removed when all jobs will move to bun,
   # as it's faster to install deps than pulling them from cache
