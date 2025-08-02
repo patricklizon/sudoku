@@ -211,8 +211,46 @@ jobs:
           name: ${{ env.BUILD_ARTIFACTS_NAME }}
           path: ${{ env.BUILD_ARTIFACTS_DIR_NAME }}
 
-      - name: Deploy to Cloudflare
-        run: bun wrangler deploy --env prod
+      - name: Generate Deployment ID
+        run: echo "DEPLOYMENT_ID=main-$(date +'%Y-%m-%d-%H-%M-%S')" >> $GITHUB_ENV
+
+      - name: Deploy to Prod
+        run: bun wrangler deploy --env prod --var DEPLOYMENT_ID:${{ env.DEPLOYMENT_ID }}
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+
+  deploy-staging:
+    needs: [build, e2e]
+    runs-on: ubuntu-latest
+    if: success()
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version-file: ${{ env.BUN_VERSION_FILE }}
+
+      - name: Restore node_modules
+        uses: actions/cache@v4
+        with:
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('bun.lock') }}
+          path: node_modules
+
+      - name: Download build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ env.BUILD_ARTIFACTS_NAME }}
+          path: ${{ env.BUILD_ARTIFACTS_DIR_NAME }}
+
+      - name: Generate Deployment ID
+        run: echo "DEPLOYMENT_ID=staging-pr-${{ github.event.pull_request.number || github.run_number }}-$(date +'%Y-%m-%d-%H-%M-%S')" >> $GITHUB_ENV
+
+      - name: Deploy to Staging
+        run: bun wrangler deploy --name ${{ env.DEPLOYMENT_ID }} --var DEPLOYMENT_ID:${{ env.DEPLOYMENT_ID }}
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
