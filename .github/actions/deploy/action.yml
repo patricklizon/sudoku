@@ -1,0 +1,106 @@
+name: "Deploy to Cloudflare"
+description: "Deploy to Cloudflare Workers with environment-based configuration"
+
+inputs:
+  cloudflare-api-token:
+    description: "Cloudflare API token"
+    required: true
+
+  cloudflare-account-id:
+    description: "Cloudflare account ID"
+    required: true
+
+  workers-subdomain:
+    description: "Workers subdomain for production URL"
+    required: true
+
+  github-token:
+    description: "GitHub token for PR comments"
+    required: false
+    default: ${{ github.token }}
+
+  deploy-command:
+    description: "Base deploy command"
+    required: false
+    default: "bun wrangler deploy"
+
+outputs:
+  deployment-id:
+    description: "Generated deployment ID"
+    value: ${{ steps.metadata.outputs.deployment-id }}
+
+  deploy-env:
+    description: "Deployment environment (prod or staging)"
+    value: ${{ steps.metadata.outputs.deploy-env }}
+
+  is-production:
+    description: "Whether this is a production deployment"
+    value: ${{ steps.metadata.outputs.is-production }}
+
+  deploy-url:
+    description: "Deployment URL"
+    value: ${{ steps.deploy.outputs.deploy-url || steps.deploy-staging.outputs.deploy-url }}
+
+runs:
+  using: "composite"
+  steps:
+    - name: Generate deployment metadata
+      id: metadata
+      shell: bash
+      run: |
+        if [ "${GITHUB_REF}" = "refs/heads/main" ]; then
+          DEPLOYMENT_ID="main-$(date +'%Y-%m-%d-%H-%M-%S')"
+          DEPLOY_ENV="prod"
+          IS_PRODUCTION="true"
+        else
+          DEPLOYMENT_ID="preview-pr-${{ github.event.pull_request.number || github.run_number }}-$(date +'%Y-%m-%d-%H-%M-%S')"
+          DEPLOY_ENV="staging"
+          IS_PRODUCTION="false"
+        fi
+
+        echo "deployment-id=$DEPLOYMENT_ID" >> $GITHUB_OUTPUT
+        echo "deploy-env=$DEPLOY_ENV" >> $GITHUB_OUTPUT
+        echo "is-production=$IS_PRODUCTION" >> $GITHUB_OUTPUT
+
+        echo "DEPLOYMENT_ID=$DEPLOYMENT_ID" >> $GITHUB_ENV
+        echo "DEPLOY_ENV=$DEPLOY_ENV" >> $GITHUB_ENV
+        echo "IS_PRODUCTION=$IS_PRODUCTION" >> $GITHUB_ENV
+
+    - name: Deploy to prod
+      id: deploy
+      if: steps.metadata.outputs.is-production == 'true'
+      shell: bash
+      run: |
+        ${{ inputs.deploy-command }} --env prod --var DEPLOYMENT_ID:${{ steps.metadata.outputs.deployment-id }}
+        DEPLOY_URL="https://sudoku.${{ inputs.workers-subdomain }}.workers.dev"
+        echo "deploy-url=$DEPLOY_URL" >> $GITHUB_OUTPUT
+        echo "DEPLOY_URL=$DEPLOY_URL" >> $GITHUB_ENV
+      env:
+        CLOUDFLARE_API_TOKEN: ${{ inputs.cloudflare-api-token }}
+        CLOUDFLARE_ACCOUNT_ID: ${{ inputs.cloudflare-account-id }}
+
+    - name: Deploy to staging
+      id: deploy-staging
+      if: steps.metadata.outputs.is-production == 'false'
+      shell: bash
+      run: |
+        PREVIEW_URL=$(${{ inputs.deploy-command }} --env staging --preview --json | jq -r '.url')
+        DEPLOY_URL="$PREVIEW_URL"
+        echo "deploy-url=$DEPLOY_URL" >> $GITHUB_OUTPUT
+        echo "DEPLOY_URL=$DEPLOY_URL" >> $GITHUB_ENV
+      env:
+        CLOUDFLARE_API_TOKEN: ${{ inputs.cloudflare-api-token }}
+        CLOUDFLARE_ACCOUNT_ID: ${{ inputs.cloudflare-account-id }}
+
+    - name: Comment preview URL on PR
+      if: steps.metadata.outputs.is-production == 'false' && github.event.pull_request.number
+      uses: peter-evans/create-or-update-comment@v3
+      with:
+        token: ${{ inputs.github-token }}
+        issue-number: ${{ github.event.pull_request.number }}
+        edit-last: true
+        body: |
+          Preview deploy ready!
+
+          **URL:** ${{ steps.deploy.outputs.deploy-url }}
+          **Deployment ID:** `${{ steps.metadata.outputs.deployment-id }}`

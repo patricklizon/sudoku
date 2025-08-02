@@ -1,0 +1,72 @@
+name: "Manage Build Artifacts"
+description: "Upload or download build artifacts"
+
+inputs:
+  operation:
+    description: "Operation to perform: upload or download"
+    required: true
+
+  artifact-name:
+    description: "Name of the artifact"
+    required: false
+    default: "build-output"
+
+  build-dir:
+    description: "Build output directory"
+    required: false
+    default: ".output"
+
+  build-command:
+    description: "Command to run for building (upload only)"
+    required: false
+    default: "bun run build"
+
+  retention-days:
+    description: "Artifact retention days (upload only)"
+    required: false
+    default: "14"
+
+outputs:
+  artifact-id:
+    description: "ID of uploaded/downloaded artifact"
+    value: ${{ steps.upload.outputs.artifact-id || steps.download.outputs.artifact-id }}
+
+runs:
+  using: "composite"
+  steps:
+    - name: Build project
+      if: inputs.operation == 'upload'
+      shell: bash
+      run: ${{ inputs.build-command }}
+
+    - name: Upload build artifacts
+      if: inputs.operation == 'upload' && success()
+      id: upload
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ inputs.artifact-name }}
+        path: |
+          ${{ inputs.build-dir }}/public/**
+          ${{ inputs.build-dir }}/server/**
+          ${{ inputs.build-dir }}/_headers
+          ${{ inputs.build-dir }}/nitro.json
+          ${{ inputs.build-dir }}/package.json
+          ${{ inputs.build-dir }}/package-lock.json
+        if-no-files-found: error
+        retention-days: ${{ inputs.retention-days }}
+
+    - name: Download build artifacts
+      if: inputs.operation == 'download'
+      id: download
+      uses: actions/download-artifact@v4
+      with:
+        name: ${{ inputs.artifact-name }}
+        path: ${{ inputs.build-dir }}
+
+    - name: Verify artifacts
+      shell: bash
+      run: |
+        if [ ! -d "${{ inputs.build-dir }}" ]; then
+          echo "Build directory not found: ${{ inputs.build-dir }}"
+          exit 1
+        fi
