@@ -11,9 +11,11 @@ directory = "./.output/public"
 enabled = true
 
 [vars]
-DEPLOYMENT_ID = "prod"
+DEPLOYMENT_ID = "production"
+DEPLOY_URL = ""
 
 [env.staging]
 name = "sudoku"
 [env.staging.vars]
 DEPLOYMENT_ID = "staging"
+DEPLOY_URL = ""

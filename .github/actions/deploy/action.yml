@@ -19,13 +19,17 @@ inputs:
     required: false
     default: ${{ github.token }}
 
+  project-name:
+    description: "Name of the project for deployment alias"
+    required: true
+
 outputs:
   deployment-id:
     description: "Generated deployment ID"
     value: ${{ steps.metadata.outputs.deployment-id }}
 
   deploy-env:
-    description: "Deployment environment (prod or staging)"
+    description: "Deployment environment (production or staging)"
     value: ${{ steps.metadata.outputs.deploy-env }}
 
   is-production:
@@ -45,7 +49,7 @@ runs:
       run: |
         if [ "${GITHUB_REF}" = "refs/heads/main" ]; then
           DEPLOYMENT_ID="release-$(date +'%Y-%m-%d-%H-%M-%S')"
-          DEPLOY_ENV="prod"
+          DEPLOY_ENV="production"
           IS_PRODUCTION="true"
         else
           PR_NUMBER="${{ github.event.pull_request.number }}"
@@ -64,12 +68,13 @@ runs:
         echo "deploy-env=$DEPLOY_ENV" >> $GITHUB_OUTPUT
         echo "is-production=$IS_PRODUCTION" >> $GITHUB_OUTPUT
 
-    - name: Deploy to prod
-      id: deploy-prod
+    - name: Deploy to production
+      id: deploy-production
       if: steps.metadata.outputs.is-production == 'true'
       shell: bash
       run: |
-        bun wrangler deploy --env prod --var DEPLOYMENT_ID:${{ steps.metadata.outputs.deployment-id }}
+        bun wrangler deploy --var DEPLOYMENT_ID:${{ steps.metadata.outputs.deployment-id }}
+
         DEPLOY_URL="https://sudoku.${{ inputs.workers-subdomain }}.workers.dev"
         echo "deploy-url=$DEPLOY_URL" >> $GITHUB_OUTPUT
         echo "DEPLOY_URL=$DEPLOY_URL" >> $GITHUB_ENV
@@ -87,8 +92,10 @@ runs:
           PR_NUMBER="${GITHUB_RUN_NUMBER}"
         fi
         ALIAS="pr-${PR_NUMBER}"
-        bun wrangler versions upload --preview-alias $ALIAS --env staging
-        PREVIEW_URL="https://$ALIAS.${{ inputs.workers-subdomain }}.workers.dev"
+
+        bun wrangler versions upload --preview-alias $ALIAS --env staging --var DEPLOYMENT_ID:${{ steps.metadata.outputs.deployment-id }}
+
+        PREVIEW_URL="https://$ALIAS-${{ inputs.project-name }}.${{ inputs.workers-subdomain }}.workers.dev"
         echo "deploy-url=$PREVIEW_URL" >> $GITHUB_OUTPUT
         echo "DEPLOY_URL=$PREVIEW_URL" >> $GITHUB_ENV
       env:
@@ -99,8 +106,8 @@ runs:
       id: set-url
       shell: bash
       run: |
-        if [ -n "${{ steps.deploy-prod.outputs.deploy-url }}" ]; then
-          echo "deploy-url=${{ steps.deploy-prod.outputs.deploy-url }}" >> $GITHUB_OUTPUT
+        if [ -n "${{ steps.deploy-production.outputs.deploy-url }}" ]; then
+          echo "deploy-url=${{ steps.deploy-production.outputs.deploy-url }}" >> $GITHUB_OUTPUT
         elif [ -n "${{ steps.deploy-staging.outputs.deploy-url }}" ]; then
           echo "deploy-url=${{ steps.deploy-staging.outputs.deploy-url }}" >> $GITHUB_OUTPUT
         else

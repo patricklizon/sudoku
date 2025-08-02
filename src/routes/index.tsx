@@ -48,7 +48,6 @@ export default function Home(): JSX.Element {
 					)}
 				</For>
 			</select>
-
 			<button onClick={requestPuzzle} data-testid="action-generate-puzzle">
 				Go
 			</button>

@@ -101,3 +101,4 @@ jobs:
           cloudflare-api-token: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           cloudflare-account-id: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           workers-subdomain: ${{ secrets.CLOUDFLARE_WORKER_SUBDOMAIN }}
+          project-name: ${{ secrets.CLOUDFLARE_APP_WORKER_NAME }}
