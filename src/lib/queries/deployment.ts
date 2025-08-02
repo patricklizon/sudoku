@@ -1,16 +1,30 @@
 import { query } from "@solidjs/router";
 import { getRequestEvent } from "solid-js/web";
-import { DeploymentRepository } from "#src/lib/infrastructure/repositories/deployment.repository";
+import type { DeploymentInfo } from "#src/lib/domain/deployment";
 import { isNil } from "#src/lib/utils/is-nil";
+import type { Option } from "#src/lib/utils/types/option";
 
-const repo = new DeploymentRepository();
+type DeploymentInfoQueryResult = {
+	id: Option<DeploymentInfo["id"]>;
+	url: Option<DeploymentInfo["url"]>;
+};
 
-export const getDeploymentInfoQuery = query(async () => {
+/**
+ * Handles GET requests to retrieve deployment information.
+ * This function extracts deployment data from the Cloudflare environment
+ * available through the SolidStart request event.
+ */
+export const getDeploymentInfoQuery = query(() => {
 	"use server";
 
 	const event = getRequestEvent();
-	if (isNil(event?.request.url)) throw new Error("No request context");
+	if (isNil(event)) throw new Error("No request context");
 
-	// const baseUrl = new URL(event.request.url).origin;
-	return await repo.getDeploymentInfo();
+	const env = event.nativeEvent.context.cloudflare.env;
+	const result: DeploymentInfoQueryResult = {
+		id: env.DEPLOYMENT_ID,
+		url: env.DEPLOY_URL,
+	};
+
+	return result;
 }, "deployment-info");
