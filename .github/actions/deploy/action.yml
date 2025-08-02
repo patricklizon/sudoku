@@ -34,7 +34,7 @@ outputs:
 
   deploy-url:
     description: "Deployment URL"
-    value: ${{ steps.deploy.outputs.deploy-url || steps.deploy-staging.outputs.deploy-url }}
+    value: ${{ steps.set-url.outputs.deploy-url }}
 
 runs:
   using: "composite"
@@ -48,7 +48,11 @@ runs:
           DEPLOY_ENV="prod"
           IS_PRODUCTION="true"
         else
-          DEPLOYMENT_ID="staging-pr-${{ github.event.pull_request.number || github.run_number }}-$(date +'%Y-%m-%d-%H-%M-%S')"
+          PR_NUMBER="${{ github.event.pull_request.number }}"
+          if [ -z "$PR_NUMBER" ]; then
+            PR_NUMBER="${GITHUB_RUN_NUMBER}"
+          fi
+          DEPLOYMENT_ID="staging-pr-${PR_NUMBER}-$(date +'%Y-%m-%d-%H-%M-%S')"
           DEPLOY_ENV="staging"
           IS_PRODUCTION="false"
         fi
@@ -64,7 +68,7 @@ runs:
       id: build-hash
       shell: bash
       run: |
-        HASH=$(tar -cf - .output | sha256sum | cut -d' ' -f1)
+        HASH=$(find .output -type f -exec sha256sum {} + | sort | sha256sum | cut -d' ' -f1)
         echo "hash=$HASH" >> $GITHUB_OUTPUT
         echo "BUILD_HASH=$HASH" >> $GITHUB_ENV
 
@@ -73,8 +77,7 @@ runs:
       uses: actions/cache@v3
       with:
         path: .last-build-hash
-        key: build-hash-${{ github.ref }}
-        restore-keys: build-hash-${{ github.ref }}
+        key: build-hash-${{ github.head_ref || github.ref_name }}
 
     - name: Load last build hash
       id: load-last
@@ -116,7 +119,11 @@ runs:
       if: steps.should-deploy.outputs.changed == 'true' && steps.metadata.outputs.is-production == 'false'
       shell: bash
       run: |
-        ALIAS="pr-${{ github.event.pull_request.number }}"
+        PR_NUMBER="${{ github.event.pull_request.number }}"
+        if [ -z "$PR_NUMBER" ]; then
+          PR_NUMBER="${GITHUB_RUN_NUMBER}"
+        fi
+        ALIAS="pr-${PR_NUMBER}"
         bun wrangler versions upload --preview-alias $ALIAS --env staging
         PREVIEW_URL="https://$ALIAS.${{ inputs.workers-subdomain }}.workers.dev"
         echo "deploy-url=$PREVIEW_URL" >> $GITHUB_OUTPUT
@@ -131,6 +138,16 @@ runs:
       run: |
         mkdir -p .last-build-hash
         echo "${{ steps.build-hash.outputs.hash }}" > .last-build-hash/hash
+
+    - name: Set deploy-url output
+      id: set-url
+      shell: bash
+      run: |
+        if [ -n "${{ steps.deploy.outputs.deploy-url }}" ]; then
+          echo "deploy-url=${{ steps.deploy.outputs.deploy-url }}" >> $GITHUB_OUTPUT
+        else
+          echo "deploy-url=${{ steps.deploy-staging.outputs.deploy-url }}" >> $GITHUB_OUTPUT
+        fi
 
     - name: Check for existing preview comment
       if: ${{ steps.metadata.outputs.is-production == 'false' && github.event_name == 'pull_request' }}
@@ -150,5 +167,5 @@ runs:
         body: |
           🚀 **Preview Deployment Ready!**
 
-          **🔗 URL:** [View Deployment](${{ steps.deploy-staging.outputs.deploy-url }})
+          **🔗 URL:** [View Deployment](${{ steps.set-url.outputs.deploy-url }})
           **📦 Deployment ID:** `${{ steps.metadata.outputs.deployment-id }}`
