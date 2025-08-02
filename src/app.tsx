@@ -15,8 +15,8 @@ export default function App(): JSX.Element {
 					<a href="/about">About</a>
 					<Suspense fallback={<div class="news-list-nav">Loading...</div>}>
 						{props.children}
+						<DeploymentInfo />
 					</Suspense>
-					<DeploymentInfo />
 				</MetaProvider>
 			)}
 		>
