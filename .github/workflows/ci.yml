@@ -3,181 +3,82 @@ name: CI
 on:
   pull_request:
   push:
-    branches:
-      - main
+    branches: [main]
 
-env:
-  CACHE_KEY_PREFIX: deps-v1
-  BUN_VERSION_FILE: ".bun-version"
-  NODE_VERSION_FILE: ".node-version"
-  PLAYWRIGHT_CACHE_PATH: "~/.cache/ms-playwright"
-  BUILD_ARTIFACTS_NAME: "build-output"
-  BUILD_ARTIFACTS_DIR_NAME: ".output"
-  BUILD_ARTIFACTS: |
-    .output/public/**
-    .output/server/**
-    .output/_headers
-    .output/nitro.json
-    .output/package.json
-    .output/package-lock.json
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
 
 jobs:
+  # this stem might be removed when all jobs will move to bun,
+  # as it's faster to install deps than pulling them from cache
   install-dependencies:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
-      - name: Setup Bun
-        uses: oven-sh/setup-bun@v2
-        with:
-          bun-version-file: ${{ env.BUN_VERSION_FILE }}
-
-      - name: Cache node_modules
-        uses: actions/cache@v4
-        id: bun-cache
-        with:
-          key: ${{ runner.os }}-node-modules-${{ hashFiles('bun.lock') }}
-          path: node_modules
-
-      - name: Install dependencies
-        if: steps.bun-cache.outputs.cache-hit != 'true'
-        run: bun install --frozen-lockfile
+      - uses: ./.github/actions/setup-environment
 
   install-browsers:
-    needs: install-dependencies
+    needs: [install-dependencies]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-environment
+      - uses: ./.github/actions/browsers
 
-      - name: Setup Bun
-        uses: oven-sh/setup-bun@v2
-        with:
-          bun-version-file: ${{ env.BUN_VERSION_FILE }}
-
-      - name: Restore node_modules
-        uses: actions/cache@v4
-        with:
-          key: ${{ runner.os }}-node-modules-${{ hashFiles('bun.lock') }}
-          path: node_modules
-
-      - name: Cache Playwright browsers
-        uses: actions/cache@v4
-        id: playwright-cache
-        with:
-          key: ${{ runner.os }}-browsers-${{ env.CACHE_KEY_PREFIX }}-${{ hashFiles('bun.lock') }}
-          path: ${{ env.PLAYWRIGHT_CACHE_PATH }}
-
-      - name: Install Playwright browsers
-        if: steps.playwright-cache.outputs.cache-hit != 'true'
-        run: bun run install-browsers -- --with-deps
-
-  check:
-    needs: install-dependencies
+  quality-checks:
+    needs: [install-dependencies]
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: true
+      matrix:
+        check: [format, types, lint]
     steps:
       - uses: actions/checkout@v4
-
-      - name: Setup Bun
-        uses: oven-sh/setup-bun@v2
-        with:
-          bun-version-file: ${{ env.BUN_VERSION_FILE }}
-
-      - name: Restore node_modules
-        uses: actions/cache@v4
-        with:
-          key: ${{ runner.os }}-node-modules-${{ hashFiles('bun.lock') }}
-          path: node_modules
-
-      - name: Check format
-        run: bun run check:format
-
-      - name: Check types
-        run: bun run check:types
-
-      - name: Check types
-        run: bun run check:lint
+      - uses: ./.github/actions/setup-environment
+      - name: Check ${{ matrix.check }}
+        run: bun run check:${{ matrix.check }}
 
   test:
-    needs: install-dependencies
+    needs: [install-dependencies]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: ./.github/actions/setup-environment
         with:
-          node-version-file: ${{ env.NODE_VERSION_FILE }}
-
-      - name: Restore node_modules
-        uses: actions/cache@v4
-        with:
-          key: ${{ runner.os }}-node-modules-${{ hashFiles('bun.lock') }}
-          path: node_modules
+          # override runtime due to vitest being incompatible with bun
+          runtime: node
 
       - name: Run unit tests
         run: npm run test:unit
 
   build:
-    needs: [install-dependencies, check, test]
+    needs: [install-dependencies, quality-checks, test]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
-      - name: Setup Bun
-        uses: oven-sh/setup-bun@v2
+      - uses: ./.github/actions/setup-environment
+      - uses: ./.github/actions/build-artifacts
         with:
-          bun-version-file: ${{ env.BUN_VERSION_FILE }}
-
-      - name: Restore node_modules
-        uses: actions/cache@v4
-        with:
-          key: ${{ runner.os }}-node-modules-${{ hashFiles('bun.lock') }}
-          path: node_modules
-
-      - name: Build
-        run: bun run build
-
-      - name: Upload build artifact
-        uses: actions/upload-artifact@v4
-        if: ${{ !cancelled() }}
-        with:
-          name: ${{ env.BUILD_ARTIFACTS_NAME }}
-          path: ${{ env.BUILD_ARTIFACTS }}
-          if-no-files-found: error
-          retention-days: 14
+          operation: upload
 
   e2e:
     needs: [install-dependencies, install-browsers, build]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
-      - name: Setup Bun
-        uses: oven-sh/setup-bun@v2
+      - uses: ./.github/actions/setup-environment
+      - uses: ./.github/actions/browsers
+      - uses: ./.github/actions/build-artifacts
         with:
-          bun-version-file: ${{ env.BUN_VERSION_FILE }}
-
-      - name: Restore node_modules
-        uses: actions/cache@v4
-        with:
-          key: ${{ runner.os }}-node-modules-${{ hashFiles('bun.lock') }}
-          path: node_modules
-
-      - name: Restore browsers
-        uses: actions/cache@v4
-        with:
-          key: ${{ runner.os }}-browsers-${{ env.CACHE_KEY_PREFIX }}-${{ hashFiles('bun.lock') }}
-          path: ${{ env.PLAYWRIGHT_CACHE_PATH }}
-
-      - name: Restore build
-        uses: actions/download-artifact@v4
-        with:
-          name: ${{ env.BUILD_ARTIFACTS_NAME }}
-          path: ${{ env.BUILD_ARTIFACTS_DIR_NAME }}
-
+          operation: download
       - name: Run E2E tests
         run: DEBUG=pw:webserver bun run test:e2e
-
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         if: failure() || cancelled()
@@ -187,32 +88,16 @@ jobs:
           retention-days: 30
 
   deploy:
-    needs: [build, e2e]
+    needs: [install-dependencies, build, e2e]
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
-
     steps:
       - uses: actions/checkout@v4
-
-      - name: Setup Bun
-        uses: oven-sh/setup-bun@v2
+      - uses: ./.github/actions/setup-environment
+      - uses: ./.github/actions/build-artifacts
         with:
-          bun-version-file: ${{ env.BUN_VERSION_FILE }}
-
-      - name: Restore node_modules
-        uses: actions/cache@v4
+          operation: download
+      - uses: ./.github/actions/deploy
         with:
-          key: ${{ runner.os }}-node-modules-${{ hashFiles('bun.lock') }}
-          path: node_modules
-
-      - name: Restore build artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: ${{ env.BUILD_ARTIFACTS_NAME }}
-          path: ${{ env.BUILD_ARTIFACTS_DIR_NAME }}
-
-      - name: Deploy to Cloudflare
-        run: bun wrangler deploy --env prod
-        env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          cloudflare-api-token: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          cloudflare-account-id: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          workers-subdomain: ${{ secrets.CLOUDFLARE_WORKER_SUBDOMAIN }}
