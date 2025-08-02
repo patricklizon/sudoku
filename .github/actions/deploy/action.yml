@@ -132,15 +132,15 @@ runs:
         mkdir -p .last-build-hash
         echo "${{ steps.build-hash.outputs.hash }}" > .last-build-hash/hash
 
-    # - name: Comment preview URL on PR
-    #   if: steps.metadata.outputs.is-production == 'false' && github.event.pull_request.number
-    #   uses: peter-evans/create-or-update-comment@v3
-    #   with:
-    #     token: ${{ inputs.github-token }}
-    #     issue-number: ${{ github.event.pull_request.number }}
-    #     edit-last: true
-    #     body: |
-    #       Preview deploy ready! 🎉
+    - name: Comment preview URL on PR
+      if: ${{ steps.metadata.outputs.is-production == 'false' && github.event_name == 'pull_request' }}
+      uses: peter-evans/create-or-update-comment@v3
+      with:
+        token: ${{ inputs.github-token }}
+        issue-number: ${{ github.event.pull_request.number }}
+        edit-last: true
+        body: |
+          🚀 **Preview Deployment Ready!**
 
-    #       **URL:** ${{ steps.deploy-staging.outputs.deploy-url }}
-    #       **Deployment ID:** `${{ steps.metadata.outputs.deployment-id }}`
+          **🔗 URL:** [View Deployment](${{ steps.deploy-staging.outputs.deploy-url }})
+          **📦 Deployment ID:** `${{ steps.metadata.outputs.deployment-id }}`
