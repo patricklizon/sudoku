@@ -21,8 +21,6 @@ outputs:
 runs:
   using: "composite"
   steps:
-    - uses: actions/checkout@v4
-
     - name: Setup Node runtime
       if: inputs.runtime == 'node'
       uses: actions/setup-node@v4

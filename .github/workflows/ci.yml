@@ -94,7 +94,7 @@ jobs:
           retention-days: 30
 
   deploy:
-    needs: [build, e2e]
+    needs: [install-dependencies, build, e2e]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
