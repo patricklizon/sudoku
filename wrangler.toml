@@ -12,13 +12,23 @@ enabled = true
 
 [vars]
 DEPLOYMENT_ID = "production"
-DEPLOYMENT_TIMESTAMP = "0"
+DEPLOYMENT_TIMESTAMP = ""
+DEPLOY_URL = ""
 PULL_REQUEST_URL = ""
 
+# --- Staging Environment ---
 [env.staging]
-name = "sudoku"
+name = "staging"
+main = "./.output/server/index.mjs"
+compatibility_date = "2025-07-30"
+compatibility_flags = ["nodejs_compat"]
+
+[env.staging.assets]
+binding = "ASSETS"
+directory = "./.output/public"
+
 [env.staging.vars]
 DEPLOYMENT_ID = "staging"
+DEPLOYMENT_TIMESTAMP = ""
 DEPLOY_URL = ""
-DEPLOY_TIMESTAMP = ""
 PULL_REQUEST_URL = ""
