@@ -93,7 +93,7 @@ runs:
         fi
         ALIAS="pr-${PR_NUMBER}"
 
-        bun wrangler versions upload --preview-alias $ALIAS --env staging --var DEPLOYMENT_ID:${{ steps.metadata.outputs.deployment-id }}
+        bun wrangler versions upload --preview-alias $ALIAS--var PULL_REQUEST_URL:${{ github.event.pull_request.html_url }} --env staging --var DEPLOYMENT_ID:${{ steps.metadata.outputs.deployment-id }}
 
         PREVIEW_URL="https://$ALIAS-${{ inputs.project-name }}.${{ inputs.workers-subdomain }}.workers.dev"
         echo "deploy-url=$PREVIEW_URL" >> $GITHUB_OUTPUT
