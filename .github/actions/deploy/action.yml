@@ -61,7 +61,7 @@ runs:
           IS_PRODUCTION="false"
         fi
 
-        DEPLOYMENT_TIMESTAMP="$(date +%s)"
+        DEPLOYMENT_TIMESTAMP="$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
 
         echo "DEPLOYMENT_TIMESTAMP=$DEPLOYMENT_TIMESTAMP" >> $GITHUB_ENV
         echo "DEPLOYMENT_ID=$DEPLOYMENT_ID" >> $GITHUB_ENV
