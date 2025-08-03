@@ -78,8 +78,8 @@ runs:
       shell: bash
       run: |
         bun wrangler deploy \
-        --var DEPLOYMENT_ID:${{ steps.metadata.outputs.deployment-id }}
-        --var DEPLOYMENT_TIMESTAMP:${{ steps.metadata.outputs.deployment-timestamp }}
+          --var DEPLOYMENT_ID:${{ steps.metadata.outputs.deployment-id }}
+          --var DEPLOYMENT_TIMESTAMP:${{ steps.metadata.outputs.deployment-timestamp }}
 
         DEPLOY_URL="https://sudoku.${{ inputs.workers-subdomain }}.workers.dev"
         echo "deploy-url=$DEPLOY_URL" >> $GITHUB_OUTPUT
@@ -101,9 +101,11 @@ runs:
 
         bun wrangler versions upload \
         --preview-alias $ALIAS \
-        --var PULL_REQUEST_URL:${{ github.event.pull_request.html_url }} \
-        --env staging --var DEPLOYMENT_ID:${{ steps.metadata.outputs.deployment-id }} \
-        --var DEPLOYMENT_TIMESTAMP:${{ steps.metadata.outputs.deployment-timestamp }}
+          --env staging \
+          --var DEPLOYMENT_ID:${{ steps.metadata.outputs.deployment-id }} \
+          --var DEPLOYMENT_TIMESTAMP:${{ steps.metadata.outputs.deployment-timestamp }} \
+          --var DEPLOY_URL:$PREVIEW_URL \
+          --var PULL_REQUEST_URL:${{ github.event.pull_request.html_url }}
 
         PREVIEW_URL="https://$ALIAS-${{ inputs.project-name }}.${{ inputs.workers-subdomain }}.workers.dev"
         echo "deploy-url=$PREVIEW_URL" >> $GITHUB_OUTPUT

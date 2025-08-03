@@ -9,21 +9,22 @@ import { isNil } from "#src/lib/utils/is-nil";
  */
 export function DeploymentInfo(): JSX.Element {
 	const deploymentInfo = getDeploymentInfo();
-	const { id, timestamp, host, pullRequestURL } = deploymentInfo;
 
 	const formattedTimestamp =
-		isNil(timestamp) || isEmpty(timestamp)
+		isNil(deploymentInfo.timestamp) || isEmpty(deploymentInfo.timestamp)
 			? null
 			: new Intl.DateTimeFormat(undefined, { dateStyle: "full", timeStyle: "long" }).format(
-					new Date(timestamp),
+					new Date(deploymentInfo.timestamp),
 				);
 
 	return (
 		<footer>
-			{isEmpty(id) ? null : <p>Deployment ID: {id}</p>}
+			{isEmpty(deploymentInfo.id) ? null : <p>Deployment ID: {deploymentInfo.id}</p>}
 			{isEmpty(formattedTimestamp) ? null : <p>Deployed At: {formattedTimestamp}</p>}
-			{isEmpty(host) ? null : <p>Deploy URL: {host}</p>}
-			{isEmpty(pullRequestURL) ? null : <p>Pull Request URL: {pullRequestURL}</p>}
+			{isEmpty(deploymentInfo.host) ? null : <p>Deploy URL: {deploymentInfo.host}</p>}
+			{isEmpty(deploymentInfo.pullRequestURL) ? null : (
+				<p>Pull Request URL: {deploymentInfo.pullRequestURL}</p>
+			)}
 		</footer>
 	);
 }
