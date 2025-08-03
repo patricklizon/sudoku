@@ -1,0 +1,83 @@
+import type { PageObjectTestAdapter } from "./test-adapter-interface";
+
+/**
+ * Options for creating or locating a Page Object (PO).
+ */
+export type BasePageObjectOptionList<T> = Partial<{ parent: T; testId?: string }>;
+
+/**
+ * BasePageObject is the foundation for all Page Objects.
+ *
+ * It encapsulates UI interactions, providing utilities to locate its root element
+ * and find elements or other Page Objects within that root.
+ *
+ * @template T The type of the root HTML element this PO represents (e.g., `HTMLDivElement`).
+ */
+export class BasePageObject<T> {
+	/**
+	 * Creates a BasePageObject instance.
+	 * @param adapter The test adapter (e.g., Playwright's `Page`, Cypress's `cy`).
+	 * @param testId The `data-testid` of the PO's root element.
+	 * @param optionList Optional configuration for this PO instance.
+	 */
+	constructor(
+		private adapter: PageObjectTestAdapter<T>,
+		private testId: string,
+		private optionList?: BasePageObjectOptionList<T>,
+	) {}
+
+	/**
+	 * Finds and returns the root element of this Page Object.
+	 * @returns The root element, or `null` if not found.
+	 */
+	root(): Option<T> {
+		return this.adapter.getByTestId(this.testId, this.optionList?.parent);
+	}
+
+	protected within<TElement>(testIdOrPageObject: string, opts?: never): TElement | null;
+
+	protected within<TElement, TPO extends BasePageObject<TElement>>(
+		testIdOrPageObject: new (
+			adapter: PageObjectTestAdapter<T>,
+			opts?: BasePageObjectOptionList<T>,
+		) => TPO,
+		opts?: { testId?: string },
+	): TPO;
+
+	/**
+	 * Finds an element within this PO's root.
+	 *
+	 * @template TElement The expected HTML element type or child PO's root element type.
+	 * @template TPageObject The constructor type of the child Page Object.
+	 * @param TestIdOrPageObject A `data-testid` string or a child PO constructor.
+	 * @param opts Optional additional options.
+	 * @returns The found element or child PO instance.
+	 * @throws {Error} If this PO's root element cannot be found.
+	 */
+	protected within<TPageObject extends BasePageObject<T>>(
+		TestIdOrPageObject:
+			| string
+			| (new (
+					adapter: PageObjectTestAdapter<T>,
+					opts?: BasePageObjectOptionList<T>,
+			  ) => TPageObject),
+		opts?: { testId?: string },
+	): Option<T | TPageObject> {
+		const self = this.root();
+		// eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
+		if (!self)
+			throw new Error(
+				`Missing root element for BasePO with testId: "${this.testId}". Cannot search within it.`,
+			);
+
+		if (typeof TestIdOrPageObject === "string") {
+			return this.adapter.getByTestId(TestIdOrPageObject, self);
+		}
+
+		return new TestIdOrPageObject(
+			this.adapter,
+			// eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
+			opts?.testId ? { parent: self, testId: opts.testId } : { parent: self },
+		);
+	}
+}

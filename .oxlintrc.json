@@ -1,5 +1,6 @@
 {
 	"$schema": "./node_modules/oxlint/configuration_schema.json",
+	"ignorePatterns": ["./src/worker-configuration.d.ts"],
 	"categories": {
 		"correctness": "error",
 		"pedantic": "error",
@@ -20,10 +21,10 @@
 		"eslint/default-param-last": "error",
 		"eslint/eqeqeq": "error",
 		"eslint/guard-for-in": "error",
-		"eslint/max-lines": ["warn", 300],
+		"eslint/max-lines": "off",
 		"eslint/max-depth": ["warn", 4],
 		"eslint/max-nested-callbacks": ["error", { "max": 3 }],
-		"eslint/max-lines-per-function": ["warn", 75],
+		"eslint/max-lines-per-function": "off",
 		"eslint/max-params": ["error", { "max": 3 }],
 		"eslint/max-classes-per-file": "off",
 		"eslint/new-cap": "error",
@@ -35,7 +36,7 @@
 		"eslint/no-duplicate-imports": "error",
 		"eslint/no-else-return": "error",
 		"eslint/no-empty": "error",
-		"eslint/no-empty-function": "error",
+		"eslint/no-empty-function": ["error", { "allow": ["constructors"] }],
 		"eslint/no-eq-null": "error",
 		"eslint/no-eval": "error",
 		"eslint/no-fallthrough": "error",
@@ -188,6 +189,17 @@
 		"unicorn/prevent-abbreviation": "error"
 	},
 	"overrides": [
+		{
+			"files": [
+				"src/app.tsx",
+				"src/entry-client.tsx",
+				"src/entry-server.tsx",
+				"src/routes/**/*.tsx"
+			],
+			"rules": {
+				"import/no-default-export": "off"
+			}
+		},
 		{
 			"files": ["*.spec.ts", "*.test.ts"],
 			"rules": {

@@ -1,5 +1,3 @@
-import type { Option } from "./option";
-
 /**
  * Represents a range with lower and upper bounds.
  */

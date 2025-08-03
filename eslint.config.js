@@ -74,7 +74,6 @@ export default tseslint.config(
 			"import/no-amd": "warn",
 			"import/no-commonjs": "warn",
 			"import/no-import-module-exports": "warn",
-			"import/no-nodejs-modules": "warn",
 			"import/no-mutable-exports": "error",
 			"import/order": [
 				"warn",
@@ -111,7 +110,7 @@ export default tseslint.config(
 
 	{
 		name: "playwright",
-		files: ["tests/**"],
+		files: ["e2e/**"],
 		...playwright.configs["flat/recommended"],
 	},
 

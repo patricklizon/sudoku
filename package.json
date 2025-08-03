@@ -16,11 +16,9 @@
 		"fix:lint": "run-s fix:lint:*",
 		"fix:lint:eslint": "eslint ./src --fix",
 		"fix:lint:oxlint": "oxlint ./src --fix --fix-suggestions --ignore-path .gitignore",
-		"test:install:browsers": "playwright install chromium",
-		"test:install:deps": "playwright install-deps chromium",
 		"lighthouse": "lhci autorun --collect.staticDistDir=\"./build\"",
-		"lint:eslint": "eslint \"src/**/*.ts*\" \"tests/**/*.ts*\"",
-		"lint:oxlint": "oxlint src/**/*.ts src/**/*.tsx tests/**/*.ts tests/**/*.tsx --ignore-path .gitignore",
+		"lint:eslint": "eslint \"src/**/*.ts\" \"src/**/*.tsx\" \"e2e/**/*.ts\" \"test/**/*.ts\"",
+		"lint:oxlint": "oxlint src/**/*.ts src/**/*.tsx e2e/**/*.ts test/**/*.ts --ignore-path .gitignore",
 		"preview": "wrangler dev --local --port 3000 --log-level error",
 		"start": "vinxi start",
 		"start:dev": "vite",
@@ -31,9 +29,10 @@
 		"test:e2e:dev": "playwright test --config=playwright.dev.config.ts",
 		"test:e2e:dev:ui": "playwright test --ui --config=playwright.dev.config.ts",
 		"test:e2e:ui": "playwright test --ui",
-		"test:unit": "vitest run",
+		"test:install:browsers": "playwright install chromium",
+		"test:install:deps": "playwright install-deps chromium",
+		"test:unit": "vitest --project unit",
 		"test:unit:run": "vitest --project unit --run",
-		"test:unit:watch": "vitest",
 		"wrangler": "wrangler"
 	},
 	"devDependencies": {
@@ -45,6 +44,7 @@
 		"@types/bun": "^1.2.19",
 		"@types/jsdom": "^21.1.7",
 		"@types/node": "^22.13.1",
+		"@vitest/browser": "^3.2.4",
 		"@vitest/eslint-plugin": "^1.1.28",
 		"eslint": "^9.21.0",
 		"eslint-config-prettier": "^10.0.2",
@@ -61,7 +61,7 @@
 		"typescript": "~5.7.3",
 		"typescript-eslint": "^8.26.0",
 		"vite-tsconfig-paths": "^5.1.4",
-		"vitest": "^3.0.5",
+		"vitest": "^3.2.4",
 		"wrangler": "^4.27.0"
 	},
 	"dependencies": {
