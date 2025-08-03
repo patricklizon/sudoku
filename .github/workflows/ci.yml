@@ -51,6 +51,9 @@ jobs:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/browsers
       - uses: ./.github/actions/setup-environment
+        with:
+          # override runtime due to vitest being incompatible with bun
+          runtime: node
 
       - name: Run unit tests
         run: npm run test:unit:run
