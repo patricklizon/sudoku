@@ -4,7 +4,7 @@ import { FileRoutes } from "@solidjs/start/router";
 import { type JSX, Suspense } from "solid-js";
 import { DeploymentInfo } from "#src/features/deployment-info";
 import "./app.css";
-import { DeploymentInfoProvider } from "./context/deployment-info";
+import { DeploymentInfoProvider } from "./context/deployment";
 
 export default function App(): JSX.Element {
 	return (
