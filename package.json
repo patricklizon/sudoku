@@ -10,7 +10,7 @@
 		"check:format": "prettier --check .",
 		"check:lint": "run-s lint:*",
 		"check:typegen": "bun run cf-typegen",
-		"check:types": "tsc --build --noEmit",
+		"check:types": "tsc --noEmit",
 		"deploy": "echo 'install a server adapter'",
 		"dev": "vinxi dev",
 		"dev:cf": "wrangler dev --local",
