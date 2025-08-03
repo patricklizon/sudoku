@@ -93,75 +93,70 @@ bun run dev
 
 ## Testing
 
-This project employs a comprehensive testing strategy to ensure reliability and maintainability.
-Tests are categorized and implemented using the following tools:
+This project employs a comprehensive testing strategy using [Vitest](https://vitest.dev/) for unit and browser-based component tests, and [Playwright](https://playwright.dev/) for end-to-end (E2E) tests.
 
-// TODO: add details on unit, components, mocking, e2e simulator with cloudflare mini
+- **Unit & Component Testing**: Vitest is used to test individual functions and Solid.js components. Tests can be run in a Node.js environment (`test:unit`) or in a headless browser (`test:browser`) for higher fidelity.
+- **End-to-End Testing**: Playwright runs tests against the built application, simulating real user interactions in a browser to validate critical user flows.
+- **Cloudflare Simulation**: For E2E tests, the setup can simulate the Cloudflare environment locally using Miniflare, ensuring tests run in an environment that closely mirrors production.
 
-For detailed commands to run tests locally, refer to the [Testing Scripts](#testing-scripts) section.
+For detailed commands, see the [Testing Scripts](#testing-scripts) section.
 
 ## CI
 
-The project uses GitHub Actions for Continuous Integration, defined in `.github/workflows/ci.yml`.
-The CI pipeline ensures code quality, functionality, and successful builds on every pull request and push to the `main` branch.
+The project uses GitHub Actions for Continuous Integration, defined in `.github/workflows/ci.yml`. The CI pipeline runs on every pull request and push to the `main` branch, ensuring code quality and stability. It automatically deploys to Cloudflare Pages upon merging to `main`.
 
-The CI workflow includes the following stages:
+The CI workflow includes the following jobs:
 
-- **Install Dependencies**: Installs project dependencies using Bun, leveraging caching for `node_modules` to speed up subsequent runs.
-- **Install Browsers**: Installs necessary Playwright browser binaries (Chromium) for E2E tests, also utilizing caching.
-- **Code Quality Checks**:
-  - **Format Check**: Ensures code adheres to Prettier formatting rules (`bun run check:format`).
-  - **Type Check**: Verifies TypeScript types (`bun run check:types`).
-- **Unit Tests**: Runs all unit tests (`bun run test:unit`) to validate individual components and logic.
-- **Build**: Creates a production-ready build of the application (`bun run build`). The build artifacts are uploaded for subsequent steps and potential deployment.
-- **End-to-End (E2E) Tests**: Executes Playwright E2E tests (`bun run test:e2e`) against the built application to ensure core user flows are working correctly. Playwright test reports are uploaded as artifacts in case of failure.
-
-// TODO: add auto deploy on merge to master
+- **Dependency & Browser Installation**: Caches and installs project dependencies (`bun install`) and Playwright browsers to speed up workflows.
+- **Quality Checks**: A matrix job that runs several parallel checks for efficiency:
+  - `check:format`: Ensures code adheres to Prettier formatting rules.
+  - `check:types`: Verifies TypeScript types.
+  - `check:lint`: Runs ESLint and Oxlint.
+  - `test:unit:run`: Executes unit tests.
+- **Browser Tests**: Runs Vitest component tests in a headless browser environment.
+- **Build**: Creates a production-ready build of the application and uploads it as an artifact.
+- **E2E Tests**: Downloads the build artifact and runs Playwright E2E tests against the production build.
+- **Deploy**: On pushes to the `main` branch and from open pull requests, automatically deploys the application to Cloudflare using Wrangler.
 
 ## Scripts
 
-Summary of `bun run` scripts defined in `package.json`.
+This section provides a summary of the `bun run` scripts defined in `package.json`.
 
-### Development & Deployment
+### Development & Build
 
-| Script             | Description                                                                                 |
-| :----------------- | :------------------------------------------------------------------------------------------ |
-| `dev`              | Starts the development server with hot module reloading (`vinxi dev`).                      |
-| `start`            | Serves the built production application locally (`vinxi start`).                            |
-| `build`            | Builds the application for production deployment.                                           |
-| `preview`          | Runs a local Cloudflare Workers/Pages development server for previewing built applications. |
-| `deploy`           | Placeholder for actual deployment logic (requires server adapter).                          |
-| `dev:cf`           | Starts a local Cloudflare Workers/Pages development server.                                 |
-| `cf-typegen`       | Generates types for Cloudflare Workers/Pages configuration.                                 |
-| `install-browsers` | Installs Playwright browser binaries (Chromium) required for E2E tests.                     |
+| Script       | Description                                                  |
+| :----------- | :----------------------------------------------------------- |
+| `build`      | Builds the application for production deployment.            |
+| `dev`        | Starts the development server with hot module reloading.     |
+| `start`      | Serves the built production application locally.             |
+| `preview`    | Previews the production build locally using Wrangler.        |
+| `deploy`     | Placeholder for deployment; CI handles automatic deployment. |
+| `dev:cf`     | Starts a local Cloudflare Workers/Pages development server.  |
+| `cf-typegen` | Generates TypeScript types for Cloudflare configuration.     |
 
-### Testing Scripts
+### Testing
 
-| Script             | Description                                                                |
-| :----------------- | :------------------------------------------------------------------------- |
-| `test`             | Runs a combination of browser and unit tests as configured in Vitest.      |
-| `test:unit`        | Runs unit tests.                                                           |
-| `test:unit:run`    | Runs unit tests explicitly for the `unit` project.                         |
-| `test:unit:watch`  | Runs unit tests in watch mode.                                             |
-| `test:browser`     | Runs browser-specific tests.                                               |
-| `test:browser:run` | Runs browser-specific tests explicitly for the `browser` project.          |
-| `test:e2e`         | Runs end-to-end tests using Playwright.                                    |
-| `test:e2e:ui`      | Runs end-to-end tests with Playwright's UI mode for interactive debugging. |
-| `test:e2e:dev`     | Runs end-to-end tests against a development server configuration.          |
-| `test:e2e:dev:ui`  | Runs end-to-end tests against a development config with Playwright's UI.   |
+| Script                  | Description                                               |
+| :---------------------- | :-------------------------------------------------------- |
+| `test`                  | Runs both unit and browser tests via Vitest.              |
+| `test:unit`             | Runs unit tests in watch mode using Bun's test runner.    |
+| `test:unit:run`         | Runs unit tests once.                                     |
+| `test:browser`          | Runs browser-based component tests in watch mode.         |
+| `test:browser:run`      | Runs browser-based component tests once.                  |
+| `test:e2e`              | Runs Playwright E2E tests against the production build.   |
+| `test:e2e:ui`           | Opens the Playwright UI for interactive E2E debugging.    |
+| `test:e2e:dev`          | Runs Playwright E2E tests against the development server. |
+| `test:e2e:dev:ui`       | Opens Playwright UI against the development server.       |
+| `test:install:browsers` | Installs Playwright browser binaries (e.g., Chromium).    |
+| `test:install:deps`     | Installs OS-level dependencies for Playwright browsers.   |
 
-### Checks & Linting
+### Code Quality & Formatting
 
-| Script         | Description                                                                                            |
-| :------------- | :----------------------------------------------------------------------------------------------------- |
-| `check:types`  | Validates TypeScript types across the project (`tsc --noEmit`).                                        |
-| `check:format` | Checks code formatting using Prettier (`prettier --check .`).                                          |
-| `check:lint`   | Runs both ESLint and Oxlint for static code analysis (`run-s lint:*`).                                 |
-| `lighthouse`   | Runs Lighthouse CI for performance, accessibility, and best practices audits on the built application. |
-
-### Formatting & Linting Fixes
-
-| Script       | Description                                                                 |
-| :----------- | :-------------------------------------------------------------------------- |
-| `fix:format` | Attempts to automatically fix code formatting issues using Prettier.        |
-| `fix:lint`   | Attempts to automatically fix linting issues reported by ESLint and Oxlint. |
+| Script         | Description                                                  |
+| :------------- | :----------------------------------------------------------- |
+| `check:format` | Checks for formatting issues with Prettier.                  |
+| `fix:format`   | Automatically fixes formatting issues with Prettier.         |
+| `check:lint`   | Runs all linters (ESLint, Oxlint).                           |
+| `fix:lint`     | Automatically fixes issues found by all linters.             |
+| `check:types`  | Validates TypeScript types across the project.               |
+| `lighthouse`   | Runs Lighthouse performance audits on the built application. |
