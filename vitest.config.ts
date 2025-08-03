@@ -18,7 +18,7 @@ export default defineConfig({
 				plugins,
 				test: {
 					setupFiles,
-					include: ["src/**/*.unit.{test,spec}.tsx?"],
+					include: ["src/**/*.{test,spec}.tsx?"],
 					name: "unit",
 					environment: "node",
 				},
