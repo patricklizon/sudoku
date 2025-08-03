@@ -1,29 +1,41 @@
-import type { JSX } from "solid-js";
+import { type JSX, createSignal, onMount } from "solid-js";
 import { getRequestEvent } from "solid-js/web";
 import type { DeploymentInfo } from "#src/lib/domain/deployment";
 import { isEmpty } from "#src/lib/utils/is-empty";
 import { isNil } from "#src/lib/utils/is-nil";
+import { isSafeNumber } from "#src/lib/utils/is-safe-number";
 
 /**
  * Renders details about the environment in which the application is currently deployed.
  */
-export function DeploymentInfo(): JSX.Element {
-	const deploymentInfo = getDeploymentInfo();
 
-	const formattedTimestamp =
-		isNil(deploymentInfo.timestamp) || isEmpty(deploymentInfo.timestamp)
-			? null
-			: new Intl.DateTimeFormat(undefined, { dateStyle: "full", timeStyle: "long" }).format(
-					new Date(deploymentInfo.timestamp),
-				);
+function DeploymentInfo(): JSX.Element {
+	const deploymentInfo = getDeploymentInfo();
+	const [formattedTimestamp, setFormattedTimestamp] = createSignal<string | null>(null);
+
+	onMount(() => {
+		if (isNil(deploymentInfo.timestamp) || isEmpty(deploymentInfo.timestamp)) return;
+
+		const date = new Date(deploymentInfo.timestamp);
+		if (isSafeNumber(date.getTime())) {
+			setFormattedTimestamp(
+				new Intl.DateTimeFormat(undefined, { dateStyle: "full", timeStyle: "long" }).format(date),
+			);
+		}
+	});
 
 	return (
 		<footer>
-			{isEmpty(deploymentInfo.id) ? null : <p>Deployment ID: {deploymentInfo.id}</p>}
-			{isEmpty(formattedTimestamp) ? null : <p>Deployed At: {formattedTimestamp}</p>}
-			{isEmpty(deploymentInfo.host) ? null : <p>Deploy URL: {deploymentInfo.host}</p>}
-			{isEmpty(deploymentInfo.pullRequestURL) ? null : (
-				<p>Pull Request URL: {deploymentInfo.pullRequestURL}</p>
+			{isNil(deploymentInfo.id) ? null : <p>Deployment ID: {deploymentInfo.id}</p>}
+			{isNil(formattedTimestamp()) ? null : <p>Deployed At: {formattedTimestamp()}</p>}
+			{isNil(deploymentInfo.host) ? null : <p>Deploy URL: {deploymentInfo.host}</p>}
+			{isNil(deploymentInfo.pullRequestURL) ? null : (
+				<p>
+					Pull Request URL:{" "}
+					<a href={deploymentInfo.pullRequestURL} target="_blank">
+						{deploymentInfo.pullRequestURL}
+					</a>
+				</p>
 			)}
 		</footer>
 	);
