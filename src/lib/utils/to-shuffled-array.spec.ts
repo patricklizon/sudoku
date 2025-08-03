@@ -1,4 +1,4 @@
-import { describe, expect, test } from "bun:test";
+import { describe, expect, test } from "vitest";
 import { shuffleArray, toShuffledArray } from "./to-shuffled-array";
 
 describe("#" + shuffleArray.name, () => {

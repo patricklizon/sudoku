@@ -18,6 +18,17 @@ export default defineConfig({
 				plugins,
 				test: {
 					setupFiles,
+					include: ["src/**/*.{test,spec}.ts"],
+					name: "unit",
+					environment: "node",
+				},
+			},
+			{
+				// TODO: refactor - fix it
+				// @ts-expect-error: it works
+				plugins,
+				test: {
+					setupFiles,
 					testTimeout: 5000,
 					include: ["src/**/*.{test,spec}.browser.tsx"],
 					name: "browser",

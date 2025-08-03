@@ -1,4 +1,4 @@
-import { expect, describe, test } from "bun:test";
+import { expect, describe, test } from "vitest";
 import type { GridFilled, GridCellCoordinates } from "#src/lib/domain/puzzle/grid";
 import { hasPuzzleCellValidValue } from "./has-puzzle-cell-valid-value";
 

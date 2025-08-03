@@ -1,4 +1,4 @@
-import { describe, expect, test } from "bun:test";
+import { describe, expect, test } from "vitest";
 import { GRID_SIZE, GRID_BOX_CELLS_COUNT, GRID_BOX_SIZE } from "./constants";
 import { ValueOutOfRangeError } from "./errors";
 import {

@@ -1,4 +1,4 @@
-import { expect, test } from "bun:test";
+import { expect, test } from "vitest";
 import { GRID_CELL_COUNT } from "#src/lib/domain/puzzle/grid/constants";
 import type { PuzzleDifficultyLevel } from "#src/lib/domain/puzzle/types";
 import {

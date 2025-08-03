@@ -1,4 +1,4 @@
-import { describe, test, expect } from "bun:test";
+import { describe, test, expect } from "vitest";
 import { GRID_CELL_ALLOWED_VALUES } from "../constants";
 import { isGridCellFilled } from "./is-grid-cell-filled";
 

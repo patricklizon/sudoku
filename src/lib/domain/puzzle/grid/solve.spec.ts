@@ -1,4 +1,4 @@
-import { describe, expect, test } from "bun:test";
+import { describe, expect, test } from "vitest";
 import { createEmptyGridCell, createEmptyGrid, fillDiagonalGridBoxesWithValues } from "./grid";
 import { mapGridToGridWithPossibleValues } from "./mappers";
 import { findCellIdxWithSmallestCountOfPossibleValues, hasUniqueSolution, solve } from "./solve";

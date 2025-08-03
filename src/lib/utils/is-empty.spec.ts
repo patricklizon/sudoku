@@ -1,4 +1,4 @@
-import { test, expect } from "bun:test";
+import { test, expect } from "vitest";
 import { isEmpty } from "./is-empty";
 
 test.each([new Set(), new Map(), "", null, undefined])(

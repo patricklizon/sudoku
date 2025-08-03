@@ -1,4 +1,4 @@
-import { describe, expect, test } from "bun:test";
+import { describe, expect, test } from "vitest";
 import { GRID_CELL_COUNT, GRID_SIZE, isGridCellValueCorrectAt } from "#src/lib/domain/puzzle/grid";
 import { createPuzzleSolution } from "./create-puzzle-solution";
 
