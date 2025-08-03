@@ -61,9 +61,13 @@ runs:
           IS_PRODUCTION="false"
         fi
 
+        DEPLOYMENT_TIMESTAMP="$(date +%s)"
+
+        echo "DEPLOYMENT_TIMESTAMP=$DEPLOYMENT_TIMESTAMP" >> $GITHUB_ENV
         echo "DEPLOYMENT_ID=$DEPLOYMENT_ID" >> $GITHUB_ENV
         echo "DEPLOY_ENV=$DEPLOY_ENV" >> $GITHUB_ENV
         echo "IS_PRODUCTION=$IS_PRODUCTION" >> $GITHUB_ENV
+        echo "deployment-timestamp=$DEPLOYMENT_TIMESTAMP" >> $GITHUB_OUTPUT
         echo "deployment-id=$DEPLOYMENT_ID" >> $GITHUB_OUTPUT
         echo "deploy-env=$DEPLOY_ENV" >> $GITHUB_OUTPUT
         echo "is-production=$IS_PRODUCTION" >> $GITHUB_OUTPUT
@@ -73,7 +77,9 @@ runs:
       if: steps.metadata.outputs.is-production == 'true'
       shell: bash
       run: |
-        bun wrangler deploy --var DEPLOYMENT_ID:${{ steps.metadata.outputs.deployment-id }}
+        bun wrangler deploy \
+        --var DEPLOYMENT_ID:${{ steps.metadata.outputs.deployment-id }}
+        --var DEPLOYMENT_TIMESTAMP:${{ steps.metadata.outputs.deployment-timestamp }}
 
         DEPLOY_URL="https://sudoku.${{ inputs.workers-subdomain }}.workers.dev"
         echo "deploy-url=$DEPLOY_URL" >> $GITHUB_OUTPUT
@@ -93,7 +99,11 @@ runs:
         fi
         ALIAS="pr-${PR_NUMBER}"
 
-        bun wrangler versions upload --preview-alias $ALIAS--var PULL_REQUEST_URL:${{ github.event.pull_request.html_url }} --env staging --var DEPLOYMENT_ID:${{ steps.metadata.outputs.deployment-id }}
+        bun wrangler versions upload \
+        --preview-alias $ALIAS \
+        --var PULL_REQUEST_URL:${{ github.event.pull_request.html_url }} \
+        --env staging --var DEPLOYMENT_ID:${{ steps.metadata.outputs.deployment-id }} \
+        --var DEPLOYMENT_TIMESTAMP:${{ steps.metadata.outputs.deployment-timestamp }}
 
         PREVIEW_URL="https://$ALIAS-${{ inputs.project-name }}.${{ inputs.workers-subdomain }}.workers.dev"
         echo "deploy-url=$PREVIEW_URL" >> $GITHUB_OUTPUT
@@ -132,4 +142,4 @@ runs:
         body: |
           🚀 **Preview Deployment Ready!**
 
-          **🔗 URL:** [View Deployment](${{ steps.set-url.outputs.deploy-url }})
+          **🔗 URL:** [${{ steps.set-url.outputs.deploy-url }}](${{ steps.set-url.outputs.deploy-url }})

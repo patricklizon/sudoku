@@ -12,11 +12,13 @@ enabled = true
 
 [vars]
 DEPLOYMENT_ID = "production"
-DEPLOY_URL = ""
+DEPLOYMENT_TIMESTAMP = "0"
+PULL_REQUEST_URL = ""
 
 [env.staging]
 name = "sudoku"
 [env.staging.vars]
 DEPLOYMENT_ID = "staging"
 DEPLOY_URL = ""
+DEPLOY_TIMESTAMP = ""
 PULL_REQUEST_URL = ""

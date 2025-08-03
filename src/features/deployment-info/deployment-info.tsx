@@ -9,18 +9,30 @@ import { isNil } from "#src/lib/utils/is-nil";
  */
 export function DeploymentInfo(): JSX.Element {
 	const deploymentInfo = getDeploymentInfo();
+	const { id, timestamp, host, pullRequestURL } = deploymentInfo;
+
+	const formattedTimestamp =
+		isNil(timestamp) || isEmpty(timestamp)
+			? null
+			: new Intl.DateTimeFormat(undefined, { dateStyle: "full", timeStyle: "long" }).format(
+					new Date(timestamp),
+				);
 
 	return (
 		<footer>
-			<p>Deployment ID: {deploymentInfo.id}</p>
-			<p>Deploy URL: {deploymentInfo.host}</p>
+			{isEmpty(id) ? null : <p>Deployment ID: {id}</p>}
+			{isEmpty(formattedTimestamp) ? null : <p>Deployed At: {formattedTimestamp}</p>}
+			{isEmpty(host) ? null : <p>Deploy URL: {host}</p>}
+			{isEmpty(pullRequestURL) ? null : <p>Pull Request URL: {pullRequestURL}</p>}
 		</footer>
 	);
 }
 
 type DeploymentInfoQueryResult = {
 	id: Option<DeploymentInfo["id"]>;
+	timestamp: Option<DeploymentInfo["timestamp"]>;
 	host: Option<DeploymentInfo["host"]>;
+	pullRequestURL: Option<DeploymentInfo["pullRequestURL"]>;
 };
 
 /**
@@ -37,6 +49,10 @@ function getDeploymentInfo(): DeploymentInfoQueryResult {
 	const env = event.nativeEvent.context.cloudflare.env;
 	return {
 		id: env.DEPLOYMENT_ID,
-		host: isEmpty(env.DEPLOY_URL) ? new URL(event.request.url).host : env.DEPLOY_URL,
+		timestamp: isEmpty(env.DEPLOYMENT_TIMESTAMP)
+			? undefined
+			: new Date(env.DEPLOYMENT_TIMESTAMP).toISOString(),
+		host: isEmpty(env.DEPLOY_URL) ? undefined : env.DEPLOY_URL,
+		pullRequestURL: isEmpty(env.PULL_REQUEST_URL) ? undefined : env.PULL_REQUEST_URL,
 	};
 }
