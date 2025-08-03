@@ -42,7 +42,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup-environment
       - name: Check ${{ matrix.check }}
-        run: bun run check:${{ matrix.check }}
+        run: bun run ${{ matrix.check }}
 
   test-browser:
     needs: [install-dependencies, install-browsers]
