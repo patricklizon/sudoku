@@ -58,7 +58,7 @@ jobs:
         run: npm run test:unit:run
 
   test-browser:
-    needs: [install-dependencies, browsers]
+    needs: [install-dependencies, install-browsers]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
