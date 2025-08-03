@@ -9,7 +9,7 @@ import { isSafeNumber } from "#src/lib/utils/is-safe-number";
  * Renders details about the environment in which the application is currently deployed.
  */
 
-function DeploymentInfo(): JSX.Element {
+export function DeploymentInfo(): JSX.Element {
 	const deploymentInfo = getDeploymentInfo();
 	const [formattedTimestamp, setFormattedTimestamp] = createSignal<string | null>(null);
 
