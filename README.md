@@ -10,6 +10,7 @@ Web app based on SolidStart, Solid.js, and Vinxi, powered by a Nix-based develop
 - [Testing](#testing)
 - [CI](#ci)
 - [Scripts](#scripts)
+- [Deployment](#deployment)
 
 ## Prerequisites
 
@@ -175,3 +176,7 @@ Summary of `bun run` scripts defined in `package.json`.
 | `check:typegen`  | Verifies Cloudflare types are up-to-date.                |
 | `postcf-typegen` | Post-generation check for outdated types.                |
 | `wrangler`       | Direct access to Wrangler CLI.                           |
+
+## Deployment
+
+For comprehensive deployment information, environment management, and rollback procedures, see [Deployment Guide](docs/deployment.md)
