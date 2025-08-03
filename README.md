@@ -1,4 +1,4 @@
-# Sudoku &middot; [![CI](https://github.com/patricklizon/sudoku/actions/workflows/ci.yml/badge.svg)](https://github.com/patricklizon/sudoku/actions/workflows/ci.yml)
+# Sudoku &middot; [![CI](https://github.com/patricklizon/sudoku/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/patricklizon/sudoku/actions/workflows/ci.yml)
 
 Web app based on SolidStart, Solid.js, and Vinxi, powered by a Nix-based development environment.
 
