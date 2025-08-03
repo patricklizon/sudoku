@@ -3,7 +3,6 @@ import { getRequestEvent } from "solid-js/web";
 import type { DeploymentInfo } from "#src/lib/domain/deployment";
 import { isEmpty } from "#src/lib/utils/is-empty";
 import { isNil } from "#src/lib/utils/is-nil";
-import { isSafeNumber } from "#src/lib/utils/is-safe-number";
 
 /**
  * Renders details about the environment in which the application is currently deployed.
