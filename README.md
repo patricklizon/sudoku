@@ -95,68 +95,84 @@ bun run dev
 
 This project employs a comprehensive testing strategy using [Vitest](https://vitest.dev/) for unit and browser-based component tests, and [Playwright](https://playwright.dev/) for end-to-end (E2E) tests.
 
-- **Unit & Component Testing**: Vitest is used to test individual functions and Solid.js components. Tests can be run in a Node.js environment (`test:unit`) or in a headless browser (`test:browser`) for higher fidelity.
-- **End-to-End Testing**: Playwright runs tests against the built application, simulating real user interactions in a browser to validate critical user flows.
-- **Cloudflare Simulation**: For E2E tests, the setup can simulate the Cloudflare environment locally using Miniflare, ensuring tests run in an environment that closely mirrors production.
+- **Unit Testing**: Bun is used as the primary test runner for unit tests (`test:unit`), providing fast execution for individual component and logic testing.
+- **Browser Testing**: Vitest runs component tests in a headless browser environment (`test:browser`) for higher fidelity testing of UI components.
+- **End-to-End Testing**: Playwright executes E2E tests against the built application, simulating real user interactions to validate critical user flows.
+- **Cloudflare Integration**: The testing setup supports local Cloudflare Workers development and testing using Wrangler.
 
-For detailed commands, see the [Testing Scripts](#testing-scripts) section.
+For detailed commands, see the [Testing](#testing-1) section.
 
 ## CI
 
-The project uses GitHub Actions for Continuous Integration, defined in `.github/workflows/ci.yml`. The CI pipeline runs on every pull request and push to the `main` branch, ensuring code quality and stability. It automatically deploys to Cloudflare Pages upon merging to `main`.
+The project uses GitHub Actions for Continuous Integration, defined in `.github/workflows/ci.yml`. The CI pipeline runs on every pull request and push to the `main` branch, ensuring code quality and stability with automatic deployment to Cloudflare.
 
 The CI workflow includes the following jobs:
 
-- **Dependency & Browser Installation**: Caches and installs project dependencies (`bun install`) and Playwright browsers to speed up workflows.
-- **Quality Checks**: A matrix job that runs several parallel checks for efficiency:
-  - `check:format`: Ensures code adheres to Prettier formatting rules.
-  - `check:types`: Verifies TypeScript types.
-  - `check:lint`: Runs ESLint and Oxlint.
-  - `test:unit:run`: Executes unit tests.
-- **Browser Tests**: Runs Vitest component tests in a headless browser environment.
-- **Build**: Creates a production-ready build of the application and uploads it as an artifact.
-- **E2E Tests**: Downloads the build artifact and runs Playwright E2E tests against the production build.
-- **Deploy**: On pushes to the `main` branch and from open pull requests, automatically deploys the application to Cloudflare using Wrangler.
+- **install-dependencies**: Installs project dependencies using Bun.
+- **install-browsers**: Installs Playwright browser binaries for E2E testing.
+- **quality-checks**: A matrix job running parallel checks:
+  - `check:format`: Verifies code formatting with Prettier.
+  - `check:types`: Validates TypeScript types.
+  - `check:lint`: Runs ESLint and Oxlint static analysis.
+  - `check:typegen`: Ensures Cloudflare worker types are up-to-date.
+- **test-unit**: Executes unit tests using Bun.
+- **test-browser**: Runs browser-based component tests using Vitest.
+- **build**: Creates production build and uploads artifacts.
+- **e2e**: Downloads build artifacts and runs Playwright E2E tests.
+- **deploy**: Automatically deploys to Cloudflare using Wrangler after successful builds.
 
 ## Scripts
 
-This section provides a summary of the `bun run` scripts defined in `package.json`.
+Summary of `bun run` scripts defined in `package.json`.
 
 ### Development & Build
 
-| Script       | Description                                                  |
-| :----------- | :----------------------------------------------------------- |
-| `build`      | Builds the application for production deployment.            |
-| `dev`        | Starts the development server with hot module reloading.     |
-| `start`      | Serves the built production application locally.             |
-| `preview`    | Previews the production build locally using Wrangler.        |
-| `deploy`     | Placeholder for deployment; CI handles automatic deployment. |
-| `dev:cf`     | Starts a local Cloudflare Workers/Pages development server.  |
-| `cf-typegen` | Generates TypeScript types for Cloudflare configuration.     |
+| Script      | Description                                              |
+| :---------- | :------------------------------------------------------- |
+| `build`     | Builds the application for production deployment.        |
+| `dev`       | Starts the development server with hot module reloading. |
+| `start`     | Serves the built production application locally.         |
+| `start:dev` | Starts Vite development server.                          |
+| `preview`   | Previews the production build locally using Wrangler.    |
+| `deploy`    | Placeholder for deployment logic.                        |
+| `dev:cf`    | Starts a local Cloudflare Workers development server.    |
 
 ### Testing
 
-| Script                  | Description                                               |
-| :---------------------- | :-------------------------------------------------------- |
-| `test`                  | Runs both unit and browser tests via Vitest.              |
-| `test:unit`             | Runs unit tests in watch mode using Bun's test runner.    |
-| `test:unit:run`         | Runs unit tests once.                                     |
-| `test:browser`          | Runs browser-based component tests in watch mode.         |
-| `test:browser:run`      | Runs browser-based component tests once.                  |
-| `test:e2e`              | Runs Playwright E2E tests against the production build.   |
-| `test:e2e:ui`           | Opens the Playwright UI for interactive E2E debugging.    |
-| `test:e2e:dev`          | Runs Playwright E2E tests against the development server. |
-| `test:e2e:dev:ui`       | Opens Playwright UI against the development server.       |
-| `test:install:browsers` | Installs Playwright browser binaries (e.g., Chromium).    |
-| `test:install:deps`     | Installs OS-level dependencies for Playwright browsers.   |
+| Script                  | Description                                         |
+| :---------------------- | :-------------------------------------------------- |
+| `test`                  | Runs both browser and unit tests via Vitest.        |
+| `test:unit`             | Runs unit tests in watch mode using Bun.            |
+| `test:unit:run`         | Runs unit tests once using Bun.                     |
+| `test:browser`          | Runs browser-based component tests via Vitest.      |
+| `test:browser:run`      | Runs browser-based component tests once.            |
+| `test:e2e`              | Runs Playwright E2E tests.                          |
+| `test:e2e:ui`           | Opens Playwright UI for interactive E2E testing.    |
+| `test:e2e:dev`          | Runs E2E tests with development configuration.      |
+| `test:e2e:dev:ui`       | Opens Playwright UI with development configuration. |
+| `test:install:browsers` | Installs Playwright browser binaries.               |
+| `test:install:deps`     | Installs OS dependencies for Playwright browsers.   |
 
 ### Code Quality & Formatting
 
-| Script         | Description                                                  |
-| :------------- | :----------------------------------------------------------- |
-| `check:format` | Checks for formatting issues with Prettier.                  |
-| `fix:format`   | Automatically fixes formatting issues with Prettier.         |
-| `check:lint`   | Runs all linters (ESLint, Oxlint).                           |
-| `fix:lint`     | Automatically fixes issues found by all linters.             |
-| `check:types`  | Validates TypeScript types across the project.               |
-| `lighthouse`   | Runs Lighthouse performance audits on the built application. |
+| Script            | Description                                          |
+| :---------------- | :--------------------------------------------------- |
+| `check:format`    | Checks code formatting with Prettier.                |
+| `fix:format`      | Automatically fixes formatting issues with Prettier. |
+| `check:lint`      | Runs all linters (ESLint and Oxlint).                |
+| `fix:lint`        | Automatically fixes linting issues.                  |
+| `fix:lint:eslint` | Automatically fixes ESLint issues.                   |
+| `fix:lint:oxlint` | Automatically fixes Oxlint issues.                   |
+| `lint:eslint`     | Lints files with ESLint.                             |
+| `lint:oxlint`     | Lints files with Oxlint.                             |
+| `check:types`     | Validates TypeScript types across the project.       |
+| `lighthouse`      | Runs Lighthouse performance audits.                  |
+
+### Cloudflare & Type Generation
+
+| Script           | Description                                              |
+| :--------------- | :------------------------------------------------------- |
+| `cf-typegen`     | Generates TypeScript types for Cloudflare configuration. |
+| `check:typegen`  | Verifies Cloudflare types are up-to-date.                |
+| `postcf-typegen` | Post-generation check for outdated types.                |
+| `wrangler`       | Direct access to Wrangler CLI.                           |
