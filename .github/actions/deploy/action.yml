@@ -71,7 +71,6 @@ runs:
       shell: bash
       run: |
         bun wrangler deploy \
-          --env production \
           --var DEPLOYMENT_ID:${{ steps.metadata.outputs.deployment-id }} \
           --var DEPLOYMENT_TIMESTAMP:${{ steps.metadata.outputs.deployment-timestamp }}
 
