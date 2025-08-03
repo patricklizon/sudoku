@@ -1,7 +1,7 @@
 import { test, expect } from "vitest";
 import { isEmpty } from "./is-empty";
 
-test.each([new Set(), new Map(), "", null, undefined])(
+test.each([[], new Array(), new Set(), new Map(), "", null, undefined])(
 	"returns 'true' for empty data structures",
 	(value) => {
 		expect(isEmpty(value)).toEqual(true);
