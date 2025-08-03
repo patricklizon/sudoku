@@ -1,4 +1,4 @@
-import { describe, expect, test } from "vitest";
+import { describe, expect, test } from "bun:test";
 import { createEmptyGridCell, type Grid, GRID_SIZE } from "#src/lib/domain/puzzle/grid";
 import { type Config, _isRowAndColMinimumCellCountSatisfied } from "./remove-cells";
 
@@ -31,7 +31,7 @@ describe("#" + _isRowAndColMinimumCellCountSatisfied.name, () => {
 					colIdx: idx,
 					rowIdx: idx,
 				}),
-			).to.equal(true);
+			).toEqual(true);
 		});
 	});
 
@@ -47,7 +47,7 @@ describe("#" + _isRowAndColMinimumCellCountSatisfied.name, () => {
 					colIdx: idx,
 					rowIdx: idx,
 				}),
-			).to.equal(false);
+			).toEqual(false);
 		});
 	});
 
@@ -62,6 +62,6 @@ describe("#" + _isRowAndColMinimumCellCountSatisfied.name, () => {
 				colIdx: 0,
 				rowIdx: 0,
 			}),
-		).to.equal(true);
+		).toEqual(true);
 	});
 });

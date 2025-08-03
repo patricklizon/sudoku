@@ -1,4 +1,4 @@
-import { describe, expect, test } from "vitest";
+import { describe, expect, test } from "bun:test";
 import {
 	DIFFICULTY_LEVEL,
 	MINIMUM_GIVEN_CELLS_COUNT_IN_LINE_BY_DIFFICULTY_LEVEL,
@@ -38,9 +38,11 @@ describe.each<PuzzleDifficultyLevel>([
 	test(`creates correct amount of holes for difficulty level '${level.toString()}'`, () => {
 		const left = puzzle.filter(isGridCellFilled);
 
-		expect(left)
-			.to.have.length.of.at.least(TOTAL_GIVEN_CELLS_RANGE_BY_DIFFICULTY_LEVEL[level]![0])
-			.and.at.most(TOTAL_GIVEN_CELLS_RANGE_BY_DIFFICULTY_LEVEL[level]![1]);
+		const minCells = TOTAL_GIVEN_CELLS_RANGE_BY_DIFFICULTY_LEVEL[level]![0];
+		const maxCells = TOTAL_GIVEN_CELLS_RANGE_BY_DIFFICULTY_LEVEL[level]![1];
+
+		expect(left.length).toBeGreaterThanOrEqual(minCells);
+		expect(left.length).toBeLessThanOrEqual(maxCells);
 	});
 
 	test.each(Array.from({ length: GRID_SIZE }, (_, idx) => idx))(
@@ -49,11 +51,11 @@ describe.each<PuzzleDifficultyLevel>([
 			const cellsFilledCount = MINIMUM_GIVEN_CELLS_COUNT_IN_LINE_BY_DIFFICULTY_LEVEL[level]!;
 
 			expect(
-				readGridRowCellsAt(puzzle, { colIdx: 0, rowIdx: idx }).filter(isGridCellFilled),
-			).to.have.length.of.at.least(cellsFilledCount);
+				readGridRowCellsAt(puzzle, { colIdx: 0, rowIdx: idx }).filter(isGridCellFilled).length,
+			).toBeGreaterThanOrEqual(cellsFilledCount);
 			expect(
-				readGridColumnAt(puzzle, { colIdx: idx, rowIdx: 0 }).filter(isGridCellFilled),
-			).to.have.length.of.at.least(cellsFilledCount);
+				readGridColumnAt(puzzle, { colIdx: idx, rowIdx: 0 }).filter(isGridCellFilled).length,
+			).toBeGreaterThanOrEqual(cellsFilledCount);
 		},
 	);
 });

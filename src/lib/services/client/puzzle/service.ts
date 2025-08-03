@@ -21,7 +21,7 @@ export class PuzzleService {
 		this.isProcessing = true;
 	}
 
-	create(difficulty: Puzzle["difficulty"]): Promise<CreatePuzzleWorkerResponse> {
+	create(difficulty: Puzzle["difficultyLevel"]): Promise<CreatePuzzleWorkerResponse> {
 		return new Promise<CreatePuzzleWorkerResponse>((resolve, reject) => {
 			const onMessage = (e: MessageEvent<CreatePuzzleWorkerResponse>): void => {
 				resolve(e.data);

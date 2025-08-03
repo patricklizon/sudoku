@@ -1,4 +1,4 @@
-import { describe, test, expect } from "vitest";
+import { describe, test, expect } from "bun:test";
 import { ValueOutOfRangeError } from "../errors";
 import { mapGridCellIndexToColIndex } from "./map-grid-cell-index-to-col-index";
 
@@ -10,7 +10,7 @@ describe("#" + mapGridCellIndexToColIndex.name, () => {
 			[33, 7],
 		],
 	])("returns correct row index", ([index, coordinates]) => {
-		expect(mapGridCellIndexToColIndex(index)).to.deep.equal(coordinates);
+		expect(mapGridCellIndexToColIndex(index)).toStrictEqual(coordinates);
 	});
 
 	test.each<number[]>([[-1, Number.POSITIVE_INFINITY]])(

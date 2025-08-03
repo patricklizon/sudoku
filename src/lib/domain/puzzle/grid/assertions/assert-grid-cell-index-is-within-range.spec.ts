@@ -1,4 +1,4 @@
-import { describe, test, expect } from "vitest";
+import { describe, test, expect } from "bun:test";
 import { GRID_CELL_COUNT } from "../constants";
 import { ValueOutOfRangeError } from "../errors";
 import { assertGridCellIndexIsWithinRange } from "./assert-grid-cell-index-is-within-range";
@@ -9,7 +9,7 @@ describe("#" + assertGridCellIndexIsWithinRange.name, () => {
 		(value) => {
 			expect(() => {
 				assertGridCellIndexIsWithinRange(value);
-			}).to.throw(ValueOutOfRangeError);
+			}).toThrow(ValueOutOfRangeError);
 		},
 	);
 
@@ -18,7 +18,7 @@ describe("#" + assertGridCellIndexIsWithinRange.name, () => {
 		(value) => {
 			expect(() => {
 				assertGridCellIndexIsWithinRange(value);
-			}).not.to.throw(ValueOutOfRangeError);
+			}).not.toThrow(ValueOutOfRangeError);
 		},
 	);
 });

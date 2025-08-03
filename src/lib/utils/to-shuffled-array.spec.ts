@@ -1,4 +1,4 @@
-import { describe, expect, test } from "vitest";
+import { describe, expect, test } from "bun:test";
 import { shuffleArray, toShuffledArray } from "./to-shuffled-array";
 
 describe("#" + shuffleArray.name, () => {
@@ -7,15 +7,15 @@ describe("#" + shuffleArray.name, () => {
 		const copy = structuredClone(input);
 		const result = shuffleArray(input);
 
-		expect(result).not.to.be.deep.equal(copy);
-		expect(result).to.equal(input);
+		expect(result).not.toEqual(copy);
+		expect(result).toEqual(input);
 	});
 
 	test("preserves all elements", () => {
 		const input = Array.from({ length: 18 }, (_, idx) => idx);
 		const copy = structuredClone(input);
 
-		expect(input.toSorted()).to.deep.equal(copy.toSorted());
+		expect(input.toSorted()).toStrictEqual(copy.toSorted());
 	});
 });
 
@@ -24,13 +24,13 @@ describe("#" + toShuffledArray.name, () => {
 		const input = Array.from({ length: 18 }, (_, idx) => idx);
 		const result = toShuffledArray(input);
 
-		expect(result).not.to.be.deep.equal(input);
+		expect(result).not.toStrictEqual(input);
 	});
 
 	test("preserves all elements", () => {
 		const input = Array.from({ length: 18 }, (_, idx) => idx);
 		const copy = structuredClone(input);
 
-		expect(input.toSorted()).to.deep.equal(copy.toSorted());
+		expect(input.toSorted()).toStrictEqual(copy.toSorted());
 	});
 });

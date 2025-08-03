@@ -18,7 +18,7 @@ export type PuzzleSolution = GridFilled;
 export type PuzzleProblem = Grid;
 
 export type Puzzle = {
-	difficulty: PuzzleDifficultyLevel;
+	difficultyLevel: PuzzleDifficultyLevel;
 	id: PuzzleEncoded;
 	problem: PuzzleProblem;
 	solution: PuzzleSolution;
@@ -26,6 +26,6 @@ export type Puzzle = {
 
 export type DBPuzzle = {
 	createdAt: TimeISOString;
-	difficulty: Puzzle["difficulty"];
+	difficultyLevel: Puzzle["difficultyLevel"];
 	id: Puzzle["id"];
 };

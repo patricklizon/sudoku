@@ -23,7 +23,7 @@ export class GameRepository {
 		payload: {
 			mode: Game["mode"];
 			puzzleId: Puzzle["id"];
-			puzzleDifficulty: Puzzle["difficulty"];
+			puzzleDifficulty: Puzzle["difficultyLevel"];
 		},
 		txn?: IDBTransaction,
 	): Promise<DBGame> {

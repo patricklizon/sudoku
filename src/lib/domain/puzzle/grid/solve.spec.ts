@@ -1,4 +1,4 @@
-import { describe, expect, test } from "vitest";
+import { describe, expect, test } from "bun:test";
 import { createEmptyGridCell, createEmptyGrid, fillDiagonalGridBoxesWithValues } from "./grid";
 import { mapGridToGridWithPossibleValues } from "./mappers";
 import { findCellIdxWithSmallestCountOfPossibleValues, hasUniqueSolution, solve } from "./solve";
@@ -32,8 +32,8 @@ describe("#" + solve.name, () => {
 			[6, 2, 5, 8, 1, 3, 4, 7, 9],
 		].flat() as GridFilled;
 
-		expect(left).to.deep.equal(right);
-		expect(input).not.to.deep.equal(right);
+		expect(left).toStrictEqual(right);
+		expect(input).not.toStrictEqual(right);
 	});
 
 	test.each(Array.from({ length: 10 }, () => [createEmptyGrid()]))(
@@ -63,7 +63,7 @@ describe("#" + hasUniqueSolution.name, () => {
 			[4, 9, 5, 6, 1, 2, 7, 3, 8],
 		].flat() as Grid;
 
-		expect(hasUniqueSolution(puzzle)).to.equal(false);
+		expect(hasUniqueSolution(puzzle)).toEqual(false);
 	});
 
 	test("returns 'true' when only one solution exists", () => {
@@ -80,7 +80,7 @@ describe("#" + hasUniqueSolution.name, () => {
 			[_, _, _, _, 8, _, _, 7, 9],
 		].flat() as Grid;
 
-		expect(hasUniqueSolution(puzzle)).to.equal(true);
+		expect(hasUniqueSolution(puzzle)).toEqual(true);
 	});
 });
 
@@ -90,7 +90,7 @@ describe("#" + findCellIdxWithSmallestCountOfPossibleValues.name, () => {
 		const grid = mapGridToGridWithPossibleValues(createEmptyGrid());
 		const left = findCellIdxWithSmallestCountOfPossibleValues(grid);
 
-		expect(left).to.equal(expectedIdx);
+		expect(left).toEqual(expectedIdx);
 	});
 
 	test("returns correct index when some cells have less possibilities", () => {
@@ -100,6 +100,6 @@ describe("#" + findCellIdxWithSmallestCountOfPossibleValues.name, () => {
 		grid[expectedIdx] = new Set([1, 4, 5]);
 		const left = findCellIdxWithSmallestCountOfPossibleValues(grid);
 
-		expect(left).to.equal(expectedIdx);
+		expect(left).toEqual(expectedIdx);
 	});
 });

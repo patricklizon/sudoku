@@ -1,12 +1,12 @@
-import { describe, expect, test } from "vitest";
+import { describe, expect, test } from "bun:test";
 import { isGridCellEmpty } from "./is-grid-cell-empty";
 
 describe("#" + isGridCellEmpty.name, () => {
 	test.each([undefined, null])("returns true when cell is empty", (value) => {
-		expect(isGridCellEmpty(value)).to.equal(true);
+		expect(isGridCellEmpty(value)).toEqual(true);
 	});
 
 	test.each([0, 2])("returns false when cell has value", (value) => {
-		expect(isGridCellEmpty(value)).to.equal(false);
+		expect(isGridCellEmpty(value)).toEqual(false);
 	});
 });

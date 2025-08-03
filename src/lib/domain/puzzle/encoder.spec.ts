@@ -1,8 +1,8 @@
-import { describe, expect, test } from "vitest";
+import { describe, expect, test } from "bun:test";
 import { DIFFICULTY_LEVEL } from "#src/lib/domain/puzzle/difficulty";
 import { encodePuzzle } from "#src/lib/domain/puzzle/encoder";
 import { createEmptyGridCell } from "#src/lib/domain/puzzle/grid";
-import type { PuzzleProblem, PuzzleSolution } from "#src/lib/domain/puzzle/types";
+import type { PuzzleEncoded, PuzzleProblem, PuzzleSolution } from "#src/lib/domain/puzzle/types";
 
 describe("#" + encodePuzzle.name, () => {
 	const _ = createEmptyGridCell();
@@ -32,13 +32,13 @@ describe("#" + encodePuzzle.name, () => {
 
 	const difficultyLevel = DIFFICULTY_LEVEL[4];
 	const encoded =
-		"24651379H31I28G5DF75849F12319482EFCG83G1F925DEFB3748A99B1GC8465483F529G167E941382" +
-		difficultyLevel;
+		("24651379H31I28G5DF75849F12319482EFCG83G1F925DEFB3748A99B1GC8465483F529G167E941382" +
+			difficultyLevel) as PuzzleEncoded;
 
 	test("encodes puzzle and solution into an URL safe string", () => {
 		const result = encodePuzzle(puzzle, solution, difficultyLevel);
 
-		expect(result).to.equal(encoded);
-		expect(result).to.equal(encodeURI(encoded));
+		expect(result).toEqual(encoded);
+		expect(result).toEqual(encodeURI(encoded) as PuzzleEncoded);
 	});
 });
