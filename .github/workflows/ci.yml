@@ -44,7 +44,7 @@ jobs:
       - name: Check ${{ matrix.check }}
         run: bun run check:${{ matrix.check }}
 
-  test:
+  test-unit:
     needs: [install-dependencies]
     runs-on: ubuntu-latest
     steps:
@@ -55,10 +55,24 @@ jobs:
           runtime: node
 
       - name: Run unit tests
-        run: npm run test:unit
+        run: npm run test:unit:run
+
+  test-browser:
+    needs: [install-dependencies, install-browsers]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/browsers
+      - uses: ./.github/actions/setup-environment
+        with:
+          # override runtime due to vitest being incompatible with bun
+          runtime: node
+
+      - name: Run unit tests in browser
+        run: npm run test:browser:run
 
   build:
-    needs: [install-dependencies, quality-checks, test]
+    needs: [install-dependencies, quality-checks, test-unit, test-browser]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

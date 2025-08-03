@@ -1,6 +1,5 @@
 import { isNil } from "./is-nil";
 import { isNumber } from "./is-number";
-import type { Nil } from "./types/option";
 
 export function isEmpty(it: { length: number } | { size: number } | Nil): boolean {
 	if (isNil(it)) return true;

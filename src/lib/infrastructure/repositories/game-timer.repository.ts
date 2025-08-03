@@ -11,7 +11,6 @@ import { gameTimerTbl } from "#src/lib/infrastructure/persistence/db/tables/game
 import { isDefined } from "#src/lib/utils/is-defined";
 import { isNil } from "#src/lib/utils/is-nil";
 import { noop } from "#src/lib/utils/noop";
-import type { Option } from "#src/lib/utils/types/option";
 
 export class GameTimerRepository {
 	constructor(db: DB) {

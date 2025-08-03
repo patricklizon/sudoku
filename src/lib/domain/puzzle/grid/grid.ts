@@ -1,5 +1,4 @@
 import { shuffleArray } from "#src/lib/utils/to-shuffled-array";
-import type { Option } from "#src/lib/utils/types/option";
 import { assertGridCellCoordinateIsWithinRange } from "./assertions";
 import {
 	GRID_CELL_ALLOWED_VALUES,

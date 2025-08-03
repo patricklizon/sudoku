@@ -1,5 +1,6 @@
 import { Title } from "@solidjs/meta";
 import { type JSX, createSignal, createResource, For, Show, onMount } from "solid-js";
+import { Button } from "#src/components/button";
 import type { PuzzleDifficultyLevel } from "#src/lib/domain/puzzle";
 import { DIFFICULTY_LEVEL, DIFFICULTY_LEVEL_BY_NAME } from "#src/lib/domain/puzzle/difficulty";
 import { PuzzleService } from "#src/lib/services/client/puzzle";
@@ -48,9 +49,9 @@ export default function Home(): JSX.Element {
 					)}
 				</For>
 			</select>
-			<button onClick={requestPuzzle} data-testid="action-generate-puzzle">
+			<Button onClick={requestPuzzle} data-testid="action-generate-puzzle">
 				Go
-			</button>
+			</Button>
 
 			<div>
 				<Show when={puzzle.loading}>

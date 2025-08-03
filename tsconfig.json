@@ -1,21 +1,38 @@
 {
 	"$schema": "https://json.schemastore.org/tsconfig",
-	"files": [],
-	"references": [
-		{
-			"path": "./tsconfig.bun.json"
-		},
-		{
-			"path": "./tsconfig.app.json"
-		},
-		{
-			"path": "./tsconfig.e2e.json"
-		},
-		{
-			"path": "./tsconfig.vitest.json"
-		},
-		{
-			"path": "./tsconfig.worker.json"
+	"compilerOptions": {
+		"noEmit": true,
+		"target": "ESNext",
+		"module": "ESNext",
+		"moduleResolution": "bundler",
+		"allowSyntheticDefaultImports": true,
+		"esModuleInterop": true,
+		"jsx": "preserve",
+		"jsxImportSource": "solid-js",
+		"allowJs": true,
+		"types": ["./worker-configuration.d.ts", "bun-types", "vinxi/types/client"],
+		"lib": ["ESNEXT", "DOM", "WebWorker"],
+		"isolatedModules": true,
+		"strict": true,
+		"skipLibCheck": true,
+		"noFallthroughCasesInSwitch": true,
+		"noUncheckedIndexedAccess": true,
+		"noImplicitOverride": true,
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+		"noPropertyAccessFromIndexSignature": false,
+		"strictNullChecks": true,
+		"strictPropertyInitialization": true,
+		"useUnknownInCatchVariables": true,
+		"allowUnreachableCode": false,
+		"noImplicitAny": true,
+		"strictFunctionTypes": true,
+		"exactOptionalPropertyTypes": true,
+		"noImplicitReturns": true,
+		"paths": {
+			"#src/*": ["./src/*"],
+			"#test/*": ["./test/*"]
 		}
-	]
+	},
+	"include": ["@types", "src", "test", "e2e", "./*.d.ts", "./*.config.*.ts"]
 }

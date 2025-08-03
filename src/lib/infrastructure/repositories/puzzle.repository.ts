@@ -8,7 +8,6 @@ import { mapDateToTimeISOString } from "#src/lib/domain/time";
 import type { DB } from "#src/lib/infrastructure/persistence";
 import { puzzleTbl } from "#src/lib/infrastructure/persistence/db/tables/puzzle";
 import { isNil } from "#src/lib/utils/is-nil";
-import type { Option } from "#src/lib/utils/types/option";
 
 export class PuzzleRepository {
 	constructor(db: DB) {
