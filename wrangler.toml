@@ -19,3 +19,4 @@ name = "sudoku"
 [env.staging.vars]
 DEPLOYMENT_ID = "staging"
 DEPLOY_URL = ""
+PR_URL = ""
