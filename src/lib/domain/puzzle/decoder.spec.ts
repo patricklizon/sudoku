@@ -1,7 +1,12 @@
-import { describe, expect, test } from "vitest";
+import { describe, expect, test } from "bun:test";
 import { decodePuzzle } from "#src/lib/domain/puzzle/decoder";
 import { createEmptyGridCell } from "#src/lib/domain/puzzle/grid";
-import type { PuzzleEncoded, PuzzleProblem, PuzzleSolution } from "#src/lib/domain/puzzle/types";
+import type {
+	PuzzleDifficultyLevel,
+	PuzzleEncoded,
+	PuzzleProblem,
+	PuzzleSolution,
+} from "#src/lib/domain/puzzle/types";
 
 describe("#" + decodePuzzle.name, () => {
 	const _ = createEmptyGridCell();
@@ -30,7 +35,7 @@ describe("#" + decodePuzzle.name, () => {
 		[6, 7, _, 9, 4, 1, 3, 8, 2],
 	].flat() as PuzzleProblem;
 
-	const difficulty = 2;
+	const difficulty = 2 as PuzzleDifficultyLevel;
 
 	const encoded =
 		("24651379H31I28G5DF75849F12319482EFCG83G1F925DEFB3748A99B1GC8465483F529G167E941382" +
@@ -39,8 +44,8 @@ describe("#" + decodePuzzle.name, () => {
 	test("decodes string to puzzle and solution", () => {
 		const result = decodePuzzle(encoded);
 
-		expect(result.solution).to.deep.equal(solution);
-		expect(result.problem).to.deep.equal(puzzle);
-		expect(result.difficulty).to.deep.equal(difficulty);
+		expect(result.solution).toStrictEqual(solution);
+		expect(result.problem).toStrictEqual(puzzle);
+		expect(result.difficultyLevel).toStrictEqual(difficulty);
 	});
 });

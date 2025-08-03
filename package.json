@@ -31,12 +31,13 @@
 		"test:e2e:ui": "playwright test --ui",
 		"test:install:browsers": "playwright install chromium",
 		"test:install:deps": "playwright install-deps chromium",
-		"test:unit": "vitest --project unit",
-		"test:unit:run": "vitest --project unit --run",
+		"test:unit": "bun test --watch",
+		"test:unit:run": "bun test",
 		"wrangler": "wrangler"
 	},
 	"devDependencies": {
 		"@eslint/compat": "^1.2.7",
+		"@faker-js/faker": "^9.9.0",
 		"@lhci/cli": "^0.14.0",
 		"@playwright/test": "^1.51.1",
 		"@solidjs/testing-library": "^0.8.10",
@@ -58,6 +59,7 @@
 		"npm-run-all2": "^7.0.1",
 		"oxlint": "^0.15.13",
 		"prettier": "^3.3.3",
+		"sinon": "^21.0.0",
 		"typescript": "~5.7.3",
 		"typescript-eslint": "^8.26.0",
 		"vite-tsconfig-paths": "^5.1.4",

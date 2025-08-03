@@ -5,16 +5,16 @@ import type { RecordDifference } from "#src/lib/utils/types/record";
 export function mapPuzzleToDB(it: Puzzle, keys: RecordDifference<DBPuzzle, Puzzle>): DBPuzzle {
 	return {
 		...keys,
-		difficulty: it.difficulty,
+		difficultyLevel: it.difficultyLevel,
 		id: it.id,
 	};
 }
 
 export function mapDBToPuzzle(it: DBPuzzle): Puzzle {
-	const { problem, solution, difficulty } = decodePuzzle(it.id);
+	const { problem, solution, difficultyLevel } = decodePuzzle(it.id);
 
 	return {
-		difficulty,
+		difficultyLevel,
 		id: it.id,
 		problem,
 		solution,

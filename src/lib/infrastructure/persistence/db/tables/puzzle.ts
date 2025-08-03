@@ -4,9 +4,9 @@ import type { ObjectStoreIndexRecord } from "#src/lib/utils/types/object-store";
 export const puzzleTbl = {
 	name: "puzzle",
 	index: {
-		difficulty: {
-			name: "difficulty",
-			keyPath: "difficulty",
+		difficultyLevel: {
+			name: "difficultyLevel",
+			keyPath: "difficultyLevel",
 			options: {
 				unique: false,
 			},

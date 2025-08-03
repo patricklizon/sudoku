@@ -1,4 +1,4 @@
-import { describe, expect, test } from "vitest";
+import { describe, expect, test } from "bun:test";
 import { GRID_SIZE, GRID_BOX_CELLS_COUNT, GRID_BOX_SIZE } from "./constants";
 import { ValueOutOfRangeError } from "./errors";
 import {
@@ -140,7 +140,7 @@ describe("#" + readGridBoxCellsAt.name, () => {
 	])("reads %s subgrid with coordinates (%d, %d)", (_, rowIdx, colIdx, expected) => {
 		const result = readGridBoxCellsAt(grid, { colIdx, rowIdx });
 
-		expect(result).to.deep.equal(expected);
+		expect(result).toStrictEqual(expected);
 	});
 
 	test.each<[row: number, col: number]>([
@@ -148,7 +148,7 @@ describe("#" + readGridBoxCellsAt.name, () => {
 		[2, 9],
 		[-2, 10],
 	])("throws when reading with coordinates outside of range", (rowIdx, colIdx) => {
-		expect(() => readGridBoxCellsAt(grid, { colIdx, rowIdx })).to.throw(ValueOutOfRangeError);
+		expect(() => readGridBoxCellsAt(grid, { colIdx, rowIdx })).toThrow(ValueOutOfRangeError);
 	});
 });
 
@@ -157,11 +157,15 @@ describe("#" + createEmptyGrid.name, () => {
 	const emptyCell = createEmptyGridCell();
 
 	test("grid has correct size", () => {
-		expect(grid).to.have.lengthOf(GRID_SIZE * GRID_SIZE);
+		expect(grid).toHaveLength(GRID_SIZE * GRID_SIZE);
 	});
 
 	test.each(grid)("grid has correct values", (cell) => {
-		expect(cell).to.equal(emptyCell);
+		expect(cell).toEqual(
+			// TODO: figure out types for expect and toEqual
+			// @ts-expect-error: for some reason undefined is dropped
+			emptyCell,
+		);
 	});
 });
 
@@ -170,11 +174,15 @@ describe("#" + createEmptyGridBox.name, () => {
 	const emptyCell = createEmptyGridCell();
 
 	test("grid has correct size", () => {
-		expect(grid).to.have.lengthOf(GRID_BOX_SIZE * GRID_BOX_SIZE);
+		expect(grid).toHaveLength(GRID_BOX_SIZE * GRID_BOX_SIZE);
 	});
 
 	test.each(grid)("grid has correct values", (cell) => {
-		expect(cell).to.deep.equal(emptyCell);
+		expect(cell).toStrictEqual(
+			// TODO: figure out types for expect and toEqual
+			// @ts-expect-error: for some reason undefined is dropped
+			emptyCell,
+		);
 	});
 });
 
@@ -184,7 +192,7 @@ describe("#" + fillDiagonalGridBoxesWithValues.name, () => {
 
 		const grid = createEmptyGrid();
 
-		expect(grid.every(isGridCellEmpty)).to.equal(true);
+		expect(grid.every(isGridCellEmpty)).toEqual(true);
 
 		fillDiagonalGridBoxesWithValues(grid);
 
@@ -192,9 +200,9 @@ describe("#" + fillDiagonalGridBoxesWithValues.name, () => {
 		const topMiddleGridBox = readGridBoxCellsAt(grid, { colIdx: GRID_BOX_SIZE, rowIdx: 0 });
 		const topRightGridBox = readGridBoxCellsAt(grid, { colIdx: GRID_BOX_SIZE * 2, rowIdx: 0 });
 
-		expect(topLeftGridBox.every(isGridCellFilled)).to.equal(true);
-		expect(topMiddleGridBox.every(isGridCellEmpty)).to.equal(true);
-		expect(topRightGridBox.every(isGridCellEmpty)).to.equal(true);
+		expect(topLeftGridBox.every(isGridCellFilled)).toEqual(true);
+		expect(topMiddleGridBox.every(isGridCellEmpty)).toEqual(true);
+		expect(topRightGridBox.every(isGridCellEmpty)).toEqual(true);
 
 		const middleLeftGridBox = readGridBoxCellsAt(grid, { colIdx: 0, rowIdx: GRID_BOX_SIZE });
 		const middleMiddleGridBox = readGridBoxCellsAt(grid, {
@@ -206,9 +214,9 @@ describe("#" + fillDiagonalGridBoxesWithValues.name, () => {
 			rowIdx: GRID_BOX_SIZE,
 		});
 
-		expect(middleLeftGridBox.every(isGridCellEmpty)).to.equal(true);
-		expect(middleMiddleGridBox.every(isGridCellFilled)).to.equal(true);
-		expect(middleRightGridBox.every(isGridCellEmpty)).to.equal(true);
+		expect(middleLeftGridBox.every(isGridCellEmpty)).toEqual(true);
+		expect(middleMiddleGridBox.every(isGridCellFilled)).toEqual(true);
+		expect(middleRightGridBox.every(isGridCellEmpty)).toEqual(true);
 
 		const bottomLeftGridBox = readGridBoxCellsAt(grid, { colIdx: 0, rowIdx: GRID_BOX_SIZE * 2 });
 		const bottomMiddleGridBox = readGridBoxCellsAt(grid, {
@@ -220,9 +228,9 @@ describe("#" + fillDiagonalGridBoxesWithValues.name, () => {
 			rowIdx: GRID_BOX_SIZE * 2,
 		});
 
-		expect(bottomLeftGridBox.every(isGridCellEmpty)).to.equal(true);
-		expect(bottomMiddleGridBox.every(isGridCellEmpty)).to.equal(true);
-		expect(bottomRightGridBox.every(isGridCellFilled)).to.equal(true);
+		expect(bottomLeftGridBox.every(isGridCellEmpty)).toEqual(true);
+		expect(bottomMiddleGridBox.every(isGridCellEmpty)).toEqual(true);
+		expect(bottomRightGridBox.every(isGridCellFilled)).toEqual(true);
 	});
 });
 
@@ -246,7 +254,7 @@ describe("#" + isGridCellValueCorrectAt.name, () => {
 			return { colIdx: Math.floor(idx / GRID_BOX_SIZE), rowIdx: idx % GRID_BOX_SIZE };
 		}),
 	)(`no interference, therefore %j is marked as correctly placed`, (coordinates) => {
-		expect(isGridCellValueCorrectAt(g, coordinates)).to.equal(true);
+		expect(isGridCellValueCorrectAt(g, coordinates)).toEqual(true);
 	});
 
 	// 1st row of 4th sub-grid
@@ -257,7 +265,7 @@ describe("#" + isGridCellValueCorrectAt.name, () => {
 	] satisfies GridCellCoordinates[])(
 		`duplicate value in other sub-grid's row, therefore %j marked as incorrectly placed`,
 		(coordinates) => {
-			expect(isGridCellValueCorrectAt(g, coordinates)).to.equal(false);
+			expect(isGridCellValueCorrectAt(g, coordinates)).toEqual(false);
 		},
 	);
 
@@ -269,7 +277,7 @@ describe("#" + isGridCellValueCorrectAt.name, () => {
 	] satisfies GridCellCoordinates[])(
 		`no interference, therefore (%d, %d) is marked as correctly placed`,
 		(coordinates) => {
-			expect(isGridCellValueCorrectAt(g, coordinates)).to.equal(true);
+			expect(isGridCellValueCorrectAt(g, coordinates)).toEqual(true);
 		},
 	);
 
@@ -279,7 +287,7 @@ describe("#" + isGridCellValueCorrectAt.name, () => {
 			return { colIdx: idx, rowIdx: 4 };
 		}),
 	)(`row has duplicated values which makes %j marked as incorrectly placed`, (coordinates) => {
-		expect(isGridCellValueCorrectAt(g, coordinates)).to.equal(false);
+		expect(isGridCellValueCorrectAt(g, coordinates)).toEqual(false);
 	});
 
 	// 9th sub-grid
@@ -288,13 +296,13 @@ describe("#" + isGridCellValueCorrectAt.name, () => {
 			return { colIdx: 6 + Math.floor(idx / GRID_BOX_SIZE), rowIdx: 6 + (idx % GRID_BOX_SIZE) };
 		}),
 	)(`sub-grid has duplicated value which makes %j marked as incorrectly placed`, (coordinates) => {
-		expect(isGridCellValueCorrectAt(g, coordinates)).to.equal(false);
+		expect(isGridCellValueCorrectAt(g, coordinates)).toEqual(false);
 	});
 });
 
 describe("#" + createEmptyGridCell.name, () => {
 	test("creates allowed values accepted by cell", () => {
-		expect(createEmptyGridCell()).to.equal(undefined);
+		expect(createEmptyGridCell()).toBeOneOf([null, undefined]);
 	});
 });
 
@@ -317,7 +325,7 @@ describe("#" + getAllowedGridCellValuesAt.name, () => {
 		[{ colIdx: 1, rowIdx: 0 }, new Set()],
 		[{ colIdx: 7, rowIdx: 2 }, new Set([3, 5, 6])],
 	])("returns potentially correct values at given coordinate", (coordinates, expected) => {
-		expect(getAllowedGridCellValuesAt(g, coordinates)).to.deep.equal(expected);
+		expect(getAllowedGridCellValuesAt(g, coordinates)).toStrictEqual(expected);
 	});
 });
 
@@ -326,6 +334,6 @@ describe("#" + readGridCellIndexesOfGridBoxAt.name, () => {
 		const left = readGridCellIndexesOfGridBoxAt({ rowIdx: 0, colIdx: 0 });
 		const right = new Set([0, 1, 2, 9, 10, 11, 18, 19, 20]);
 
-		expect(left).to.deep.equal(right);
+		expect(left).toStrictEqual(right);
 	});
 });

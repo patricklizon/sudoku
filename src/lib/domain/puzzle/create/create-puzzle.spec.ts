@@ -1,4 +1,4 @@
-import { describe, expect, test } from "vitest";
+import { describe, expect, test } from "bun:test";
 import { createPuzzle } from "#src/lib/domain/puzzle/create/create-puzzle";
 import { DIFFICULTY_LEVEL } from "#src/lib/domain/puzzle/difficulty";
 
@@ -7,7 +7,7 @@ describe("#" + createPuzzle.name, () => {
 	test.each(Object.values(DIFFICULTY_LEVEL).slice(0, 4))("creates puzzle", (expectedDifficulty) => {
 		const left = createPuzzle(expectedDifficulty);
 
-		expect(left.difficulty).to.equal(expectedDifficulty);
-		expect(left.id).not.to.be.empty;
+		expect(left.difficultyLevel).toEqual(expectedDifficulty);
+		expect(left.id).not.toHaveLength(0);
 	});
 });

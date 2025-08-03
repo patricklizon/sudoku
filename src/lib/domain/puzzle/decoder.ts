@@ -6,6 +6,7 @@ import type {
 	PuzzleProblem,
 	PuzzleSolution,
 } from "#src/lib/domain/puzzle/types";
+import { createEmptyGridCell } from "./grid";
 
 /**
  * Decodes an encoded puzzle string into its solution and initial puzzle state
@@ -13,14 +14,14 @@ import type {
 export function decodePuzzle(s: PuzzleEncoded): {
 	solution: PuzzleSolution;
 	problem: PuzzleProblem;
-	difficulty: PuzzleDifficultyLevel;
+	difficultyLevel: PuzzleDifficultyLevel;
 } {
 	const codePointOffset = ENCODED_EMPTY_FIELD_CODE_POINT_OFFSET;
 	const solution = [] as unknown as PuzzleSolution;
 	const problem = [] as unknown as PuzzleProblem;
 
-	const difficulty = Number.parseInt(s.at(-1) ?? "", 10);
-	if (!isPuzzleDifficultyLevel(difficulty)) {
+	const difficultyLevel = Number.parseInt(s.at(-1) ?? "", 10);
+	if (!isPuzzleDifficultyLevel(difficultyLevel)) {
 		throw new Error("Difficulty level is not defined");
 	}
 
@@ -34,11 +35,12 @@ export function decodePuzzle(s: PuzzleEncoded): {
 				String.fromCodePoint((char.codePointAt(0) ?? 0) - codePointOffset),
 				10,
 			);
+			problem[idx] = createEmptyGridCell();
 		} else {
 			solution[idx] = number;
 			problem[idx] = number;
 		}
 	}
 
-	return { solution, problem, difficulty };
+	return { solution, problem, difficultyLevel };
 }

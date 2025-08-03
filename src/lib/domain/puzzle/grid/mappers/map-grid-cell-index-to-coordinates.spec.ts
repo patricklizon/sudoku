@@ -1,4 +1,4 @@
-import { describe, test, expect } from "vitest";
+import { describe, test, expect } from "bun:test";
 import { ValueOutOfRangeError } from "../errors";
 import type { GridCellCoordinates } from "../types";
 import { mapGridCellIndexToCoordinates } from "./map-grid-cell-index-to-coordinates";
@@ -11,7 +11,7 @@ describe("#" + mapGridCellIndexToCoordinates.name, () => {
 			[33, { rowIdx: 4, colIdx: 7 }],
 		],
 	])("returns coorect coordinates", ([index, coordinates]) => {
-		expect(mapGridCellIndexToCoordinates(index)).to.deep.equal(coordinates);
+		expect(mapGridCellIndexToCoordinates(index)).toStrictEqual(coordinates);
 	});
 
 	test.each<number[]>([[-1, Number.POSITIVE_INFINITY]])(

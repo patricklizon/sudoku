@@ -11,7 +11,7 @@ export function createPuzzle(difficulty: PuzzleDifficultyLevel): Puzzle {
 	return {
 		problem,
 		solution,
-		difficulty,
+		difficultyLevel: difficulty,
 		id,
 	};
 }

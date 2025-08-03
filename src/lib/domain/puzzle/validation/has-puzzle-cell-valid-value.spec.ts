@@ -1,4 +1,4 @@
-import { expect, describe, test } from "vitest";
+import { expect, describe, test } from "bun:test";
 import type { GridFilled, GridCellCoordinates } from "#src/lib/domain/puzzle/grid";
 import { hasPuzzleCellValidValue } from "./has-puzzle-cell-valid-value";
 
@@ -29,6 +29,6 @@ describe("#" + hasPuzzleCellValidValue.name, () => {
 		[{ rowIdx: 1, colIdx: 1 }, 9, true],
 		[{ rowIdx: 8, colIdx: 3 }, 9, true],
 	])("%j returns correct value when passing %d", (coordinates, val, expected) => {
-		expect(hasPuzzleCellValidValue(puzzleSolved, coordinates, val)).to.equal(expected);
+		expect(hasPuzzleCellValidValue(puzzleSolved, coordinates, val)).toEqual(expected);
 	});
 });
