@@ -5,9 +5,11 @@
 	"type": "module",
 	"scripts": {
 		"build": "vinxi build",
-		"cf-typegen": "wrangler types src/worker-configuration.d.ts",
+		"cf-typegen": "wrangler types @types/generated/worker-configuration.d.ts",
+		"postcf-typegen": "git diff --quiet @types/generated/worker-configuration.d.ts || (echo 'worker-configuration.d.ts is outdated' && exit 1)",
 		"check:format": "prettier --check .",
 		"check:lint": "run-s lint:*",
+		"check:typegen": "bun run cf-typegen",
 		"check:types": "tsc --build --noEmit",
 		"deploy": "echo 'install a server adapter'",
 		"dev": "vinxi dev",

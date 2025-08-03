@@ -24,7 +24,6 @@ jobs:
       - uses: ./.github/actions/setup-environment
 
   install-browsers:
-    needs: [install-dependencies]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -32,20 +31,29 @@ jobs:
       - uses: ./.github/actions/browsers
 
   quality-checks:
-    needs: [install-dependencies]
     runs-on: ubuntu-latest
     strategy:
       fail-fast: true
       matrix:
-        check: [check:format, check:types, check:lint, test:unit:run]
+        check: [check:format, check:types, check:lint, check:typegen]
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup-environment
       - name: Check ${{ matrix.check }}
         run: bun run ${{ matrix.check }}
 
+  test-unit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/browsers
+      - uses: ./.github/actions/setup-environment
+
+      - name: Run unit tests
+        run: npm run test:unit:run
+
   test-browser:
-    needs: [install-dependencies, install-browsers]
+    needs: [install-dependencies, install-browsers, test-unit]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -59,7 +67,7 @@ jobs:
         run: npm run test:browser:run
 
   build:
-    needs: [install-dependencies, quality-checks, test-browser]
+    needs: [quality-checks, test-browser]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -69,7 +77,7 @@ jobs:
           operation: upload
 
   e2e:
-    needs: [install-dependencies, install-browsers, build]
+    needs: [install-browsers, build]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -89,7 +97,7 @@ jobs:
           retention-days: 30
 
   deploy:
-    needs: [install-dependencies, build, e2e]
+    needs: [build, e2e]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

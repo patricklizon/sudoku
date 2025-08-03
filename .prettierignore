@@ -4,6 +4,6 @@ dist/
 public/
 static/
 # auto generated:
-src/worker-configuration.d.ts
+@types/generated/
 
 package-lock.json
