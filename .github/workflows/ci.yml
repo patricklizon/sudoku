@@ -37,21 +37,12 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        check: [format, types, lint]
+        check: [check:format, check:types, check:lint, test:unit:run]
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup-environment
       - name: Check ${{ matrix.check }}
         run: bun run check:${{ matrix.check }}
-
-  test-unit:
-    needs: [install-dependencies]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: ./.github/actions/setup-environment
-      - name: Run unit tests
-        run: npm run test:unit:run
 
   test-browser:
     needs: [install-dependencies, install-browsers]
@@ -68,7 +59,7 @@ jobs:
         run: npm run test:browser:run
 
   build:
-    needs: [install-dependencies, quality-checks, test-unit, test-browser]
+    needs: [install-dependencies, quality-checks, test-browser]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
