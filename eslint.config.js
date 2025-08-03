@@ -95,11 +95,13 @@ export default tseslint.config(
 
 	{
 		name: "vitest",
-		files: ["**/*.spec.{ts,tsx}"],
+		files: ["**/*.spec.{ts,tsx}", "**/*.spec.*.{ts,tsx}"],
 		plugins: { vitest: pluginVitest },
 		rules: {
 			...pluginVitest.configs.recommended.rules,
 			"@typescript-eslint/no-non-null-assertion": "off",
+			"@typescript-eslint/no-base-to-string": "off",
+			"@typescript-eslint/restrict-template-expressions": "off",
 			"vitest/no-disabled-tests": "error",
 			"vitest/no-focused-tests": "error",
 			"vitest/no-conditional-tests": "error",

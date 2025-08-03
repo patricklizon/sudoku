@@ -1,6 +1,6 @@
 {
 	"$schema": "./node_modules/oxlint/configuration_schema.json",
-	"ignorePatterns": ["./src/worker-configuration.d.ts"],
+	"ignorePatterns": ["./@types/generated/**"],
 	"categories": {
 		"correctness": "error",
 		"pedantic": "error",
@@ -209,7 +209,9 @@
 						"assertFunctionNames": ["assert", "expect"]
 					}
 				],
+				"unicorn/no-new-array": "off",
 				"eslint/max-params": "off",
+				"eslint/no-array-constructor": "off",
 				"max-nested-describe": "error",
 				"no-conditional-in-test": "error",
 				"eslint/no-unused-expressions": "off",

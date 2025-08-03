@@ -1,4 +1,4 @@
-import { describe, expect, test } from "bun:test";
+import { describe, expect, test } from "vitest";
 import { decodePuzzle } from "#src/lib/domain/puzzle/decoder";
 import { createEmptyGridCell } from "#src/lib/domain/puzzle/grid";
 import type {

@@ -10,7 +10,7 @@
 		"jsx": "preserve",
 		"jsxImportSource": "solid-js",
 		"allowJs": true,
-		"types": ["./worker-configuration.d.ts", "bun-types", "vinxi/types/client"],
+		"types": ["bun-types", "vinxi/types/client"],
 		"lib": ["ESNEXT", "DOM", "WebWorker"],
 		"isolatedModules": true,
 		"strict": true,

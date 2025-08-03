@@ -37,15 +37,29 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        check: [check:format, check:types, check:lint, test:unit:run]
+        check: [check:format, check:types, check:lint, check:typegen]
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup-environment
       - name: Check ${{ matrix.check }}
         run: bun run ${{ matrix.check }}
 
+  test-unit:
+    needs: [install-dependencies]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/browsers
+      - uses: ./.github/actions/setup-environment
+        with:
+          # override runtime due to vitest being incompatible with bun
+          runtime: node
+
+      - name: Run unit tests
+        run: npm run test:unit:run
+
   test-browser:
-    needs: [install-dependencies, install-browsers]
+    needs: [install-dependencies, install-dependencies, install-browsers, test-unit]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

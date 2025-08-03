@@ -1,4 +1,4 @@
-import { describe, expect, test } from "bun:test";
+import { describe, expect, test } from "vitest";
 import { DIFFICULTY_LEVEL } from "#src/lib/domain/puzzle/difficulty";
 import { encodePuzzle } from "#src/lib/domain/puzzle/encoder";
 import { createEmptyGridCell } from "#src/lib/domain/puzzle/grid";

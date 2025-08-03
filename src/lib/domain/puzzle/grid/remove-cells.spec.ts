@@ -1,4 +1,4 @@
-import { describe, expect, test } from "bun:test";
+import { describe, expect, test } from "vitest";
 import { createEmptyGridCell, type Grid, GRID_SIZE } from "#src/lib/domain/puzzle/grid";
 import { type Config, _isRowAndColMinimumCellCountSatisfied } from "./remove-cells";
 

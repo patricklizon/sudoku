@@ -1,4 +1,4 @@
-import { describe, expect, test } from "bun:test";
+import { describe, expect, test } from "vitest";
 import { GRID_SIZE, GRID_BOX_CELLS_COUNT, GRID_BOX_SIZE } from "./constants";
 import { ValueOutOfRangeError } from "./errors";
 import {
@@ -161,11 +161,7 @@ describe("#" + createEmptyGrid.name, () => {
 	});
 
 	test.each(grid)("grid has correct values", (cell) => {
-		expect(cell).toEqual(
-			// TODO: figure out types for expect and toEqual
-			// @ts-expect-error: for some reason undefined is dropped
-			emptyCell,
-		);
+		expect(cell).toEqual(emptyCell);
 	});
 });
 
@@ -178,11 +174,7 @@ describe("#" + createEmptyGridBox.name, () => {
 	});
 
 	test.each(grid)("grid has correct values", (cell) => {
-		expect(cell).toStrictEqual(
-			// TODO: figure out types for expect and toEqual
-			// @ts-expect-error: for some reason undefined is dropped
-			emptyCell,
-		);
+		expect(cell).toStrictEqual(emptyCell);
 	});
 });
 

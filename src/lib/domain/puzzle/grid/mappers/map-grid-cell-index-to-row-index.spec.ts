@@ -1,4 +1,4 @@
-import { describe, test, expect } from "bun:test";
+import { describe, test, expect } from "vitest";
 import { ValueOutOfRangeError } from "../errors";
 import { mapGridCellIndexToRowIndex } from "./map-grid-cell-index-to-row-index";
 

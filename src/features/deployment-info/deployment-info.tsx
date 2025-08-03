@@ -1,5 +1,5 @@
 import type { JSX } from "solid-js";
-import { getRequestEvent } from "solid-js/web";
+import { useDeploymentInfo } from "#src/context/deployment";
 import type { DeploymentInfo } from "#src/lib/domain/deployment";
 import { isEmpty } from "#src/lib/utils/is-empty";
 import { isNil } from "#src/lib/utils/is-nil";
@@ -8,35 +8,28 @@ import { isNil } from "#src/lib/utils/is-nil";
  * Renders details about the environment in which the application is currently deployed.
  */
 export function DeploymentInfo(): JSX.Element {
-	const deploymentInfo = getDeploymentInfo();
+	const info = useDeploymentInfo();
+
+	const formattedTimestamp =
+		isNil(info.timestamp) || isEmpty(info.timestamp)
+			? null
+			: new Intl.DateTimeFormat(undefined, { dateStyle: "full", timeStyle: "long" }).format(
+					new Date(info.timestamp),
+				);
 
 	return (
 		<footer>
-			<p>Deployment ID: {deploymentInfo.id}</p>
-			<p>Deploy URL: {deploymentInfo.host}</p>
+			{isNil(info.id) ? null : <p>Deployment ID: {info.id}</p>}
+			{isNil(formattedTimestamp) ? null : <p>Deployed At: {formattedTimestamp}</p>}
+			{isNil(info.host) ? null : <p>Deploy URL: {info.host}</p>}
+			{isNil(info.pullRequestURL) ? null : (
+				<p>
+					Pull Request URL:{" "}
+					<a href={info.pullRequestURL} target="_blank">
+						{info.pullRequestURL}
+					</a>
+				</p>
+			)}
 		</footer>
 	);
-}
-
-type DeploymentInfoQueryResult = {
-	id: Option<DeploymentInfo["id"]>;
-	host: Option<DeploymentInfo["host"]>;
-};
-
-/**
- * Handles GET requests to retrieve deployment information.
- * This function extracts deployment data from the Cloudflare environment
- * available through the SolidStart request event.
- */
-function getDeploymentInfo(): DeploymentInfoQueryResult {
-	"use server";
-
-	const event = getRequestEvent();
-	if (isNil(event)) throw new Error("No request context");
-
-	const env = event.nativeEvent.context.cloudflare.env;
-	return {
-		id: env.DEPLOYMENT_ID,
-		host: isEmpty(env.DEPLOY_URL) ? new URL(event.request.url).host : env.DEPLOY_URL,
-	};
 }

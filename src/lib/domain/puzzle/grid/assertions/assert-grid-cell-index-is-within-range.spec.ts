@@ -1,4 +1,4 @@
-import { describe, test, expect } from "bun:test";
+import { describe, test, expect } from "vitest";
 import { GRID_CELL_COUNT } from "../constants";
 import { ValueOutOfRangeError } from "../errors";
 import { assertGridCellIndexIsWithinRange } from "./assert-grid-cell-index-is-within-range";

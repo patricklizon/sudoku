@@ -1,4 +1,4 @@
-import { expect, test } from "bun:test";
+import { expect, test } from "vitest";
 import { noop } from "./noop";
 
 test("returns nothing", () => {
