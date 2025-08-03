@@ -5880,7 +5880,7 @@ type AIGatewayHeaders = {
 	[key: string]: string | number | boolean | object;
 };
 type AIGatewayUniversalRequest = {
-	provider: AIGatewayProviders | string; // eslint-disable-line
+	provider: AIGatewayProviders | string;
 	endpoint: string;
 	headers: Partial<AIGatewayHeaders>;
 	query: unknown;
