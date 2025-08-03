@@ -1,23 +1,24 @@
-import { useDeploymentInfo } from "#src/context/deployment-info";
+import type { JSX } from "solid-js";
+import { useDeploymentInfo } from "#src/context/deployment";
 import type { DeploymentInfo } from "#src/lib/domain/deployment";
+import { isEmpty } from "#src/lib/utils/is-empty";
 import { isNil } from "#src/lib/utils/is-nil";
 
 /**
  * Renders details about the environment in which the application is currently deployed.
  */
 
-// src/components/DeploymentInfo.tsx
-
-export function DeploymentInfo() {
+export function DeploymentInfo(): JSX.Element {
 	const info = useDeploymentInfo();
 
 	// if (!info) return null;
 
-	const formattedTimestamp = info.timestamp
-		? new Intl.DateTimeFormat(undefined, { dateStyle: "full", timeStyle: "long" }).format(
-				new Date(info.timestamp),
-			)
-		: null;
+	const formattedTimestamp =
+		isNil(info.timestamp) || isEmpty(info.timestamp)
+			? null
+			: new Intl.DateTimeFormat(undefined, { dateStyle: "full", timeStyle: "long" }).format(
+					new Date(info.timestamp),
+				);
 
 	return (
 		<footer>
