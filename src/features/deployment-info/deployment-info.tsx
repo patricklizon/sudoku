@@ -7,11 +7,8 @@ import { isNil } from "#src/lib/utils/is-nil";
 /**
  * Renders details about the environment in which the application is currently deployed.
  */
-
 export function DeploymentInfo(): JSX.Element {
 	const info = useDeploymentInfo();
-
-	// if (!info) return null;
 
 	const formattedTimestamp =
 		isNil(info.timestamp) || isEmpty(info.timestamp)
