@@ -11,7 +11,7 @@
 		"check:lint": "run-s lint:*",
 		"check:typegen": "bun run cf-typegen",
 		"check:types": "tsc --noEmit",
-		"dev": "vinxi dev --port 3000",
+		"dev": "vinxi dev --port 5173",
 		"fix:format": "prettier . --list-different --write",
 		"fix:lint": "run-s fix:lint:*",
 		"fix:lint:eslint": "eslint ./src --fix",
