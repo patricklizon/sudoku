@@ -141,7 +141,6 @@ Summary of `bun run` scripts defined in `package.json`.
 
 | Script                  | Description                                         |
 | :---------------------- | :-------------------------------------------------- |
-| `test`                  | Runs both browser and unit tests via Vitest.        |
 | `test:unit`             | Runs unit tests in watch mode using Bun.            |
 | `test:unit:run`         | Runs unit tests once using Bun.                     |
 | `test:browser`          | Runs browser-based component tests via Vitest.      |
@@ -161,10 +160,10 @@ Summary of `bun run` scripts defined in `package.json`.
 | `fix:format`      | Automatically fixes formatting issues with Prettier. |
 | `check:lint`      | Runs all linters (ESLint and Oxlint).                |
 | `fix:lint`        | Automatically fixes linting issues.                  |
-| `fix:lint:eslint` | Automatically fixes ESLint issues.                   |
-| `fix:lint:oxlint` | Automatically fixes Oxlint issues.                   |
-| `lint:eslint`     | Lints files with ESLint.                             |
-| `lint:oxlint`     | Lints files with Oxlint.                             |
+| `fix:lint:eslint` | Automatically fixes issues (used by `fix:lint`).     |
+| `fix:lint:oxlint` | Automatically fixes issues (used by `fix:lint`).     |
+| `lint:eslint`     | Lints files with ESLint (used by `check:lint`).      |
+| `lint:oxlint`     | Lints files with Oxlint (used by `check:lint`).      |
 | `check:types`     | Validates TypeScript types across the project.       |
 | `lighthouse`      | Runs Lighthouse performance audits.                  |
 

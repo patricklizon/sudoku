@@ -24,7 +24,6 @@
 		"preview": "wrangler dev --local --port 3000 --log-level error",
 		"start": "vinxi start",
 		"start:dev": "vite",
-		"test": "vitest --project browser unit",
 		"test:browser": "vitest --project browser",
 		"test:browser:run": "vitest --project browser --run",
 		"test:e2e": "playwright test",
