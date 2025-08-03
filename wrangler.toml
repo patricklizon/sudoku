@@ -1,6 +1,6 @@
 name = "sudoku"
 main = "./.output/server/index.mjs"
-compatibility_date = "2025-07-31"
+compatibility_date = "2025-07-30"
 compatibility_flags = ["nodejs_compat"]
 
 [assets]

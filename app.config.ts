@@ -4,7 +4,7 @@ import tsConfigPaths from "vite-tsconfig-paths";
 export default defineConfig({
 	server: {
 		preset: "cloudflare_module",
-		compatibilityDate: "2025-07-31",
+		compatibilityDate: "2025-07-30",
 	},
 	vite: {
 		plugins: [
@@ -14,12 +14,11 @@ export default defineConfig({
 		worker: {
 			format: "es",
 			rollupOptions: {
-				output: {
-					esModule: true,
-				},
+				output: { esModule: true },
 			},
+
 			// @ts-expect-error: verify
-			plugins: [tsConfigPaths()],
+			plugins: () => [tsConfigPaths()],
 		},
 	},
 });
