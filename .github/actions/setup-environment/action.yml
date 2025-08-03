@@ -43,4 +43,9 @@ runs:
     - name: Install dependencies
       if: steps.cache.outputs.cache-hit != 'true'
       shell: bash
-      run: bun install --frozen-lockfile
+      run: |
+        if [ "${{ inputs.runtime }}" == "node" ]; then
+        npm ci
+        else
+        bun install --frozen-lockfile
+        fi
