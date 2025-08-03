@@ -11,17 +11,15 @@ import { isSafeNumber } from "#src/lib/utils/is-safe-number";
 
 export function DeploymentInfo(): JSX.Element {
 	const deploymentInfo = getDeploymentInfo();
-	const [formattedTimestamp, setFormattedTimestamp] = createSignal<string | null>(null);
+	const [formattedTimestamp, setFormattedTimestamp] = createSignal<Option<string>>();
 
 	onMount(() => {
 		if (isNil(deploymentInfo.timestamp) || isEmpty(deploymentInfo.timestamp)) return;
 
 		const date = new Date(deploymentInfo.timestamp);
-		if (isSafeNumber(date.getTime())) {
-			setFormattedTimestamp(
-				new Intl.DateTimeFormat(undefined, { dateStyle: "full", timeStyle: "long" }).format(date),
-			);
-		}
+		setFormattedTimestamp(
+			new Intl.DateTimeFormat(undefined, { dateStyle: "full", timeStyle: "long" }).format(date),
+		);
 	});
 
 	return (
@@ -53,6 +51,7 @@ type DeploymentInfoQueryResult = {
  * This function extracts deployment data from the Cloudflare environment
  * available through the SolidStart request event.
  */
+// TODO: extract to mapper, safely extract date
 function getDeploymentInfo(): DeploymentInfoQueryResult {
 	"use server";
 
