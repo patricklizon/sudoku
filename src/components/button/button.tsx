@@ -5,7 +5,12 @@ export type ButtonProps = ComponentCommonTypes<JSX.ButtonHTMLAttributes<HTMLButt
 
 export function Button(props: ButtonProps): JSX.Element {
 	return (
-		<button {...props} data-testid={props["data-testid"] ?? ButtonTestId.root}>
+		<button
+			{...props}
+			disabled={props.disabled ?? false}
+			type={props.type ?? "button"}
+			data-testid={props["data-testid"] ?? ButtonTestId.root}
+		>
 			{props.children}
 		</button>
 	);
