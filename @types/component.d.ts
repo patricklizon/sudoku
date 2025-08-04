@@ -1,7 +1,7 @@
-type _ComponentCommonTypes = {
+type _ComponentCommonProps = {
 	class?: string;
 	classList?: { [className: string]: boolean } | undefined;
 	"data-testid"?: string;
 };
 
-type ComponentCommonTypes<T> = Omit<T, keyof _ComponentCommonTypes> & _ComponentCommonTypes;
+type ComponentCommonProps<T> = Omit<T, keyof _ComponentCommonProps> & _ComponentCommonProps;

@@ -11,7 +11,7 @@ type DeploymentInfoCtx = {
 	pullRequestURL: Option<DeploymentInfo["pullRequestURL"]>;
 };
 
-const DeploymentContext = createContext<DeploymentInfoCtx>();
+const DeploymentInfoContext = createContext<DeploymentInfoCtx>();
 
 function loadDeploymentInfo(): DeploymentInfoCtx {
 	// "use server";
@@ -20,7 +20,8 @@ function loadDeploymentInfo(): DeploymentInfoCtx {
 
 	const env = event.nativeEvent.context.cloudflare.env;
 	// TODO: figure out how to inject it for better local development
-	// {
+	// see https://github.com/nitrojs/nitro/issues/3461
+	// const env = {
 	// 	DEPLOYMENT_ID: "local-dev",
 	// 	DEPLOYMENT_TIMESTAMP: "2025-08-03T18:50:39Z",
 	// 	DEPLOY_URL: "",
@@ -38,11 +39,15 @@ function loadDeploymentInfo(): DeploymentInfoCtx {
 
 export const DeploymentInfoProvider: ParentComponent = (props) => {
 	const [info] = createResource(loadDeploymentInfo, { deferStream: false });
-	return <DeploymentContext.Provider value={info()}>{props.children}</DeploymentContext.Provider>;
+
+	return (
+		<DeploymentInfoContext.Provider value={info()}>{props.children}</DeploymentInfoContext.Provider>
+	);
 };
 
 export function useDeploymentInfo(): DeploymentInfoCtx {
-	const ctx = useContext(DeploymentContext);
-	if (!ctx) throw new Error("Must be inside DeploymentInfoProvider");
+	const ctx = useContext(DeploymentInfoContext);
+	if (isNil(ctx)) throw new Error("Must be inside DeploymentInfoProvider");
+
 	return ctx;
 }
