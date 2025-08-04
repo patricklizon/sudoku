@@ -1,6 +1,5 @@
 import { decodePuzzle } from "#src/lib/domain/puzzle/decoder";
 import type { DBPuzzle, Puzzle } from "#src/lib/domain/puzzle/types";
-import type { RecordDifference } from "#src/lib/utils/types/record";
 
 export function mapPuzzleToDB(it: Puzzle, keys: RecordDifference<DBPuzzle, Puzzle>): DBPuzzle {
 	return {
