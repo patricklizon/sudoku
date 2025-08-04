@@ -83,6 +83,7 @@ bun run build
 
 # Deploy to production
 bun wrangler deploy \
+  --env production \
   --var DEPLOYMENT_ID:manual-$(date +%s) \
   --var DEPLOYMENT_TIMESTAMP:$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 ```
@@ -95,7 +96,7 @@ bun run build
 
 # Deploy to staging with preview alias
 bun wrangler versions upload \
-  --preview-alias staging-manual \
+  --preview-alias manual \
   --env staging \
   --var DEPLOYMENT_ID:staging-manual-$(date +%s) \
   --var DEPLOYMENT_TIMESTAMP:$(date -u +"%Y-%m-%dT%H:%M:%SZ")
