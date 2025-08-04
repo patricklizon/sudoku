@@ -131,7 +131,7 @@ The CI workflow includes the following jobs:
 - **e2e**: Downloads build artifacts and runs Playwright E2E tests.
 - **deploy**: Automatically deploys to Cloudflare using Wrangler after successful builds.
 
-## Dependabot
+### Dependabot
 
 This repository uses [Dependabot](https://docs.github.com/en/code-security/dependabot) to keep dependencies secure and up to date. Dependabot automatically creates pull requests for:
 
@@ -140,7 +140,7 @@ This repository uses [Dependabot](https://docs.github.com/en/code-security/depen
 
 These pull requests ensure that the project remains secure and compatible with the latest stable versions of its dependencies. Configuration for Dependabot is stored in `.github/dependabot.yml`.
 
-## Code Owners
+### Code Owners
 
 A `.github/CODEOWNERS` file is included to define responsibility for reviewing and approving changes. Pull requests affecting specific parts of the repository automatically request reviews from designated owners.
 
