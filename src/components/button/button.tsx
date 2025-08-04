@@ -1,7 +1,7 @@
 import type { JSX } from "solid-js";
 import { ButtonTestId } from "./button.testid";
 
-export type ButtonProps = ComponentCommonTypes<JSX.ButtonHTMLAttributes<HTMLButtonElement>>;
+export type ButtonProps = ComponentCommonProps<JSX.ButtonHTMLAttributes<HTMLButtonElement>>;
 
 export function Button(props: ButtonProps): JSX.Element {
 	return (
