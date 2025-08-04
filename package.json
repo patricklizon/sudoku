@@ -47,7 +47,7 @@
 		"@vitest/eslint-plugin": "^1.1.28",
 		"eslint": "^9.21.0",
 		"eslint-config-prettier": "^10.0.2",
-		"eslint-plugin-import": "^2.31.0",
+		"eslint-plugin-import": "^2.32.0",
 		"eslint-plugin-jsx-a11y": "^6.10.2",
 		"eslint-plugin-oxlint": "^0.15.10",
 		"eslint-plugin-playwright": "^2.2.2",
