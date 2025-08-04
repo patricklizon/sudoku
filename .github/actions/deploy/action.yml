@@ -75,7 +75,7 @@ runs:
           --var DEPLOYMENT_ID:${{ steps.metadata.outputs.deployment-id }} \
           --var DEPLOYMENT_TIMESTAMP:${{ steps.metadata.outputs.deployment-timestamp }}
 
-        DEPLOY_URL="https://sudoku.${{ inputs.workers-subdomain }}.workers.dev"
+        DEPLOY_URL="https://${{ inputs.project-name }}-production.${{ inputs.workers-subdomain }}.workers.dev"
         echo "deploy-url=$DEPLOY_URL" >> $GITHUB_OUTPUT
         echo "DEPLOY_URL=$DEPLOY_URL" >> $GITHUB_ENV
       env:
@@ -101,7 +101,7 @@ runs:
           --var DEPLOY_URL:$PREVIEW_URL \
           --var PULL_REQUEST_URL:${{ github.event.pull_request.html_url }}
 
-        PREVIEW_URL="https://$ALIAS-${{ inputs.project-name }}.${{ inputs.workers-subdomain }}.workers.dev"
+        PREVIEW_URL="https://$ALIAS-${{ inputs.project-name }}-staging.${{ inputs.workers-subdomain }}.workers.dev"
         echo "deploy-url=$PREVIEW_URL" >> $GITHUB_OUTPUT
         echo "DEPLOY_URL=$PREVIEW_URL" >> $GITHUB_ENV
       env:
