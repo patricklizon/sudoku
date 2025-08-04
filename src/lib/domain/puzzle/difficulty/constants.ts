@@ -21,7 +21,6 @@ import type {
 	PuzzleDifficultyLevelName,
 	PuzzleDifficultyLevel,
 } from "#src/lib/domain/puzzle/types";
-import type { DeepReadonly } from "#src/lib/utils/types/deep-readonly";
 import type { Range } from "#src/lib/utils/types/range";
 
 export const DIFFICULTY_LEVEL = {

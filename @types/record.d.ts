@@ -1,4 +1,4 @@
-export type RecordKey = string | number | symbol;
+type RecordKey = string | number | symbol;
 
 /**
  * Creates a type containing all keys from type A that are not present in type B.
@@ -15,9 +15,9 @@ export type RecordKey = string | number | symbol;
  * type MissingProps = RecordDifference<User, UserPartial>;
  * ```
  */
-export type RecordDifference<
+type RecordDifference<
 	R extends Record<RecordKey, unknown>,
 	ExcludeKeysFrom extends Record<RecordKey, unknown>,
 > = { [K in Exclude<keyof R, keyof ExcludeKeysFrom>]: R[K] };
 
-export type AnyRecord = Record<RecordKey, unknown>;
+type AnyRecord = Record<RecordKey, unknown>;

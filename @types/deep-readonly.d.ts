@@ -1,10 +1,7 @@
-import type { Primitive } from "./primitive";
-import type { RecordKey } from "./record";
-
 /**
  * Creates a deeply readonly version of a type.
  */
-export type DeepReadonly<T> = T extends Primitive
+type DeepReadonly<T> = T extends Primitive
 	? Readonly<T>
 	: T extends Record<RecordKey, unknown>
 		? Readonly<{ [K in keyof T]: DeepReadonly<T[K]> }>

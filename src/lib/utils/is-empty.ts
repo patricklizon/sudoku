@@ -1,5 +1,4 @@
 import { isNil } from "./is-nil";
-import type { Primitive } from "./types/primitive";
 
 export function isEmpty(it: { length: number } | { size: number } | Nil | Primitive): boolean {
 	if (isNil(it)) return true;

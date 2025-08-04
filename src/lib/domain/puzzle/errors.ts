@@ -1,4 +1,3 @@
-import type { AnyRecord } from "#src/lib/utils/types/record";
 import { type Grid, gridDebugFormatter } from "./grid";
 
 export class PuzzleGenerationError extends Error {
