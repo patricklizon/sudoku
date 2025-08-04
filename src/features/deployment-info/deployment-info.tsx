@@ -13,9 +13,10 @@ export function DeploymentInfo(): JSX.Element {
 	const formattedTimestamp =
 		isNil(info.timestamp) || isEmpty(info.timestamp)
 			? null
-			: new Intl.DateTimeFormat(undefined, { dateStyle: "full", timeStyle: "long" }).format(
-					new Date(info.timestamp),
-				);
+			: new Intl.DateTimeFormat(undefined, {
+					dateStyle: "medium",
+					timeStyle: "medium",
+				}).format(new Date(info.timestamp));
 
 	return (
 		<footer>

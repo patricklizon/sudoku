@@ -96,12 +96,21 @@ bun run dev
 
 This project employs a comprehensive testing strategy using [Vitest](https://vitest.dev/) for unit and browser-based component tests, and [Playwright](https://playwright.dev/) for end-to-end (E2E) tests.
 
-- **Unit Testing**: Bun is used as the primary test runner for unit tests (`test:unit`), providing fast execution for individual component and logic testing.
-- **Browser Testing**: Vitest runs component tests in a headless browser environment (`test:browser`) for higher fidelity testing of UI components.
-- **End-to-End Testing**: Playwright executes E2E tests against the built application, simulating real user interactions to validate critical user flows.
-- **Cloudflare Integration**: The testing setup supports local Cloudflare Workers development and testing using Wrangler.
+### Testing Structure
 
-For detailed commands, see the [Testing](#testing-1) section.
+- **Unit Testing**: Vitest runs unit tests (`*.spec.ts`) in Node.js environment for utilities and logic testing (22 test files)
+- **Browser Testing**: Vitest with Playwright provider runs component tests (`*.spec.browser.tsx`) in Chromium for UI components (1 test file)
+- **End-to-End Testing**: Playwright executes E2E tests in `e2e/` directory against the built application using Wrangler preview server
+- **Page Objects**: Shared page object pattern with adapters for both Vitest and Playwright test environments
+
+### Test Configuration
+
+- **Unit Tests**: Run in Node.js environment with SolidJS Testing Library setup
+- **Browser Tests**: Run in headless Chromium with 5-second timeout
+- **E2E Tests**: Run against `http://localhost:8787` (Wrangler preview) with retry logic in CI
+- **CI Integration**: Tests run in GitHub Actions with proper browser installation and artifact management
+
+For detailed commands, see the [Testing Scripts](#testing) section.
 
 ## CI
 
@@ -142,15 +151,15 @@ Summary of `bun run` scripts defined in `package.json`.
 
 | Script                  | Description                                         |
 | :---------------------- | :-------------------------------------------------- |
-| `test:unit`             | Runs unit tests in watch mode using Bun.            |
-| `test:unit:run`         | Runs unit tests once using Bun.                     |
+| `test:unit`             | Runs unit tests in watch mode using Vitest.         |
+| `test:unit:run`         | Runs unit tests once using Vitest.                  |
 | `test:browser`          | Runs browser-based component tests via Vitest.      |
 | `test:browser:run`      | Runs browser-based component tests once.            |
-| `test:e2e`              | Runs Playwright E2E tests.                          |
+| `test:e2e`              | Runs Playwright E2E tests against preview server.   |
 | `test:e2e:ui`           | Opens Playwright UI for interactive E2E testing.    |
-| `test:e2e:dev`          | Runs E2E tests with development configuration.      |
+| `test:e2e:dev`          | Runs E2E tests against development server.          |
 | `test:e2e:dev:ui`       | Opens Playwright UI with development configuration. |
-| `test:install:browsers` | Installs Playwright browser binaries.               |
+| `test:install:browsers` | Installs Playwright browser binaries (Chromium).    |
 | `test:install:deps`     | Installs OS dependencies for Playwright browsers.   |
 
 ### Code Quality & Formatting
