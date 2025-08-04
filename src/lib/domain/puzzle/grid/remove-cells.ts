@@ -22,7 +22,6 @@ import {
 import { isEven } from "#src/lib/utils/is-even";
 import { isNil } from "#src/lib/utils/is-nil";
 import { toShuffledArray } from "#src/lib/utils/to-shuffled-array";
-import type { DeepReadonly } from "#src/lib/utils/types/deep-readonly";
 import type { Range } from "#src/lib/utils/types/range";
 
 export type Config = DeepReadonly<{

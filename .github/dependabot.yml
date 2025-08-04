@@ -3,14 +3,12 @@ updates:
   - package-ecosystem: "bun"
     directory: "/"
     schedule:
-      interval: "daily"
+      interval: weekly
+      day: "monday"
+      timezone: "Europe/Zurich"
     commit-message:
       prefix: "deps:"
     pull-request-branch-name:
       separator: "-"
     open-pull-requests-limit: 10
     rebase-strategy: "auto"
-    labels:
-      - "dependencies"
-    reviewers:
-      - "patricklizon"

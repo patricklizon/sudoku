@@ -131,6 +131,24 @@ The CI workflow includes the following jobs:
 - **e2e**: Downloads build artifacts and runs Playwright E2E tests.
 - **deploy**: Automatically deploys to Cloudflare using Wrangler after successful builds.
 
+### Dependabot
+
+This repository uses [Dependabot](https://docs.github.com/en/code-security/dependabot) to keep dependencies secure and up to date. Dependabot automatically creates pull requests for:
+
+- JavaScript/TypeScript dependencies managed by Bun
+- GitHub Actions workflows
+
+These pull requests ensure that the project remains secure and compatible with the latest stable versions of its dependencies. Configuration for Dependabot is stored in `.github/dependabot.yml`.
+
+### Code Owners
+
+A `.github/CODEOWNERS` file is included to define responsibility for reviewing and approving changes. Pull requests affecting specific parts of the repository automatically request reviews from designated owners.
+
+This ensures that domain experts review relevant changes, maintaining code quality and project consistency.
+
+- Code owners are automatically added as reviewers on PRs that touch their designated files or directories.
+- Merging a pull request typically requires approval from at least one code owner (depending on repository settings).
+
 ## Scripts
 
 Summary of `bun run` scripts defined in `package.json`.
