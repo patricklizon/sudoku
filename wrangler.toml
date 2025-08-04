@@ -1,26 +1,30 @@
-name = "sudoku"
-main = "./.output/server/index.mjs"
 compatibility_date = "2025-07-30"
-compatibility_flags = ["nodejs_compat"]
-
-[assets]
-binding = "ASSETS"
-directory = "./.output/public"
 
 [observability]
 enabled = true
 
-[vars]
+# --- Production Environment ---
+
+[env.production]
+name = "sudoku-production"
+main = "./.output/server/index.mjs"
+compatibility_flags = ["nodejs_compat"]
+
+[env.production.assets]
+binding = "ASSETS"
+directory = "./.output/public"
+
+[env.production.vars]
 DEPLOYMENT_ID = "production"
 DEPLOYMENT_TIMESTAMP = ""
 DEPLOY_URL = ""
 PULL_REQUEST_URL = ""
 
 # --- Staging Environment ---
+
 [env.staging]
-name = "staging"
+name = "sudoku-staging"
 main = "./.output/server/index.mjs"
-compatibility_date = "2025-07-30"
 compatibility_flags = ["nodejs_compat"]
 
 [env.staging.assets]
