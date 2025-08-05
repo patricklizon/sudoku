@@ -34,7 +34,6 @@
         "jsdom": "^26.0.0",
         "oxlint": "^1.9.0",
         "npm-run-all2": "^8.0.4",
-        "oxlint": "^1.9.0",
         "prettier": "^3.6.2",
         "sinon": "^21.0.0",
         "typescript": "~5.9.2",
