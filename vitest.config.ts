@@ -8,6 +8,7 @@ const setupFiles = ["./test/setup.ts"];
 
 export default defineConfig({
 	test: {
+		globalSetup: "./test/global-setup.ts",
 		exclude: [...configDefaults.exclude, "e2e/**"],
 		root: fileURLToPath(new URL("./", import.meta.url)),
 		globals: true,
