@@ -17,17 +17,6 @@ export type DeploymentInfoProps = ComponentCommonProps;
 export function DeploymentInfo(props: DeploymentInfoProps): JSX.Element {
 	const entries = useDeploymentInfo();
 
-	const [entries, setEntries] = createSignal<[label: string, value: Option<string>][]>();
-
-	createEffect(function updateEntries() {
-		setEntries([
-			["Deployment ID", info.id],
-			["Deployed At", formattedTimestamp()],
-			["Deploy URL", info.host],
-			["Pull Request URL", info.pullRequestURL],
-		]);
-	});
-
 	return (
 		<ul data-testid={props["data-testid"] ?? DeploymentInfoTestId.root}>
 			<Index each={entries()}>{(it) => <EntryItem {...it()} />}</Index>
@@ -60,26 +49,6 @@ type EntryValueProps = {
 function EntryValue(props: EntryValueProps): JSX.Element {
 	return (
 		<Show when={isValidUrl(props.value)} fallback={props.value}>
-			<a href={props.value} target="_blank" rel="noopener noreferrer">
-				{props.value}
-			</a>
-		</Show>
-	);
-}
-
-type EntryValueProps = {
-	value: string;
-};
-
-function EntryValue(props: EntryValueProps): JSX.Element {
-	const [isUrl, setIsUrl] = createSignal(false);
-
-	createEffect(() => {
-		setIsUrl(isValidUrl(props.value));
-	});
-
-	return (
-		<Show when={isUrl()} fallback={props.value}>
 			<a href={props.value} target="_blank" rel="noopener noreferrer">
 				{props.value}
 			</a>
