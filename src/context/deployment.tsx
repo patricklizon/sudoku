@@ -24,8 +24,8 @@ function loadDeploymentInfo(): DeploymentInfoCtx {
 	// const env = {
 	// 	DEPLOYMENT_ID: "local-dev",
 	// 	DEPLOYMENT_TIMESTAMP: "2025-08-03T18:50:39Z",
-	// 	DEPLOY_URL: "",
-	// 	PULL_REQUEST_URL: "",
+	// 	DEPLOY_URL: "http://192.168.0.1",
+	// 	PULL_REQUEST_URL: "http://www.google.com",
 	// };
 	return {
 		id: env.DEPLOYMENT_ID,
