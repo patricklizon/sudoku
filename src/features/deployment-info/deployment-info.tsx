@@ -1,8 +1,9 @@
-import { createSignal, type JSX, onMount } from "solid-js";
+import { createEffect, createSignal, For, type JSX, onMount, Show } from "solid-js";
 import { useDeploymentInfo } from "#src/context/deployment";
 import type { DeploymentInfo } from "#src/lib/domain/deployment";
 import { isEmpty } from "#src/lib/utils/is-empty";
 import { isNil } from "#src/lib/utils/is-nil";
+import { isValidUrl } from "#src/lib/utils/is-valid-url";
 
 /**
  * Renders details about the environment in which the application is currently deployed.
@@ -23,19 +24,48 @@ export function DeploymentInfo(): JSX.Element {
 		);
 	});
 
+	const [entries, setEntries] = createSignal<[label: string, value: Option<string>][]>();
+
+	createEffect(function updateEntries() {
+		setEntries([
+			["Deployment ID", info.id],
+			["Deployed At", formattedTimestamp()],
+			["Deploy URL", info.host],
+			["Pull Request URL", info.pullRequestURL],
+		]);
+	});
+
 	return (
 		<footer>
-			{isNil(info.id) ? null : <p>Deployment ID: {info.id}</p>}
-			{isNil(formattedTimestamp) ? null : <p>Deployed At: {formattedTimestamp()}</p>}
-			{isNil(info.host) ? null : <p>Deploy URL: {info.host}</p>}
-			{isNil(info.pullRequestURL) ? null : (
-				<p>
-					Pull Request URL:{" "}
-					<a href={info.pullRequestURL} target="_blank">
-						{info.pullRequestURL}
-					</a>
-				</p>
-			)}
+			<For each={entries()}>
+				{([label, value]) => {
+					return isNil(value) ? null : (
+						<p>
+							{label}: <EntryValue value={value} />{" "}
+						</p>
+					);
+				}}
+			</For>
 		</footer>
+	);
+}
+
+type EntryValueProps = {
+	value: string;
+};
+
+function EntryValue(props: EntryValueProps): JSX.Element {
+	const [isUrl, setIsUrl] = createSignal(false);
+
+	createEffect(() => {
+		setIsUrl(isValidUrl(props.value));
+	});
+
+	return (
+		<Show when={isUrl()} fallback={props.value}>
+			<a href={props.value} target="_blank" rel="noopener noreferrer">
+				{props.value}
+			</a>
+		</Show>
 	);
 }
