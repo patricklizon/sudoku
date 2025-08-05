@@ -9,4 +9,13 @@ export interface PageObjectTestAdapter<T> {
 	 * @returns The found element, or null if not found.
 	 */
 	getByTestId<K extends T = T>(testId: string, container?: K | null): T | null;
+
+	/**
+	 * Queries the DOM for the nth element matching the given data-testid.
+	 * @param testId The value of the data-testid attribute.
+	 * @param index The index of the element to select (0-based).
+	 * @param container Optional container to scope the search.
+	 * @returns The found element, or null if not found.
+	 */
+	getNthByTestId<K extends T = T>(testId: string, index: number, container?: K | null): T | null;
 }

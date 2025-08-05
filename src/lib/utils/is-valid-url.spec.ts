@@ -17,6 +17,7 @@ test.each([
 
 test.each([
 	{ url: "just some text", description: "plain text" },
+	{ url: "localhost:3000", description: "localhost" },
 	{ url: "www.example.com", description: "a URL missing a protocol (http/https)" },
 	{ url: "", description: "an empty string" },
 	{ url: "https://www.google .com", description: "a malformed URL with spaces" },

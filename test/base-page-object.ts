@@ -1,9 +1,15 @@
+import { isDefined } from "#src/lib/utils/is-defined";
+import { isNil } from "#src/lib/utils/is-nil";
 import type { PageObjectTestAdapter } from "./test-adapter-interface";
 
 /**
  * Options for creating or locating a Page Object (PO).
  */
-export type BasePageObjectOptionList<T> = Partial<{ parent: T; testId?: string }>;
+export type BasePageObjectOptionList<T> = Partial<{
+	parent: Option<T>;
+	testId?: Option<string>;
+	atIdx?: Option<number>;
+}>;
 
 /**
  * BasePageObject is the foundation for all Page Objects.
@@ -17,35 +23,41 @@ export class BasePageObject<T> {
 	/**
 	 * Creates a BasePageObject instance.
 	 * @param adapter The test adapter (e.g., Playwright's `Page`, Cypress's `cy`).
-	 * @param testId The `data-testid` of the PO's root element.
 	 * @param optionList Optional configuration for this PO instance.
 	 */
 	constructor(
 		private adapter: PageObjectTestAdapter<T>,
-		private testId: string,
 		private optionList?: BasePageObjectOptionList<T>,
-	) {}
+	) {
+		if (isNil(this.optionList?.testId)) throw new Error("test id is not defined");
+		this.testId = this.optionList.testId;
+	}
+
+	private testId: string;
 
 	/**
 	 * Finds and returns the root element of this Page Object.
+	 * This method does not throw an error if the element is not found.
 	 * @returns The root element, or `null` if not found.
 	 */
-	root(): Option<T> {
-		return this.adapter.getByTestId(this.testId, this.optionList?.parent);
+	root(): T | null {
+		return isDefined(this.optionList?.atIdx)
+			? this.adapter.getNthByTestId(this.testId, this.optionList.atIdx, this.optionList.parent)
+			: this.adapter.getByTestId(this.testId, this.optionList?.parent);
 	}
 
-	protected within<TElement>(testIdOrPageObject: string, opts?: never): TElement | null;
+	within<TElement>(testIdOrPageObject: string, opts?: never): TElement | null;
 
-	protected within<TElement, TPO extends BasePageObject<TElement>>(
+	within<TElement, TPO extends BasePageObject<TElement>>(
 		testIdOrPageObject: new (
 			adapter: PageObjectTestAdapter<T>,
 			opts?: BasePageObjectOptionList<T>,
 		) => TPO,
-		opts?: { testId?: string },
+		opts?: { testId?: string; atIdx?: number },
 	): TPO;
 
 	/**
-	 * Finds an element within this PO's root.
+	 * Finds an element or a child Page Object within this PO's root.
 	 *
 	 * @template TElement The expected HTML element type or child PO's root element type.
 	 * @template TPageObject The constructor type of the child Page Object.
@@ -54,30 +66,29 @@ export class BasePageObject<T> {
 	 * @returns The found element or child PO instance.
 	 * @throws {Error} If this PO's root element cannot be found.
 	 */
-	protected within<TPageObject extends BasePageObject<T>>(
+	within<TPageObject extends BasePageObject<T>>(
 		TestIdOrPageObject:
 			| string
 			| (new (
 					adapter: PageObjectTestAdapter<T>,
 					opts?: BasePageObjectOptionList<T>,
 			  ) => TPageObject),
-		opts?: { testId?: string },
-	): Option<T | TPageObject> {
+		opts?: { testId?: string; atIdx?: number },
+	): T | null | TPageObject {
 		const self = this.root();
-		// eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-		if (!self)
-			throw new Error(
-				`Missing root element for BasePO with testId: "${this.testId}". Cannot search within it.`,
-			);
 
 		if (typeof TestIdOrPageObject === "string") {
-			return this.adapter.getByTestId(TestIdOrPageObject, self);
+			return isDefined(opts?.atIdx)
+				? this.adapter.getNthByTestId(TestIdOrPageObject, opts.atIdx, self)
+				: this.adapter.getByTestId(TestIdOrPageObject, self);
 		}
 
 		return new TestIdOrPageObject(
 			this.adapter,
-			// eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-			opts?.testId ? { parent: self, testId: opts.testId } : { parent: self },
+
+			isDefined(opts?.testId)
+				? { parent: self, testId: opts.testId, atIdx: opts.atIdx }
+				: { parent: self, atIdx: opts?.atIdx },
 		);
 	}
 }

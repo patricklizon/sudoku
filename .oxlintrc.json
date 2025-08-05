@@ -201,7 +201,7 @@
 			}
 		},
 		{
-			"files": ["*.spec.ts", "*.test.ts"],
+			"files": ["*.spec.{ts,tsx}", "*.spec.browser.{ts,tsx}"],
 			"rules": {
 				"expect-expect": [
 					"error",

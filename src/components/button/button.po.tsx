@@ -13,7 +13,7 @@ export class ButtonPO<T> extends BasePageObject<T> {
 		adapter: PageObjectTestAdapter<T>,
 		optionList?: Partial<BasePageObjectOptionList<T>>,
 	) {
-		super(adapter, optionList?.testId ?? ButtonTestId.root, optionList);
+		super(adapter, { ...optionList, testId: optionList?.testId ?? ButtonTestId.root });
 	}
 
 	getButton<E = T>(): E {

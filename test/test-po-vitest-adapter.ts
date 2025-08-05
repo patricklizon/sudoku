@@ -8,4 +8,9 @@ export class VitestBrowserAdapter implements PageObjectTestAdapter<Locator> {
 		const scope = container ?? this.screen;
 		return scope.getByTestId(testId);
 	}
+
+	getNthByTestId<L extends Locator>(testId: string, index: number, container?: L | null): Locator {
+		const scope = container ?? this.screen;
+		return scope.getByTestId(testId).nth(index);
+	}
 }
