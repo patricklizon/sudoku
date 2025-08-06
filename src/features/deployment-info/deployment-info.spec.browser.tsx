@@ -87,8 +87,8 @@ test("handles non-URL values as plain text", async () => {
 		</DeploymentCtxProvider>
 	));
 
-	await expect.element(po.getEntryAtIdx(2).getValue()).toHaveTextContent("unknown");
-	expect(() => po.getEntryAtIdx(2).getValue()?.getByRole("link").element()).toThrow(
+	await expect.element(po.getPullRequestUrlEntry().getValue()).toHaveTextContent("unknown");
+	expect(() => po.getPullRequestUrlEntry().getValue()?.getByRole("link").element()).toThrow(
 		"Cannot find element",
 	);
 });
