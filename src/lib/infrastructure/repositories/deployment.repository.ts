@@ -1,5 +1,5 @@
 import { getRequestEvent } from "solid-js/web";
-import type { DeploymentInfo } from "#src/lib/domain/deployment";
+import type { DeploymentInfo } from "#lib/domain/deployment/types";
 
 export class DeploymentRepository {
 	/**

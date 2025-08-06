@@ -1,5 +1,5 @@
 import { expect, test } from "vitest";
-import { TIME_HOUR_IN_SECONDS, TIME_MINUTE_IN_SECONDS } from "#src/lib/domain/time";
+import { TIME_HOUR_IN_SECONDS, TIME_MINUTE_IN_SECONDS } from "#lib/domain/time/constants";
 import { formatSecondsToTimeString } from "./seconds-to-time-string";
 
 test.each<[given: number, expected: string]>([

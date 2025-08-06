@@ -1,5 +1,5 @@
 import { test, expect } from "vitest";
-import { ValueOutOfRangeError } from "../errors";
+import { ValueOutOfRangeError } from "#lib/domain/puzzle/grid/errors";
 import { mapGridCellIndexToColIndex } from "./map-grid-cell-index-to-col-index";
 
 test.each<[gridIdx: number, rowIdx: number][]>([

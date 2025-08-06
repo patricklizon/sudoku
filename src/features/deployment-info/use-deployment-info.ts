@@ -1,20 +1,27 @@
 import { type Accessor, createMemo, createSignal, onMount, useContext } from "solid-js";
+import { isEmpty } from "#lib/utils/is-empty";
+import { isNil } from "#lib/utils/is-nil";
 import { DeploymentCtx } from "#src/context/deployment";
-import { isEmpty } from "#src/lib/utils/is-empty";
-import { isNil } from "#src/lib/utils/is-nil";
 
 type DeploymentInfoEntry = {
 	label: string;
 	value: Option<string>;
 };
 
+/**
+ * Retrieves and formats deployment information for display.
+ * It consumes the `DeploymentCtx` to get raw deployment details and
+ * formats the timestamp for local timezone display.
+ *
+ * @throws {Error} When is called outside of a `DeploymentCtx.Provider`.
+ */
 export function useDeploymentInfo(): Accessor<DeploymentInfoEntry[]> {
 	const ctx = useContext(DeploymentCtx);
 	if (isNil(ctx)) throw new Error(`Must be inside ${DeploymentCtx.Provider.name}`);
 
 	const [formattedTimestamp, setFormattedTimestamp] = createSignal<Option<string>>();
 
-	onMount(function formatTimeInLocalTimeZoneAtClient() {
+	onMount(function formatTimeInClientTimeZone() {
 		if (isNil(ctx.timestamp) || isEmpty(ctx.timestamp)) return;
 
 		setFormattedTimestamp(

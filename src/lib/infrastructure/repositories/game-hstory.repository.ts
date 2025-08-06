@@ -1,10 +1,10 @@
-import type { GameHistoryEntry, DBGameHistoryEntry } from "#src/lib/domain/game-history";
-import { createRandomStringId } from "#src/lib/domain/id";
-import { mapDateToTimeISOString } from "#src/lib/domain/time";
-import type { DB } from "#src/lib/infrastructure/persistence";
-import { gameTimerTbl } from "#src/lib/infrastructure/persistence/db/tables/game-timer";
-import { isNil } from "#src/lib/utils/is-nil";
-import { noop } from "#src/lib/utils/noop";
+import type { GameHistoryEntry, DBGameHistoryEntry } from "#lib/domain/game-history/types";
+import { createRandomStringId } from "#lib/domain/id/create-random-id";
+import { mapDateToTimeISOString } from "#lib/domain/time/mappers/date-to-time-iso-string";
+import type { DB } from "#lib/infrastructure/persistence";
+import { gameTimerTbl } from "#lib/infrastructure/persistence/db/tables/game-timer";
+import { isNil } from "#lib/utils/is-nil";
+import { noop } from "#lib/utils/noop";
 
 export class GameHistoryEntryRepository {
 	constructor(db: DB) {

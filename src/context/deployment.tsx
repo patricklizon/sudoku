@@ -6,9 +6,9 @@
 
 import { createContext, createResource, type ParentComponent } from "solid-js";
 import { getRequestEvent } from "solid-js/web";
-import type { DeploymentInfo } from "#src/lib/domain/deployment";
-import { isEmpty } from "#src/lib/utils/is-empty";
-import { isNil } from "#src/lib/utils/is-nil";
+import type { DeploymentInfo } from "#lib/domain/deployment/types";
+import { isEmpty } from "#lib/utils/is-empty";
+import { isNil } from "#lib/utils/is-nil";
 
 export type TDeploymentCtx = {
 	id: Option<DeploymentInfo["id"]>;

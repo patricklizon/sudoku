@@ -1,5 +1,5 @@
-import { isNil } from "#src/lib/utils/is-nil";
-import { GRID_CELL_ALLOWED_VALUES } from "../constants";
+import { GRID_CELL_ALLOWED_VALUES } from "#lib/domain/puzzle/grid/constants";
+import { isNil } from "#lib/utils/is-nil";
 import type { GridCell, GridCellEmptyWithPossibleValues, GridCellFilled } from "../types";
 
 export function isGridCellFilled(

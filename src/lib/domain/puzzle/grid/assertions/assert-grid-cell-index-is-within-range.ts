@@ -1,6 +1,6 @@
-import type { Range } from "#src/lib/utils/types/range";
-import { GRID_CELL_COUNT } from "../constants";
-import { ValueOutOfRangeError } from "../errors";
+import { GRID_CELL_COUNT } from "#lib/domain/puzzle/grid/constants";
+import { ValueOutOfRangeError } from "#lib/domain/puzzle/grid/errors";
+import type { Range } from "#lib/utils/types/range";
 
 /**
  * @throws {ValueOutOfRangeError} when number is out of allowed range.

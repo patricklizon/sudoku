@@ -1,3 +1,6 @@
+# cloudflare
+.dev.vars
+
 # dependencies (bun install)
 node_modules
 
@@ -24,6 +27,7 @@ coverage
 logs
 _.log
 report.[0-9]_.[0-9]_.[0-9]_.[0-9]_.json
+*.timestamp_*.js
 
 # dotenv environment variable files
 .env

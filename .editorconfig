@@ -1,11 +1,13 @@
+root = true
+
 [*]
 charset = utf-8
 insert_final_newline = true
 trim_trailing_whitespace = true
 
-[*.{js,jsx,mjs,cjs,ts,tsx,mts,cts}]
+[*.{js,jsx,mjs,cjs,ts,tsx,mts,cts}, *.json]
 indent_style = tab
 
-[*.yml, *.nix, *.json]
+[*.yml, *.nix]
 indent_style = space
 indent_size = 2

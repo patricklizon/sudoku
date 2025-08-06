@@ -3,6 +3,12 @@ main = "./.output/server/index.mjs"
 compatibility_date = "2025-07-30"
 compatibility_flags = ["nodejs_compat"]
 
+[vars]
+DEPLOYMENT_ID = "fake-local-id"
+DEPLOYMENT_TIMESTAMP = "2025-08-06T00:00:00Z"
+DEPLOY_URL = "http://127.0.0.1:8787"
+PULL_REQUEST_URL = "http://localhost:3000/fake-pr"
+
 [assets]
 binding = "ASSETS"
 directory = "./.output/public"

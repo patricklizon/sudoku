@@ -146,11 +146,6 @@ These pull requests ensure that the project remains secure and compatible with t
 
 A `.github/CODEOWNERS` file is included to define responsibility for reviewing and approving changes. Pull requests affecting specific parts of the repository automatically request reviews from designated owners.
 
-This ensures that domain experts review relevant changes, maintaining code quality and project consistency.
-
-- Code owners are automatically added as reviewers on PRs that touch their designated files or directories.
-- Merging a pull request typically requires approval from at least one code owner (depending on repository settings).
-
 ## Scripts
 
 Summary of `bun run` scripts defined in `package.json`.

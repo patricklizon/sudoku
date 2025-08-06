@@ -1,16 +1,13 @@
 import { describe, expect, test } from "vitest";
 import {
 	DIFFICULTY_LEVEL,
-	MINIMUM_GIVEN_CELLS_COUNT_IN_LINE_BY_DIFFICULTY_LEVEL,
 	TOTAL_GIVEN_CELLS_RANGE_BY_DIFFICULTY_LEVEL,
-} from "#src/lib/domain/puzzle/difficulty";
-import {
-	GRID_SIZE,
-	isGridCellFilled,
-	readGridColumnAt,
-	readGridRowCellsAt,
-} from "#src/lib/domain/puzzle/grid";
-import type { PuzzleDifficultyLevel, PuzzleSolution } from "#src/lib/domain/puzzle/types";
+	MINIMUM_GIVEN_CELLS_COUNT_IN_LINE_BY_DIFFICULTY_LEVEL,
+} from "#lib/domain/puzzle/difficulty/constants";
+import { GRID_SIZE } from "#lib/domain/puzzle/grid/constants";
+import { readGridRowCellsAt, readGridColumnAt } from "#lib/domain/puzzle/grid/grid";
+import { isGridCellFilled } from "#lib/domain/puzzle/grid/predicates/is-grid-cell-filled";
+import type { PuzzleDifficultyLevel, PuzzleSolution } from "#lib/domain/puzzle/types";
 import { createPuzzleProblem } from "./create-puzzle-problem";
 
 // TODO: Object.values(DIFFICULTY_LEVEL)

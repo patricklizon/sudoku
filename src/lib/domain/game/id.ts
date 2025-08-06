@@ -1,5 +1,5 @@
-import type { Game } from "#src/lib/domain/game/types";
-import { createRandomStringId } from "#src/lib/domain/id";
+import type { Game } from "#lib/domain/game/types";
+import { createRandomStringId } from "#lib/domain/id/create-random-id";
 
 export function createGameId(): Game["id"] {
 	return createRandomStringId();

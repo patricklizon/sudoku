@@ -1,5 +1,5 @@
-import { isSafeNumber } from "#src/lib/utils/is-safe-number";
-import type { TimeMillisecond } from "../types";
+import type { TimeMillisecond } from "#lib/domain/time/types";
+import { isSafeNumber } from "#lib/utils/is-safe-number";
 
 export function mapNumberToTimeMillisecond(n: number): Option<TimeMillisecond> {
 	if (!isSafeNumber(n)) return;

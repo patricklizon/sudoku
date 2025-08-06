@@ -18,7 +18,7 @@
 		"fix:lint:oxlint": "oxlint ./src --fix --fix-suggestions --ignore-path .gitignore",
 		"lighthouse": "lhci autorun --collect.staticDistDir=\"./build\"",
 		"lint:eslint": "eslint \"src/**/*.ts\" \"src/**/*.tsx\" \"e2e/**/*.ts\" \"test/**/*.ts\"",
-		"lint:oxlint": "oxlint src/**/*.ts src/**/*.tsx e2e/**/*.ts test/**/*.ts --ignore-path .gitignore",
+		"lint:oxlint": "oxlint --ignore-path .gitignore",
 		"preview": "wrangler dev --local --port 8787 --log-level error",
 		"start": "vinxi start",
 		"test:browser": "vitest --project browser",

@@ -1,6 +1,6 @@
 {
 	"$schema": "./node_modules/oxlint/configuration_schema.json",
-	"ignorePatterns": ["./@types/generated/**"],
+	"ignorePatterns": ["@types/generated/worker-configuration.d.ts"],
 	"categories": {
 		"correctness": "error",
 		"pedantic": "error",
@@ -119,7 +119,7 @@
 		"typescript/ban-ts-comment": "error",
 		"typescript/ban-types": "error",
 		"typescript/consistent-generic-constructors": "error",
-		"typescript/consistent-indexed-object-style": "error",
+		"typescript/consistent-indexed-object-style": "off",
 		"typescript/consistent-type-imports": "error",
 		"typescript/explicit-function-return-type": "warn",
 		"typescript/no-dynamic-delete": "error",
@@ -186,7 +186,8 @@
 		"unicorn/switch-case-braces": "error",
 		"unicorn/throw-new-error": "error",
 		"unicorn/unicorn/no-nul": "error",
-		"unicorn/prevent-abbreviation": "error"
+		"unicorn/prevent-abbreviation": "error",
+		"unicorn/require-post-message-target-origin": "off"
 	},
 	"overrides": [
 		{
