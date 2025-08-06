@@ -3,7 +3,8 @@ import { beforeEach } from "vitest";
 
 beforeEach(() => {
 	if ("document" in globalThis) {
-		// has to be in 'before' hook to preserve DOM output in visual test runner
+		// In Vitest browser, cleanup must be in 'beforeEach' to clear the DOM from the previous test,
+		// allowing the current test's DOM state to persist for visual inspection.
 		cleanup();
 	}
 });
