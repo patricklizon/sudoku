@@ -17,6 +17,18 @@ export class DeploymentInfoPO<T> extends BasePageObject<T> {
 	getEntryAtIdx(idx: number): DeploymentInfoEntryPO<T> {
 		return this.within(DeploymentInfoEntryPO, { atIdx: idx });
 	}
+
+	getDeploymentIdEntry(): DeploymentInfoEntryPO<T> {
+		return this.getEntryAtIdx(0);
+	}
+
+	getDeployedAtEntry(): DeploymentInfoEntryPO<T> {
+		return this.getEntryAtIdx(1);
+	}
+
+	getPullRequestUrlEntry(): DeploymentInfoEntryPO<T> {
+		return this.getEntryAtIdx(2);
+	}
 }
 
 class DeploymentInfoEntryPO<T> extends BasePageObject<T> {

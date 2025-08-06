@@ -14,11 +14,9 @@ type RequestEvent = NonNullable<
 test("renders deployment info entries", async () => {
 	const adapter = new VitestBrowserAdapter(page);
 	const po = new DeploymentInfoPO(adapter);
-
 	const id = faker.string.nanoid();
 	const pullRequestURL = faker.internet.url();
 	const timestamp = "2022-01-29T06:12:12.829Z";
-
 	const requestEvent = {
 		nativeEvent: {
 			context: {
@@ -36,7 +34,6 @@ test("renders deployment info entries", async () => {
 			},
 		},
 	} satisfies RequestEvent;
-
 	const getRequestEventFn = vi.fn().mockReturnValue(requestEvent);
 
 	render(() => (
@@ -45,29 +42,27 @@ test("renders deployment info entries", async () => {
 		</DeploymentCtxProvider>
 	));
 
-	await expect.element(po.getEntryAtIdx(0).getLabel()).toHaveTextContent("Deployment ID");
-	await expect.element(po.getEntryAtIdx(0).getValue()).toHaveTextContent(id);
-
-	await expect.element(po.getEntryAtIdx(1).getLabel()).toHaveTextContent("Deployed At");
-	await expect.element(po.getEntryAtIdx(1).getValue()).not.toEqual(timestamp);
+	await expect.element(po.getDeploymentIdEntry().getLabel()).toHaveTextContent("Deployment ID");
+	await expect.element(po.getDeploymentIdEntry().getValue()).toHaveTextContent(id);
+	await expect.element(po.getDeployedAtEntry().getLabel()).toHaveTextContent("Deployed At");
+	await expect.element(po.getDeployedAtEntry().getValue()).not.toEqual(timestamp);
 	await expect
-		.element(po.getEntryAtIdx(1).getValue())
+		.element(po.getDeployedAtEntry().getValue())
 		.toHaveTextContent("Jan 29, 2022, 6:12:12 AM");
-
-	await expect.element(po.getEntryAtIdx(2).getLabel()).toHaveTextContent("Pull Request URL");
-	await expect.element(po.getEntryAtIdx(2).getValue()).toHaveTextContent(pullRequestURL);
 	await expect
-		.element(po.getEntryAtIdx(2).getValue()!.getByRole("link"))
+		.element(po.getPullRequestUrlEntry().getLabel())
+		.toHaveTextContent("Pull Request URL");
+	await expect.element(po.getPullRequestUrlEntry().getValue()).toHaveTextContent(pullRequestURL);
+	await expect
+		.element(po.getPullRequestUrlEntry().getValue()!.getByRole("link"))
 		.toHaveAttribute("href", pullRequestURL);
 });
 
 test("handles non-URL values as plain text", async () => {
 	const adapter = new VitestBrowserAdapter(page);
 	const po = new DeploymentInfoPO(adapter);
-
 	const id = faker.string.nanoid();
 	const timestamp = faker.date.recent().toISOString();
-
 	const requestEvent = {
 		nativeEvent: {
 			context: {
@@ -84,7 +79,6 @@ test("handles non-URL values as plain text", async () => {
 			},
 		},
 	} satisfies RequestEvent;
-
 	const getRequestEventFn = vi.fn().mockReturnValue(requestEvent);
 
 	render(() => (
@@ -94,7 +88,6 @@ test("handles non-URL values as plain text", async () => {
 	));
 
 	await expect.element(po.getEntryAtIdx(2).getValue()).toHaveTextContent("unknown");
-
 	expect(() => po.getEntryAtIdx(2).getValue()?.getByRole("link").element()).toThrow(
 		"Cannot find element",
 	);
