@@ -1,21 +1,21 @@
-import { isDefined } from "#src/lib/utils/is-defined";
-import { isNil } from "#src/lib/utils/is-nil";
-import { isNumber } from "#src/lib/utils/is-number";
-import { UnableToFillGridWithValuesError } from "./errors";
-import {
-	getAllowedGridCellValuesAt,
-	readGridColumnCellIndexesAt,
-	readGridRowCellIndexesAt,
-	readGridCellIndexesOfGridBoxAt,
-} from "./grid";
-import { mapGridCellIndexToCoordinates } from "./mappers";
+import { UnableToFillGridWithValuesError } from "#lib/domain/puzzle/grid/errors";
+import { mapGridCellIndexToCoordinates } from "#lib/domain/puzzle/grid/mappers/map-grid-cell-index-to-coordinates";
 import type {
 	Grid,
 	GridFilled,
 	GridCellFilled,
 	GridCellCoordinates,
 	GridCellEmptyWithPossibleValues,
-} from "./types";
+} from "#lib/domain/puzzle/grid/types";
+import { isDefined } from "#lib/utils/is-defined";
+import { isNil } from "#lib/utils/is-nil";
+import { isNumber } from "#lib/utils/is-number";
+import {
+	getAllowedGridCellValuesAt,
+	readGridColumnCellIndexesAt,
+	readGridRowCellIndexesAt,
+	readGridCellIndexesOfGridBoxAt,
+} from "./grid";
 
 /**
  * Creates filled grid.

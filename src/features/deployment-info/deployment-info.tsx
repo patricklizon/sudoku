@@ -1,6 +1,6 @@
 import { Index, type JSX, Show } from "solid-js";
-import type { DeploymentInfo } from "#src/lib/domain/deployment";
-import { isValidUrl } from "#src/lib/utils/is-valid-url";
+import type { DeploymentInfo } from "#lib/domain/deployment/types";
+import { isValidUrl } from "#lib/utils/is-valid-url";
 import { DeploymentInfoTestId } from "./deployment-info.testid";
 import { useDeploymentInfo } from "./use-deployment-info";
 

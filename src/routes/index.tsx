@@ -1,9 +1,12 @@
 import { Title } from "@solidjs/meta";
 import { type JSX, createSignal, createResource, For, Show, onMount } from "solid-js";
+import {
+	DIFFICULTY_LEVEL,
+	DIFFICULTY_LEVEL_BY_NAME,
+} from "#lib/domain/puzzle/difficulty/constants";
+import type { PuzzleDifficultyLevel } from "#lib/domain/puzzle/types";
+import { PuzzleService } from "#lib/services/client/puzzle";
 import { Button } from "#src/components/button";
-import type { PuzzleDifficultyLevel } from "#src/lib/domain/puzzle";
-import { DIFFICULTY_LEVEL, DIFFICULTY_LEVEL_BY_NAME } from "#src/lib/domain/puzzle/difficulty";
-import { PuzzleService } from "#src/lib/services/client/puzzle";
 
 let puzzleService: PuzzleService;
 

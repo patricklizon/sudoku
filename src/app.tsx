@@ -3,8 +3,8 @@ import { Router } from "@solidjs/router";
 import { FileRoutes } from "@solidjs/start/router";
 import { type JSX, Suspense } from "solid-js";
 import { AppProviders } from "#src/app-providers";
+import _appCss from "#src/app.css";
 import { DeploymentInfo } from "#src/features/deployment-info";
-import "#src/app.css";
 
 export default function App(): JSX.Element {
 	return (

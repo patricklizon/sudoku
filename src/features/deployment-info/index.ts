@@ -1,1 +1,1 @@
-export * from "./deployment-info";
+export { DeploymentInfo, type DeploymentInfoProps } from "./deployment-info";
