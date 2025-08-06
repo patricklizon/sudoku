@@ -186,7 +186,8 @@
 		"unicorn/switch-case-braces": "error",
 		"unicorn/throw-new-error": "error",
 		"unicorn/unicorn/no-nul": "error",
-		"unicorn/prevent-abbreviation": "error"
+		"unicorn/prevent-abbreviation": "error",
+		"unicorn/require-post-message-target-origin": "off"
 	},
 	"overrides": [
 		{

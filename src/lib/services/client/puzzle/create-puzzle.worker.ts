@@ -3,14 +3,10 @@ import type { CreatePuzzleWorkerRequest, CreatePuzzleWorkerResponse } from "./ty
 
 self.addEventListener("message", (event: MessageEvent<CreatePuzzleWorkerRequest>): void => {
 	const { payload, requestId } = event.data;
-	self.postMessage(
-		{
-			requestId,
-			payload: {
-				puzzle: createPuzzle(payload.difficulty),
-			},
-		} satisfies CreatePuzzleWorkerResponse,
-		// TODO: verify
-		"*",
-	);
+	self.postMessage({
+		requestId,
+		payload: {
+			puzzle: createPuzzle(payload.difficulty),
+		},
+	} satisfies CreatePuzzleWorkerResponse);
 });

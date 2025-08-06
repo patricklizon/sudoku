@@ -40,14 +40,11 @@ export class PuzzleService {
 				this.worker.addEventListener("error", onError, { once: true });
 				this.worker.addEventListener("message", onMessage, { once: true });
 
-				this.worker.postMessage(
-					{
-						payload: { difficulty },
-						requestId: createRandomStringId(),
-						type: "@sudoku/request/puzzle/create/one",
-					} satisfies CreatePuzzleWorkerRequest,
-					{},
-				);
+				this.worker.postMessage({
+					payload: { difficulty },
+					requestId: createRandomStringId(),
+					type: "@sudoku/request/puzzle/create/one",
+				} satisfies CreatePuzzleWorkerRequest);
 			});
 
 			this.processNextTask();
