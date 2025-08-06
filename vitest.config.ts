@@ -6,6 +6,9 @@ import { configDefaults, defineConfig } from "vitest/config";
 const plugins = [solid(), tsConfigPaths()];
 const setupFiles = ["./test/setup.ts"];
 
+const isRunMode = process.argv.includes("--run");
+const isCI = !!process.env.CI;
+
 export default defineConfig({
 	test: {
 		globalSetup: "./test/global-setup.ts",
@@ -35,9 +38,9 @@ export default defineConfig({
 					include: ["src/**/*.{test,spec}.browser.tsx"],
 					name: "browser",
 					browser: {
-						screenshotFailures: !!process.env.CI,
+						screenshotFailures: isCI,
 						enabled: true,
-						headless: !!process.env.CI,
+						headless: isCI || isRunMode,
 						provider: "playwright",
 						instances: [{ browser: "chromium" }],
 					},
