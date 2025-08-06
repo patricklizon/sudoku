@@ -25,7 +25,7 @@ test("returns full set of deployment entries", () => {
 		  },
 		  {
 		    "label": "Deployed At",
-		    "value": "Aug 3, 2025, 8:50:39 PM",
+		    "value": "Aug 3, 2025, 6:50:39 PM",
 		  },
 		  {
 		    "label": "Deploy URL",
@@ -63,7 +63,7 @@ test("returns partial set of deployment entries", () => {
 		  },
 		  {
 		    "label": "Deployed At",
-		    "value": "Aug 3, 2025, 8:50:39 PM",
+		    "value": "Aug 3, 2025, 6:50:39 PM",
 		  },
 		  {
 		    "label": "Deploy URL",
