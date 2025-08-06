@@ -1,5 +1,6 @@
 # cloudflare
 .dev.vars
+.dev.vars.*
 
 # dependencies (bun install)
 node_modules

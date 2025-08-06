@@ -1,32 +1,48 @@
 import { faker } from "@faker-js/faker";
 import { render } from "@solidjs/testing-library";
 import { page } from "@vitest/browser/context";
-import { test, expect } from "vitest";
-import { DeploymentCtx } from "#src/context/deployment";
+import { test, expect, vi } from "vitest";
+import { DeploymentCtxProvider, type DeploymentCtxProviderProps } from "#src/context/deployment";
 import { VitestBrowserAdapter } from "#test/test-po-vitest-adapter";
 import { DeploymentInfo } from "./deployment-info";
 import { DeploymentInfoPO } from "./deployment-info.po";
+
+type RequestEvent = NonNullable<
+	ReturnType<NonNullable<DeploymentCtxProviderProps["_getRequestEvent"]>>
+>;
 
 test("renders deployment info entries", async () => {
 	const adapter = new VitestBrowserAdapter(page);
 	const po = new DeploymentInfoPO(adapter);
 
-	const host = faker.internet.url();
 	const id = faker.string.nanoid();
 	const pullRequestURL = faker.internet.url();
 	const timestamp = "2022-01-29T06:12:12.829Z";
 
+	const requestEvent = {
+		nativeEvent: {
+			context: {
+				cloudflare: {
+					env: {
+						// TODO: refactor - figure out if it's possible to generate primitive
+						// @ts-expect-error: cloudflare's typegen returns union instead of primitive
+						PULL_REQUEST_URL: pullRequestURL,
+						// @ts-expect-error: cloudflare's typegen returns union instead of primitive
+						DEPLOYMENT_ID: id,
+						// @ts-expect-error: cloudflare's typegen returns union instead of primitive
+						DEPLOYMENT_TIMESTAMP: timestamp,
+					},
+				},
+			},
+		},
+	} satisfies RequestEvent;
+
+	const getRequestEventFn = vi.fn().mockReturnValue(requestEvent);
+
 	render(() => (
-		<DeploymentCtx.Provider
-			value={{
-				host,
-				id,
-				pullRequestURL,
-				timestamp,
-			}}
-		>
+		<DeploymentCtxProvider _getRequestEvent={getRequestEventFn}>
 			<DeploymentInfo />
-		</DeploymentCtx.Provider>
+		</DeploymentCtxProvider>
 	));
 
 	await expect.element(po.getEntryAtIdx(0).getLabel()).toHaveTextContent("Deployment ID");
@@ -38,38 +54,46 @@ test("renders deployment info entries", async () => {
 		.element(po.getEntryAtIdx(1).getValue())
 		.toHaveTextContent("Jan 29, 2022, 6:12:12 AM");
 
-	await expect.element(po.getEntryAtIdx(2).getLabel()).toHaveTextContent("Deploy URL");
+	await expect.element(po.getEntryAtIdx(2).getLabel()).toHaveTextContent("Pull Request URL");
+	await expect.element(po.getEntryAtIdx(2).getValue()).toHaveTextContent(pullRequestURL);
 	await expect
 		.element(po.getEntryAtIdx(2).getValue()!.getByRole("link"))
-		.toHaveAttribute("href", host);
-
-	await expect.element(po.getEntryAtIdx(3).getLabel()).toHaveTextContent("Pull Request URL");
-	await expect.element(po.getEntryAtIdx(3).getValue()).toHaveTextContent(pullRequestURL);
+		.toHaveAttribute("href", pullRequestURL);
 });
 
 test("handles non-URL values as plain text", async () => {
 	const adapter = new VitestBrowserAdapter(page);
 	const po = new DeploymentInfoPO(adapter);
 
-	const host = "asdf 1";
 	const id = faker.string.nanoid();
 	const timestamp = faker.date.recent().toISOString();
 
+	const requestEvent = {
+		nativeEvent: {
+			context: {
+				cloudflare: {
+					env: {
+						// TODO: refactor - figure out if it's possible to generate primitive
+						PULL_REQUEST_URL: "",
+						// @ts-expect-error: cloudflare's typegen returns union instead of primitive
+						DEPLOYMENT_ID: id,
+						// @ts-expect-error: cloudflare's typegen returns union instead of primitive
+						DEPLOYMENT_TIMESTAMP: timestamp,
+					},
+				},
+			},
+		},
+	} satisfies RequestEvent;
+
+	const getRequestEventFn = vi.fn().mockReturnValue(requestEvent);
+
 	render(() => (
-		<DeploymentCtx.Provider
-			value={{
-				host,
-				id,
-				pullRequestURL: null,
-				timestamp,
-			}}
-		>
+		<DeploymentCtxProvider _getRequestEvent={getRequestEventFn}>
 			<DeploymentInfo />
-		</DeploymentCtx.Provider>
+		</DeploymentCtxProvider>
 	));
 
-	await expect.element(po.getEntryAtIdx(2).getValue()).toHaveTextContent(host);
-	await expect.element(po.getEntryAtIdx(2).getValue()).toHaveTextContent(host);
+	await expect.element(po.getEntryAtIdx(2).getValue()).toHaveTextContent("unknown");
 
 	expect(() => po.getEntryAtIdx(2).getValue()?.getByRole("link").element()).toThrow(
 		"Cannot find element",
