@@ -1,52 +1,44 @@
-import { createEffect, createSignal, For, type JSX, onMount, Show } from "solid-js";
-import { useDeploymentInfo } from "#src/context/deployment";
+import { Index, type JSX, Show } from "solid-js";
 import type { DeploymentInfo } from "#src/lib/domain/deployment";
-import { isEmpty } from "#src/lib/utils/is-empty";
-import { isNil } from "#src/lib/utils/is-nil";
 import { isValidUrl } from "#src/lib/utils/is-valid-url";
+import { DeploymentInfoTestId } from "./deployment-info.testid";
+import { useDeploymentInfo } from "./use-deployment-info";
+
+type DeploymentInfoEntry = {
+	label: string;
+	value: Option<string>;
+};
+
+export type DeploymentInfoProps = ComponentCommonProps;
 
 /**
  * Renders details about the environment in which the application is currently deployed.
  */
-export function DeploymentInfo(): JSX.Element {
-	const info = useDeploymentInfo();
-
-	const [formattedTimestamp, setFormattedTimestamp] = createSignal<Option<string>>();
-
-	onMount(function formatTimeInLocalTimeZone() {
-		if (isNil(info.timestamp) || isEmpty(info.timestamp)) return;
-
-		setFormattedTimestamp(
-			new Intl.DateTimeFormat(undefined, {
-				dateStyle: "medium",
-				timeStyle: "medium",
-			}).format(new Date(info.timestamp)),
-		);
-	});
-
-	const [entries, setEntries] = createSignal<[label: string, value: Option<string>][]>();
-
-	createEffect(function updateEntries() {
-		setEntries([
-			["Deployment ID", info.id],
-			["Deployed At", formattedTimestamp()],
-			["Deploy URL", info.host],
-			["Pull Request URL", info.pullRequestURL],
-		]);
-	});
+export function DeploymentInfo(props: DeploymentInfoProps): JSX.Element {
+	const entries = useDeploymentInfo();
 
 	return (
-		<footer>
-			<For each={entries()}>
-				{([label, value]) => {
-					return isNil(value) ? null : (
-						<p>
-							{label}: <EntryValue value={value} />{" "}
-						</p>
-					);
-				}}
-			</For>
-		</footer>
+		<ul data-testid={props["data-testid"] ?? DeploymentInfoTestId.root}>
+			<Index each={entries()}>{(it) => <EntryItem {...it()} />}</Index>
+		</ul>
+	);
+}
+
+type EntryItemProps = {
+	label: DeploymentInfoEntry["label"];
+	value: DeploymentInfoEntry["value"];
+};
+
+function EntryItem(props: EntryItemProps): JSX.Element {
+	return (
+		<li data-testid={DeploymentInfoTestId.entry}>
+			<span data-testid={DeploymentInfoTestId.entryLabel}>{props.label}</span>:{" "}
+			<span data-testid={DeploymentInfoTestId.entryValue}>
+				<Show when={props.value} fallback="unknown">
+					{(val) => <EntryValue value={val()} />}
+				</Show>
+			</span>
+		</li>
 	);
 }
 
@@ -55,14 +47,8 @@ type EntryValueProps = {
 };
 
 function EntryValue(props: EntryValueProps): JSX.Element {
-	const [isUrl, setIsUrl] = createSignal(false);
-
-	createEffect(() => {
-		setIsUrl(isValidUrl(props.value));
-	});
-
 	return (
-		<Show when={isUrl()} fallback={props.value}>
+		<Show when={isValidUrl(props.value)} fallback={props.value}>
 			<a href={props.value} target="_blank" rel="noopener noreferrer">
 				{props.value}
 			</a>

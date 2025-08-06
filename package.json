@@ -45,6 +45,7 @@
 		"@types/node": "^22.13.1",
 		"@vitest/browser": "^3.2.4",
 		"@vitest/eslint-plugin": "^1.1.28",
+		"@vitest/ui": "3.2.4",
 		"eslint": "^9.21.0",
 		"eslint-config-prettier": "^10.0.2",
 		"eslint-plugin-import": "^2.31.0",
