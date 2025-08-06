@@ -37,7 +37,7 @@ export default defineConfig({
 					browser: {
 						screenshotFailures: !!process.env.CI,
 						enabled: true,
-						headless: false,
+						headless: !!process.env.CI,
 						provider: "playwright",
 						instances: [{ browser: "chromium" }],
 					},
