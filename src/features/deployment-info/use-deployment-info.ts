@@ -1,5 +1,5 @@
 import { type Accessor, createMemo, createSignal, onMount, useContext } from "solid-js";
-import { DeploymentCtx } from "#src/context/deployment/context";
+import { DeploymentCtx } from "#src/context/deployment";
 import { isEmpty } from "#src/lib/utils/is-empty";
 import { isNil } from "#src/lib/utils/is-nil";
 

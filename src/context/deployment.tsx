@@ -1,3 +1,9 @@
+/**
+ * @file This module defines the context for deployment information.
+ * It provides a context provider for accessing details like deployment ID, timestamp, host, etc..
+ * The deployment information is loaded from server-side environment variables.
+ */
+
 import { createContext, createResource, type ParentComponent } from "solid-js";
 import { getRequestEvent } from "solid-js/web";
 import type { DeploymentInfo } from "#src/lib/domain/deployment";
