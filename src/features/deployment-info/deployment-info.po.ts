@@ -35,11 +35,11 @@ class DeploymentInfoEntryPO<T> extends BasePageObject<T> {
 		super(adapter, { ...optionList, testId: optionList?.testId ?? DeploymentInfoTestId.entry });
 	}
 
-	getLabel<E = T>(): E | null {
+	getLabel<E = T>(): E {
 		return this.within(DeploymentInfoTestId.entryLabel);
 	}
 
-	getValue<E = T>(): E | null {
+	getValue<E = T>(): E {
 		return this.within(DeploymentInfoTestId.entryValue);
 	}
 }

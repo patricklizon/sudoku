@@ -1,4 +1,5 @@
 import { faker } from "@faker-js/faker";
+import { Router } from "@solidjs/router";
 import { render } from "@solidjs/testing-library";
 import { page } from "@vitest/browser/context";
 import { test, expect, vi } from "vitest";
@@ -37,9 +38,13 @@ test("renders deployment info entries", async () => {
 	const getRequestEventFn = vi.fn().mockReturnValue(requestEvent);
 
 	render(() => (
-		<DeploymentCtxProvider _getRequestEvent={getRequestEventFn}>
-			<DeploymentInfo />
-		</DeploymentCtxProvider>
+		<Router
+			root={() => (
+				<DeploymentCtxProvider _getRequestEvent={getRequestEventFn}>
+					<DeploymentInfo />
+				</DeploymentCtxProvider>
+			)}
+		/>
 	));
 
 	await expect.element(po.getDeploymentIdEntry().getLabel()).toHaveTextContent("Deployment ID");
@@ -54,7 +59,7 @@ test("renders deployment info entries", async () => {
 		.toHaveTextContent("Pull Request URL");
 	await expect.element(po.getPullRequestUrlEntry().getValue()).toHaveTextContent(pullRequestURL);
 	await expect
-		.element(po.getPullRequestUrlEntry().getValue()!.getByRole("link"))
+		.element(po.getPullRequestUrlEntry().getValue())
 		.toHaveAttribute("href", pullRequestURL);
 });
 
@@ -69,7 +74,8 @@ test("handles non-URL values as plain text", async () => {
 				cloudflare: {
 					env: {
 						// TODO: refactor - figure out if it's possible to generate primitive
-						PULL_REQUEST_URL: "",
+						// @ts-expect-error: cloudflare's typegen returns union instead of primitive
+						PULL_REQUEST_URL: "wwwwwww",
 						// @ts-expect-error: cloudflare's typegen returns union instead of primitive
 						DEPLOYMENT_ID: id,
 						// @ts-expect-error: cloudflare's typegen returns union instead of primitive
@@ -82,13 +88,50 @@ test("handles non-URL values as plain text", async () => {
 	const getRequestEventFn = vi.fn().mockReturnValue(requestEvent);
 
 	render(() => (
-		<DeploymentCtxProvider _getRequestEvent={getRequestEventFn}>
-			<DeploymentInfo />
-		</DeploymentCtxProvider>
+		<Router
+			root={() => (
+				<DeploymentCtxProvider _getRequestEvent={getRequestEventFn}>
+					<DeploymentInfo />
+				</DeploymentCtxProvider>
+			)}
+		/>
 	));
 
-	await expect.element(po.getPullRequestUrlEntry().getValue()).toHaveTextContent("unknown");
-	expect(() => po.getPullRequestUrlEntry().getValue()?.getByRole("link").element()).toThrow(
-		"Cannot find element",
-	);
+	await expect.element(po.getPullRequestUrlEntry().getValue()).toHaveTextContent("wwwwwww");
+	await expect.element(po.getPullRequestUrlEntry().getValue()).not.toHaveAttribute("href");
+});
+
+test("does not render optional values", async () => {
+	const adapter = new VitestBrowserAdapter(page);
+	const po = new DeploymentInfoPO(adapter);
+
+	const requestEvent = {
+		nativeEvent: {
+			context: {
+				cloudflare: {
+					env: {
+						// TODO: refactor - figure out if it's possible to generate primitive
+						PULL_REQUEST_URL: "",
+						// @ts-expect-error: cloudflare's typegen returns union instead of primitive
+						DEPLOYMENT_ID: "",
+						DEPLOYMENT_TIMESTAMP: "",
+					},
+				},
+			},
+		},
+	} satisfies RequestEvent;
+	const getRequestEventFn = vi.fn().mockReturnValue(requestEvent);
+
+	render(() => (
+		<Router
+			root={() => (
+				<DeploymentCtxProvider _getRequestEvent={getRequestEventFn}>
+					<DeploymentInfo />
+				</DeploymentCtxProvider>
+			)}
+		/>
+	));
+
+	await expect.element(po.getDeployedAtEntry().getValue()).toHaveTextContent("unknown");
+	await expect.element(po.getDeploymentIdEntry().getValue()).toHaveTextContent("unknown");
 });

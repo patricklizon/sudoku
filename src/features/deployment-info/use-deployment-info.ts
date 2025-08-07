@@ -2,11 +2,7 @@ import { type Accessor, createMemo, createSignal, onMount, useContext } from "so
 import { isEmpty } from "#lib/utils/is-empty";
 import { isNil } from "#lib/utils/is-nil";
 import { DeploymentCtx } from "#src/context/deployment";
-
-type DeploymentInfoEntry = {
-	label: string;
-	value: Option<string>;
-};
+import type { DeploymentInfoEntry } from "./types";
 
 /**
  * Retrieves and formats deployment information for display.
@@ -33,8 +29,8 @@ export function useDeploymentInfo(): Accessor<DeploymentInfoEntry[]> {
 	});
 
 	const result = createMemo<DeploymentInfoEntry[]>(() => [
-		{ label: "Deployment ID", value: ctx.id },
-		{ label: "Deployed At", value: formattedTimestamp() },
+		{ label: "Deployment ID", value: ctx.id, isVisibleEmpty: true },
+		{ label: "Deployed At", value: formattedTimestamp(), isVisibleEmpty: true },
 		{ label: "Pull Request URL", value: ctx.pullRequestURL },
 	]);
 

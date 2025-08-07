@@ -39,10 +39,12 @@ test("returns full set of deployment entries", () => {
 	expect(result()).toMatchInlineSnapshot(`
 		[
 		  {
+		    "isVisibleEmpty": true,
 		    "label": "Deployment ID",
 		    "value": "abc-123",
 		  },
 		  {
+		    "isVisibleEmpty": true,
 		    "label": "Deployed At",
 		    "value": "Aug 3, 2025, 6:50:39 PM",
 		  },
@@ -88,10 +90,12 @@ test("returns partial set of deployment entries", () => {
 	expect(result()).toMatchInlineSnapshot(`
 		[
 		  {
+		    "isVisibleEmpty": true,
 		    "label": "Deployment ID",
 		    "value": "abc-123",
 		  },
 		  {
+		    "isVisibleEmpty": true,
 		    "label": "Deployed At",
 		    "value": "Aug 3, 2025, 6:50:39 PM",
 		  },

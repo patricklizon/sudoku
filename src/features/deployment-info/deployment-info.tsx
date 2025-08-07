@@ -1,13 +1,12 @@
-import { Index, type JSX, Show } from "solid-js";
+import { createMemo, Index, Show, type JSX } from "solid-js";
 import type { DeploymentInfo } from "#lib/domain/deployment/types";
+import { isEmpty } from "#lib/utils/is-empty";
 import { isValidUrl } from "#lib/utils/is-valid-url";
+import { isNil } from "#src/lib/utils/is-nil";
+import { Anchor } from "#ui/anchor";
 import { DeploymentInfoTestId } from "./deployment-info.testid";
+import type { DeploymentInfoEntry } from "./types";
 import { useDeploymentInfo } from "./use-deployment-info";
-
-type DeploymentInfoEntry = {
-	label: string;
-	value: Option<string>;
-};
 
 export type DeploymentInfoProps = ComponentCommonProps;
 
@@ -24,34 +23,42 @@ export function DeploymentInfo(props: DeploymentInfoProps): JSX.Element {
 	);
 }
 
-type EntryItemProps = {
-	label: DeploymentInfoEntry["label"];
-	value: DeploymentInfoEntry["value"];
-};
+type EntryItemProps = Pick<DeploymentInfoEntry, "label" | "isVisibleEmpty" | "value">;
 
 function EntryItem(props: EntryItemProps): JSX.Element {
 	return (
-		<li data-testid={DeploymentInfoTestId.entry}>
-			<span data-testid={DeploymentInfoTestId.entryLabel}>{props.label}</span>:{" "}
-			<span data-testid={DeploymentInfoTestId.entryValue}>
-				<Show when={props.value} fallback="unknown">
-					{(val) => <EntryValue value={val()} />}
-				</Show>
-			</span>
-		</li>
+		<Show when={props.isVisibleEmpty === true || !isEmpty(props.value)}>
+			<li data-testid={DeploymentInfoTestId.entry}>
+				<span data-testid={DeploymentInfoTestId.entryLabel}>{props.label}</span>:{" "}
+				<EntryValue value={props.value} />
+			</li>
+		</Show>
 	);
 }
 
-type EntryValueProps = {
-	value: string;
-};
+type EntryValueProps = ComponentCommonProps<{
+	value: DeploymentInfoEntry["value"];
+}>;
 
 function EntryValue(props: EntryValueProps): JSX.Element {
+	const testId = createMemo<string>(() => {
+		return props["data-testid"] ?? DeploymentInfoTestId.entryValue;
+	});
+
+	const value = createMemo<string>(() => {
+		if (isEmpty(props.value) || isNil(props.value)) return "unknown";
+		return props.value;
+	});
+
 	return (
-		<Show when={isValidUrl(props.value)} fallback={props.value}>
-			<a href={props.value} target="_blank" rel="noopener noreferrer">
-				{props.value}
-			</a>
-		</Show>
+		<>
+			{isValidUrl(value()) ? (
+				<Anchor href={value()} data-testid={testId()}>
+					{value()}
+				</Anchor>
+			) : (
+				<span data-testid={testId()}>{value()}</span>
+			)}
+		</>
 	);
 }

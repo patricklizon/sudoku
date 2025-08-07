@@ -25,14 +25,7 @@ function loadDeployment(
 	const event = (_getRequestEvent ?? getRequestEvent)();
 	if (isNil(event)) throw new Error("No request context");
 
-	const env = event.nativeEvent.context.cloudflare.env;
-	// TODO: figure out how to inject it for better local development
-	// see https://github.com/nitrojs/nitro/issues/3461
-	// const env = {
-	// 	DEPLOYMENT_ID: "local-dev",
-	// 	DEPLOYMENT_TIMESTAMP: "2025-08-03T18:50:39Z",
-	// 	PULL_REQUEST_URL: "http://www.google.com",
-	// };
+	const env = event.nativeEvent.context.cloudflare?.env ?? process.env;
 	return {
 		id: env.DEPLOYMENT_ID,
 		timestamp: isEmpty(env.DEPLOYMENT_TIMESTAMP)
