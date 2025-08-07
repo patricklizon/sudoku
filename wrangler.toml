@@ -6,7 +6,6 @@ compatibility_flags = ["nodejs_compat"]
 [vars]
 DEPLOYMENT_ID = "fake-local-id"
 DEPLOYMENT_TIMESTAMP = "2025-08-06T00:00:00Z"
-DEPLOY_URL = "http://127.0.0.1:8787"
 PULL_REQUEST_URL = "http://localhost:3000/fake-pr"
 
 [assets]
@@ -30,7 +29,6 @@ directory = "./.output/public"
 [env.production.vars]
 DEPLOYMENT_ID = "production"
 DEPLOYMENT_TIMESTAMP = ""
-DEPLOY_URL = ""
 PULL_REQUEST_URL = ""
 
 # --- Staging Environment ---
@@ -47,5 +45,4 @@ directory = "./.output/public"
 [env.staging.vars]
 DEPLOYMENT_ID = "staging"
 DEPLOYMENT_TIMESTAMP = ""
-DEPLOY_URL = ""
 PULL_REQUEST_URL = ""

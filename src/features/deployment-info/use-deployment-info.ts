@@ -17,7 +17,7 @@ type DeploymentInfoEntry = {
  */
 export function useDeploymentInfo(): Accessor<DeploymentInfoEntry[]> {
 	const ctx = useContext(DeploymentCtx);
-	if (isNil(ctx)) throw new Error(`Must be inside ${DeploymentCtx.Provider.name}`);
+	if (isNil(ctx)) throw new Error("Must be called inside DeploymentCtx.Provider");
 
 	const [formattedTimestamp, setFormattedTimestamp] = createSignal<Option<string>>();
 
@@ -35,7 +35,6 @@ export function useDeploymentInfo(): Accessor<DeploymentInfoEntry[]> {
 	const result = createMemo<DeploymentInfoEntry[]>(() => [
 		{ label: "Deployment ID", value: ctx.id },
 		{ label: "Deployed At", value: formattedTimestamp() },
-		{ label: "Deploy URL", value: ctx.host },
 		{ label: "Pull Request URL", value: ctx.pullRequestURL },
 	]);
 

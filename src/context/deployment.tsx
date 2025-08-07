@@ -1,7 +1,6 @@
 /**
  * @file This module defines the context for deployment information.
  * It provides a context provider for accessing details like deployment ID, timestamp, host, etc..
- * The deployment information is loaded from server-side environment variables.
  */
 
 import { createContext, createResource, type ParentComponent } from "solid-js";
@@ -13,7 +12,6 @@ import { isNil } from "#lib/utils/is-nil";
 export type TDeploymentCtx = {
 	id: Option<DeploymentInfo["id"]>;
 	timestamp: Option<DeploymentInfo["timestamp"]>;
-	host: Option<DeploymentInfo["host"]>;
 	pullRequestURL: Option<DeploymentInfo["pullRequestURL"]>;
 };
 
@@ -21,10 +19,10 @@ export const DeploymentCtx = createContext<Option<TDeploymentCtx>>();
 
 function loadDeployment(
 	/** exposed for tests */
-	_override?: Option<TDeploymentCtx>,
+	_getRequestEvent?: typeof getRequestEvent,
 ): TDeploymentCtx {
 	"use server";
-	const event = getRequestEvent();
+	const event = (_getRequestEvent ?? getRequestEvent)();
 	if (isNil(event)) throw new Error("No request context");
 
 	const env = event.nativeEvent.context.cloudflare.env;
@@ -33,29 +31,29 @@ function loadDeployment(
 	// const env = {
 	// 	DEPLOYMENT_ID: "local-dev",
 	// 	DEPLOYMENT_TIMESTAMP: "2025-08-03T18:50:39Z",
-	// 	DEPLOY_URL: "http://192.168.0.1",
 	// 	PULL_REQUEST_URL: "http://www.google.com",
 	// };
-	return (
-		_override ?? {
-			id: env.DEPLOYMENT_ID,
-			timestamp: isEmpty(env.DEPLOYMENT_TIMESTAMP)
-				? undefined
-				: new Date(env.DEPLOYMENT_TIMESTAMP).toISOString(),
-			host: isEmpty(env.DEPLOY_URL) ? undefined : env.DEPLOY_URL,
-			pullRequestURL: isEmpty(env.PULL_REQUEST_URL) ? undefined : env.PULL_REQUEST_URL,
-		}
-	);
+	return {
+		id: env.DEPLOYMENT_ID,
+		timestamp: isEmpty(env.DEPLOYMENT_TIMESTAMP)
+			? undefined
+			: new Date(env.DEPLOYMENT_TIMESTAMP).toISOString(),
+		pullRequestURL: isEmpty(env.PULL_REQUEST_URL) ? undefined : env.PULL_REQUEST_URL,
+	};
 }
 
-export const DeploymentInfoCtxProvider: ParentComponent<{
+export type DeploymentCtxProviderProps = {
 	/** exposed for tests */
-	_override?: TDeploymentCtx;
-}> = (props) => {
-	const [info] = createResource(() => props._override ?? loadDeployment(), {
+	_getRequestEvent?: typeof getRequestEvent;
+};
+
+/**
+ * The deployment information loaded from server-side environment variables.
+ */
+export const DeploymentCtxProvider: ParentComponent<DeploymentCtxProviderProps> = (props) => {
+	const [info] = createResource(() => loadDeployment(props._getRequestEvent), {
 		deferStream: false,
 	});
 
-	// return <DeploymentInfoCtx.Provider value={info()}>{props.children}</DeploymentInfoCtx.Provider>;
 	return <DeploymentCtx.Provider value={info()}>{props.children}</DeploymentCtx.Provider>;
 };
