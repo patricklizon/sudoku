@@ -38,15 +38,15 @@ export class BasePageObject<T> {
 	/**
 	 * Finds and returns the root element of this Page Object.
 	 * This method does not throw an error if the element is not found.
-	 * @returns The root element, or `null` if not found.
+	 * @returns The root element.
 	 */
-	root(): T | null {
+	root(): T {
 		return isDefined(this.optionList?.atIdx)
 			? this.adapter.getNthByTestId(this.testId, this.optionList.atIdx, this.optionList.parent)
 			: this.adapter.getByTestId(this.testId, this.optionList?.parent);
 	}
 
-	within<TElement>(testIdOrPageObject: string, opts?: never): TElement | null;
+	within<TElement>(testIdOrPageObject: string, opts?: never): TElement;
 
 	within<TElement, TPO extends BasePageObject<TElement>>(
 		testIdOrPageObject: new (
@@ -74,7 +74,7 @@ export class BasePageObject<T> {
 					opts?: BasePageObjectOptionList<T>,
 			  ) => TPageObject),
 		opts?: { testId?: string; atIdx?: number },
-	): T | null | TPageObject {
+	): T | TPageObject {
 		const self = this.root();
 
 		if (typeof TestIdOrPageObject === "string") {

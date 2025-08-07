@@ -8,7 +8,7 @@ export interface PageObjectTestAdapter<T> {
 	 * @param testId The value of the data-testid attribute.
 	 * @returns The found element, or null if not found.
 	 */
-	getByTestId<K extends T = T>(testId: string, container?: K | null): T | null;
+	getByTestId<K extends T = T>(testId: string, container?: Option<K>): T;
 
 	/**
 	 * Queries the DOM for the nth element matching the given data-testid.
@@ -17,5 +17,5 @@ export interface PageObjectTestAdapter<T> {
 	 * @param container Optional container to scope the search.
 	 * @returns The found element, or null if not found.
 	 */
-	getNthByTestId<K extends T = T>(testId: string, index: number, container?: K | null): T | null;
+	getNthByTestId<K extends T = T>(testId: string, index: number, container?: Option<K>): T;
 }
