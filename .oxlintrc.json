@@ -90,6 +90,7 @@
 		"import/no-dynamic-require": "error",
 		"import/no-namespace": "error",
 		"import/no-webapck-loader-syntax": "error",
+		"import/no-unassigned-import": "off",
 		"new-for-builtins": "error",
 		"no-hex-escape": "error",
 		"no-instanceof-array": "error",
