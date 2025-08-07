@@ -10,7 +10,7 @@ export class ButtonPO<T> extends BasePageObject<T> {
 		super(adapter, { ...optionList, testId: optionList?.testId ?? ButtonTestId.root });
 	}
 
-	getButton<E = T>(): E {
-		return this.root() as E;
+	getButton(): T {
+		return this.root();
 	}
 }

@@ -10,10 +10,6 @@ export class DeploymentInfoPO<T> extends BasePageObject<T> {
 		super(adapter, { ...optionList, testId: optionList?.testId ?? DeploymentInfoTestId.root });
 	}
 
-	getDeploymentInfo<E = T>(): E {
-		return this.root() as E;
-	}
-
 	getEntryAtIdx(idx: number): DeploymentInfoEntryPO<T> {
 		return this.within(DeploymentInfoEntryPO, { atIdx: idx });
 	}
