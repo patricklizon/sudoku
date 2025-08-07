@@ -98,7 +98,6 @@ runs:
           --env staging \
           --var DEPLOYMENT_ID:${{ steps.metadata.outputs.deployment-id }} \
           --var DEPLOYMENT_TIMESTAMP:${{ steps.metadata.outputs.deployment-timestamp }} \
-          --var DEPLOYMENT_URL:$PREVIEW_URL \
           --var PULL_REQUEST_URL:${{ github.event.pull_request.html_url }}
 
         PREVIEW_URL="https://$ALIAS-${{ inputs.project-name }}-staging.${{ inputs.workers-subdomain }}.workers.dev"
