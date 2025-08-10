@@ -1,0 +1,35 @@
+name: Deploy
+
+on:
+  workflow_run:
+    workflows: ["CI"]
+    types:
+      - completed
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    if: github.event.workflow_run.conclusion == 'success'
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.ref }}
+
+      - name: Download build artifact
+        uses: ./.github/actions/build-artifacts
+        with:
+          operation: download
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup environment for deployment
+        uses: ./.github/actions/setup-environment
+
+      - name: Deploy to Cloudflare
+        uses: ./.github/actions/deploy
+        with:
+          cloudflare-api-token: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          cloudflare-account-id: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          workers-subdomain: ${{ vars.CLOUDFLARE_WORKER_SUBDOMAIN }}
+          project-name: ${{ vars.CLOUDFLARE_APP_WORKER_NAME }}
