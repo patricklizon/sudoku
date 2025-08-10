@@ -4,4 +4,5 @@ type _ComponentCommonProps = {
 	"data-testid"?: string;
 };
 
-type ComponentCommonProps<T> = Omit<T, keyof _ComponentCommonProps> & _ComponentCommonProps;
+type ComponentCommonProps<T = unknow> = Omit<T, keyof _ComponentCommonProps> &
+	_ComponentCommonProps;

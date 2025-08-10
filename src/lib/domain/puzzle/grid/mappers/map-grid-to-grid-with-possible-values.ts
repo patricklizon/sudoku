@@ -1,6 +1,6 @@
-import { getAllowedGridCellValuesAt } from "../grid";
-import { isGridCellFilled } from "../predicates";
-import type { Grid, GridWithPossibleValues } from "../types";
+import { getAllowedGridCellValuesAt } from "#lib/domain/puzzle/grid/grid";
+import { isGridCellFilled } from "#lib/domain/puzzle/grid/predicates/is-grid-cell-filled";
+import type { Grid, GridWithPossibleValues } from "#lib/domain/puzzle/grid/types";
 import { mapGridCellIndexToCoordinates } from "./map-grid-cell-index-to-coordinates";
 
 export function mapGridToGridWithPossibleValues(g: Readonly<Grid>): GridWithPossibleValues {

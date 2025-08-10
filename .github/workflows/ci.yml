@@ -49,7 +49,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: ./.github/actions/browsers
       - uses: ./.github/actions/setup-environment
         with:
           # override runtime due to vitest being incompatible with bun
@@ -101,19 +100,3 @@ jobs:
           name: playwright-report
           path: playwright-report/
           retention-days: 30
-
-  deploy:
-    needs: [install-dependencies, build, e2e]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: ./.github/actions/setup-environment
-      - uses: ./.github/actions/build-artifacts
-        with:
-          operation: download
-      - uses: ./.github/actions/deploy
-        with:
-          cloudflare-api-token: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          cloudflare-account-id: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          workers-subdomain: ${{ secrets.CLOUDFLARE_WORKER_SUBDOMAIN }}
-          project-name: ${{ secrets.CLOUDFLARE_APP_WORKER_NAME }}

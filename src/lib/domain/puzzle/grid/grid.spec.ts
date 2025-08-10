@@ -11,7 +11,8 @@ import {
 	readGridCellIndexesOfGridBoxAt,
 	isGridCellValueCorrectAt,
 } from "./grid";
-import { isGridCellEmpty, isGridCellFilled } from "./predicates";
+import { isGridCellEmpty } from "./predicates/is-grid-cell-empty";
+import { isGridCellFilled } from "./predicates/is-grid-cell-filled";
 import type { Grid, GridCellCoordinates, GridFilled, GridRow } from "./types";
 
 describe("#" + readGridBoxCellsAt.name, () => {

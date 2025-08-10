@@ -1,5 +1,5 @@
-import type { DBGameHistoryEntry } from "#src/lib/domain/game-history";
-import type { ObjectStoreIndexRecord } from "#src/lib/utils/types/object-store";
+import type { DBGameHistoryEntry } from "#lib/domain/game-history/types";
+import type { ObjectStoreIndexRecord } from "#lib/utils/types/object-store";
 
 export const gameHistoryTbl = {
 	name: "game-history",

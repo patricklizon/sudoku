@@ -1,12 +1,12 @@
 import { describe, expect, test } from "vitest";
-import { decodePuzzle } from "#src/lib/domain/puzzle/decoder";
-import { createEmptyGridCell } from "#src/lib/domain/puzzle/grid";
+import { decodePuzzle } from "#lib/domain/puzzle/decoder";
+import { createEmptyGridCell } from "#lib/domain/puzzle/grid/grid";
 import type {
 	PuzzleDifficultyLevel,
 	PuzzleEncoded,
 	PuzzleProblem,
 	PuzzleSolution,
-} from "#src/lib/domain/puzzle/types";
+} from "#lib/domain/puzzle/types";
 
 describe("#" + decodePuzzle.name, () => {
 	const _ = createEmptyGridCell();

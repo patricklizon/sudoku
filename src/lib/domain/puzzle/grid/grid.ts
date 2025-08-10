@@ -1,5 +1,5 @@
-import { shuffleArray } from "#src/lib/utils/to-shuffled-array";
-import { assertGridCellCoordinateIsWithinRange } from "./assertions";
+import { assertGridCellCoordinateIsWithinRange } from "#lib/domain/puzzle/grid/assertions/assert-grid-cell-coordinates-is-within-range";
+import { shuffleArray } from "#lib/utils/to-shuffled-array";
 import {
 	GRID_CELL_ALLOWED_VALUES,
 	GRID_CELL_COUNT,
@@ -8,7 +8,7 @@ import {
 	GRID_BOX_SIZE,
 } from "./constants";
 import { GridHasWrongSizeError } from "./errors";
-import { isGridCellFilled } from "./predicates";
+import { isGridCellFilled } from "./predicates/is-grid-cell-filled";
 import type {
 	Grid,
 	GridCellCoordinates,

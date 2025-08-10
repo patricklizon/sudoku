@@ -1,9 +1,5 @@
-import {
-	type GridFilled,
-	type GridCellCoordinates,
-	readGridCellAt,
-	type GridCell,
-} from "#src/lib/domain/puzzle/grid";
+import { readGridCellAt } from "#lib/domain/puzzle/grid/grid";
+import type { GridFilled, GridCellCoordinates, GridCell } from "#lib/domain/puzzle/grid/types";
 
 export function hasPuzzleCellValidValue(
 	g: GridFilled,

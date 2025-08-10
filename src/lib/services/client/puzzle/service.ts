@@ -1,5 +1,5 @@
-import { createRandomStringId } from "#src/lib/domain/id";
-import type { Puzzle } from "#src/lib/domain/puzzle";
+import { createRandomStringId } from "#lib/domain/id/create-random-id";
+import type { Puzzle } from "#lib/domain/puzzle/types";
 import type { CreatePuzzleWorkerRequest, CreatePuzzleWorkerResponse } from "./types";
 
 export class PuzzleService {

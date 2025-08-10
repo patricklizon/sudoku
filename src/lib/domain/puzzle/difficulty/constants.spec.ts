@@ -1,6 +1,6 @@
 import { expect, test } from "vitest";
-import { GRID_CELL_COUNT } from "#src/lib/domain/puzzle/grid/constants";
-import type { PuzzleDifficultyLevel } from "#src/lib/domain/puzzle/types";
+import { GRID_CELL_COUNT } from "#lib/domain/puzzle/grid/constants";
+import type { PuzzleDifficultyLevel } from "#lib/domain/puzzle/types";
 import {
 	DIFFICULTY_LEVEL,
 	MINIMUM_GIVEN_CELLS_COUNT_IN_LINE_BY_DIFFICULTY_LEVEL,

@@ -3,6 +3,11 @@ main = "./.output/server/index.mjs"
 compatibility_date = "2025-07-30"
 compatibility_flags = ["nodejs_compat"]
 
+[vars]
+DEPLOYMENT_ID = "fake-local-id"
+DEPLOYMENT_TIMESTAMP = "2025-08-06T00:00:00Z"
+PULL_REQUEST_URL = "http://localhost:3000/fake-pr"
+
 [assets]
 binding = "ASSETS"
 directory = "./.output/public"
@@ -24,7 +29,6 @@ directory = "./.output/public"
 [env.production.vars]
 DEPLOYMENT_ID = "production"
 DEPLOYMENT_TIMESTAMP = ""
-DEPLOY_URL = ""
 PULL_REQUEST_URL = ""
 
 # --- Staging Environment ---
@@ -41,5 +45,4 @@ directory = "./.output/public"
 [env.staging.vars]
 DEPLOYMENT_ID = "staging"
 DEPLOYMENT_TIMESTAMP = ""
-DEPLOY_URL = ""
 PULL_REQUEST_URL = ""

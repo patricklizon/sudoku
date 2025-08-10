@@ -1,5 +1,5 @@
-import type { DBGame } from "#src/lib/domain/game";
-import type { ObjectStoreIndexRecord } from "#src/lib/utils/types/object-store";
+import type { DBGame } from "#lib/domain/game/types";
+import type { ObjectStoreIndexRecord } from "#lib/utils/types/object-store";
 
 export const gameTbl = {
 	name: "game",
