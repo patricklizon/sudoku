@@ -5,24 +5,16 @@
  * Different ways of removing cells from {@link PuzzleSolution}.
  */
 
-import {
-	GRID_CELL_COUNT,
-	GRID_CELL_INDEXES,
-	GRID_SIZE,
-	GRID_SIZE_INDEXES,
-	hasUniqueSolution,
-	isGridCellFilled,
-	mapGridCellIndexToCoordinates,
-	readGridColumnAt,
-	readGridRowCellsAt,
-	type Grid,
-	type GridCellCoordinates,
-	type GridFilled,
-} from "#src/lib/domain/puzzle/grid";
-import { isEven } from "#src/lib/utils/is-even";
-import { isNil } from "#src/lib/utils/is-nil";
-import { toShuffledArray } from "#src/lib/utils/to-shuffled-array";
-import type { Range } from "#src/lib/utils/types/range";
+import { isEven } from "#lib/utils/is-even";
+import { isNil } from "#lib/utils/is-nil";
+import { toShuffledArray } from "#lib/utils/to-shuffled-array";
+import type { Range } from "#lib/utils/types/range";
+import { GRID_CELL_COUNT, GRID_CELL_INDEXES, GRID_SIZE, GRID_SIZE_INDEXES } from "./constants";
+import { readGridRowCellsAt, readGridColumnAt } from "./grid";
+import { mapGridCellIndexToCoordinates } from "./mappers/map-grid-cell-index-to-coordinates";
+import { isGridCellFilled } from "./predicates/is-grid-cell-filled";
+import { hasUniqueSolution } from "./solve";
+import type { GridFilled, Grid, GridCellCoordinates } from "./types";
 
 export type Config = DeepReadonly<{
 	minimumGivenCells: {
@@ -97,9 +89,10 @@ export function pickIndexOrderJumpingByOneCell(): readonly number[] {
 		if (isEven(coordinates.rowIdx)) {
 			if (coordinates.colIdx === GRID_SIZE_INDEXES.at(-2)) idx += rowLastIdx;
 			else idx += jumpByIdx;
+		} else if (coordinates.colIdx === GRID_SIZE_INDEXES.at(1)) {
+			idx += rowLastIdx;
 		} else {
-			if (coordinates.colIdx === GRID_SIZE_INDEXES.at(1)) idx += rowLastIdx;
-			else idx -= jumpByIdx;
+			idx -= jumpByIdx;
 		}
 	}
 
@@ -124,9 +117,10 @@ export function pickIndexOrderWanderingAlongS(): readonly number[] {
 		if (isEven(coordinates.rowIdx)) {
 			if (coordinates.colIdx === GRID_SIZE_INDEXES.at(-1)) idx += GRID_SIZE;
 			else idx++;
+		} else if (coordinates.colIdx === GRID_SIZE_INDEXES.at(0)) {
+			idx += GRID_SIZE;
 		} else {
-			if (coordinates.colIdx === GRID_SIZE_INDEXES.at(0)) idx += GRID_SIZE;
-			else idx--;
+			idx--;
 		}
 	}
 

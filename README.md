@@ -109,6 +109,8 @@ This project employs a comprehensive testing strategy using [Vitest](https://vit
 - **Browser Tests**: Run in headless Chromium with 5-second timeout
 - **E2E Tests**: Run against `http://localhost:8787` (Wrangler preview) with retry logic in CI
 - **CI Integration**: Tests run in GitHub Actions with proper browser installation and artifact management
+- **Vitest setup**: all vitest setup files defined in test folder
+- **Page Objects setup**: all page object adapters are defined in test folder
 
 For detailed commands, see the [Testing Scripts](#testing) section.
 
@@ -143,11 +145,6 @@ These pull requests ensure that the project remains secure and compatible with t
 ### Code Owners
 
 A `.github/CODEOWNERS` file is included to define responsibility for reviewing and approving changes. Pull requests affecting specific parts of the repository automatically request reviews from designated owners.
-
-This ensures that domain experts review relevant changes, maintaining code quality and project consistency.
-
-- Code owners are automatically added as reviewers on PRs that touch their designated files or directories.
-- Merging a pull request typically requires approval from at least one code owner (depending on repository settings).
 
 ## Scripts
 

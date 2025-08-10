@@ -1,41 +1,64 @@
-import { createSignal, type JSX, onMount } from "solid-js";
-import { useDeploymentInfo } from "#src/context/deployment";
-import type { DeploymentInfo } from "#src/lib/domain/deployment";
-import { isEmpty } from "#src/lib/utils/is-empty";
+import { createMemo, Index, Show, type JSX } from "solid-js";
+import type { DeploymentInfo } from "#lib/domain/deployment/types";
+import { isEmpty } from "#lib/utils/is-empty";
+import { isValidUrl } from "#lib/utils/is-valid-url";
 import { isNil } from "#src/lib/utils/is-nil";
+import { Anchor } from "#ui/anchor";
+import { DeploymentInfoTestId } from "./deployment-info.testid";
+import type { DeploymentInfoEntry } from "./types";
+import { useDeploymentInfo } from "./use-deployment-info";
+
+export type DeploymentInfoProps = ComponentCommonProps;
 
 /**
  * Renders details about the environment in which the application is currently deployed.
  */
-export function DeploymentInfo(): JSX.Element {
-	const info = useDeploymentInfo();
+export function DeploymentInfo(props: DeploymentInfoProps): JSX.Element {
+	const entries = useDeploymentInfo();
 
-	const [formattedTimestamp, setFormattedTimestamp] = createSignal<Option<string>>();
+	return (
+		<ul data-testid={props["data-testid"] ?? DeploymentInfoTestId.root}>
+			<Index each={entries()}>{(it) => <EntryItem {...it()} />}</Index>
+		</ul>
+	);
+}
 
-	onMount(function formatTimeInLocalTimeZone() {
-		if (isNil(info.timestamp) || isEmpty(info.timestamp)) return;
+type EntryItemProps = Pick<DeploymentInfoEntry, "label" | "isVisibleEmpty" | "value">;
 
-		setFormattedTimestamp(
-			new Intl.DateTimeFormat(undefined, {
-				dateStyle: "medium",
-				timeStyle: "medium",
-			}).format(new Date(info.timestamp)),
-		);
+function EntryItem(props: EntryItemProps): JSX.Element {
+	return (
+		<Show when={props.isVisibleEmpty === true || !isEmpty(props.value)}>
+			<li data-testid={DeploymentInfoTestId.entry}>
+				<span data-testid={DeploymentInfoTestId.entryLabel}>{props.label}</span>:{" "}
+				<EntryValue value={props.value} />
+			</li>
+		</Show>
+	);
+}
+
+type EntryValueProps = ComponentCommonProps<{
+	value: DeploymentInfoEntry["value"];
+}>;
+
+function EntryValue(props: EntryValueProps): JSX.Element {
+	const testId = createMemo<string>(() => {
+		return props["data-testid"] ?? DeploymentInfoTestId.entryValue;
+	});
+
+	const value = createMemo<string>(() => {
+		if (isEmpty(props.value) || isNil(props.value)) return "unknown";
+		return props.value;
 	});
 
 	return (
-		<footer>
-			{isNil(info.id) ? null : <p>Deployment ID: {info.id}</p>}
-			{isNil(formattedTimestamp) ? null : <p>Deployed At: {formattedTimestamp()}</p>}
-			{isNil(info.host) ? null : <p>Deploy URL: {info.host}</p>}
-			{isNil(info.pullRequestURL) ? null : (
-				<p>
-					Pull Request URL:{" "}
-					<a href={info.pullRequestURL} target="_blank">
-						{info.pullRequestURL}
-					</a>
-				</p>
+		<>
+			{isValidUrl(value()) ? (
+				<Anchor href={value()} data-testid={testId()}>
+					{value()}
+				</Anchor>
+			) : (
+				<span data-testid={testId()}>{value()}</span>
 			)}
-		</footer>
+		</>
 	);
 }

@@ -1,5 +1,5 @@
 import { describe, test, expect } from "vitest";
-import { GRID_CELL_ALLOWED_VALUES } from "../constants";
+import { GRID_CELL_ALLOWED_VALUES } from "#lib/domain/puzzle/grid/constants";
 import { isGridCellFilled } from "./is-grid-cell-filled";
 
 describe("#" + isGridCellFilled.name, () => {

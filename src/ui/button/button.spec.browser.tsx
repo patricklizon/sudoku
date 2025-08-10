@@ -15,7 +15,7 @@ test("Renders with defaults", async () => {
 		</Button>
 	));
 
-	const sut = po.getButton();
+	const sut = po.root();
 
 	await expect.element(sut).toHaveTextContent("");
 	await expect.element(sut).toHaveAttribute("type", "button");
@@ -29,7 +29,7 @@ test("Overrides 'data-testid' prop", async () => {
 
 	render(() => <Button data-testid={testId}>{textContent}</Button>);
 
-	const sut = po.getButton();
+	const sut = po.root();
 
 	await expect.element(sut).toHaveTextContent(textContent);
 });
@@ -40,9 +40,13 @@ test("Clicking an element calls 'onClick' callback", async () => {
 	const user = userEvent.setup();
 	const onClickSpy = vi.fn();
 
-	render(() => <Button onClick={onClickSpy}>Click Me If You Can</Button>);
+	render(() => (
+		<Button disabled={false} onClick={onClickSpy}>
+			Click Me If You Can
+		</Button>
+	));
 
-	const sut = po.getButton();
+	const sut = po.root();
 	await user.click(sut.element());
 
 	expect(onClickSpy).toHaveBeenCalledTimes(1);
@@ -60,7 +64,7 @@ test("Clicking a 'disabled' element does not call 'onClick' callback", async () 
 		</Button>
 	));
 
-	const sut = po.getButton();
+	const sut = po.root();
 	await expect.element(sut).toBeDisabled();
 	await user.click(sut.element(), { force: true });
 

@@ -1,0 +1,25 @@
+[
+	{
+		"label": "Launch App in Chrome",
+		"adapter": "JavaScript",
+		"type": "chrome",
+		"request": "launch",
+		"url": "http://localhost:5173",
+		"webRoot": "${workspaceFolder}",
+		"sourceMaps": true,
+		"sourceMapPathOverrides": {
+			"http://localhost:5173/_build/*": "/Users/patricklizon/Developer/sudoku/*"
+		},
+		"sourceMapRenames": true,
+		"resolveSourceMapLocations": [],
+		"pauseForSourceMap": true,
+		"skipFiles": [
+			"**/node_modules/**",
+			"<node_internals>/**",
+			"**/@vite/**",
+			"**/@solidjs/**",
+			"**/@solid-refresh/**",
+			"**/@id/vinxi/**"
+		]
+	}
+]

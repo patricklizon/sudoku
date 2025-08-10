@@ -1,9 +1,12 @@
 import { Title } from "@solidjs/meta";
-import { type JSX, createSignal, createResource, For, Show, onMount } from "solid-js";
-import { Button } from "#src/components/button";
-import type { PuzzleDifficultyLevel } from "#src/lib/domain/puzzle";
-import { DIFFICULTY_LEVEL, DIFFICULTY_LEVEL_BY_NAME } from "#src/lib/domain/puzzle/difficulty";
-import { PuzzleService } from "#src/lib/services/client/puzzle";
+import { type JSX, createSignal, createResource, For, Show, onMount, Index } from "solid-js";
+import {
+	DIFFICULTY_LEVEL,
+	DIFFICULTY_LEVEL_BY_NAME,
+} from "#lib/domain/puzzle/difficulty/constants";
+import type { PuzzleDifficultyLevel } from "#lib/domain/puzzle/types";
+import { PuzzleService } from "#lib/services/client/puzzle";
+import { Button } from "#ui/button";
 
 let puzzleService: PuzzleService;
 
@@ -66,14 +69,14 @@ export default function Home(): JSX.Element {
 				<Show when={puzzle()} fallback={<p>No puzzle requested yet.</p>}>
 					{(p) => (
 						<div data-testid="game-board">
-							<For each={p().problem}>
+							<Index each={p().problem}>
 								{(cell, idx) => (
 									<>
-										<span data-testid="game-board.cell">{cell ?? "_"}</span>
-										{(idx() + 1) % 9 === 0 && <br />}
+										<span data-testid="game-board.cell">{cell() ?? "_"}</span>
+										{(idx + 1) % 9 === 0 && <br />}
 									</>
 								)}
-							</For>
+							</Index>
 						</div>
 					)}
 				</Show>

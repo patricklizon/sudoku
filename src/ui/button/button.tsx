@@ -1,5 +1,8 @@
 import type { JSX } from "solid-js";
-import { ButtonTestId } from "./button.testid";
+
+export const ButtonTestId = {
+	root: "button-component-root",
+};
 
 export type ButtonProps = ComponentCommonProps<JSX.ButtonHTMLAttributes<HTMLButtonElement>>;
 
