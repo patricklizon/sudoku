@@ -1,5 +1,5 @@
-import type { GameId } from "#src/lib/domain/id";
-import type { TimeISOString } from "#src/lib/domain/time";
+import type { GameId } from "#lib/domain/id/types";
+import type { TimeISOString } from "#lib/domain/time/types";
 
 export type GameHistoryEntry = {
 	colIdx: number;

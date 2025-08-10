@@ -1,5 +1,13 @@
+:root {
+	color-scheme: light dark;
+}
+
 body {
-	font-family: Gordita, Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+	font-family:
+		Gordita, Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+	color: CanvasText;
+	background-color: Canvas;
+	border-color: GrayText;
 }
 
 a {

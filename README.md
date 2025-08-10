@@ -109,6 +109,8 @@ This project employs a comprehensive testing strategy using [Vitest](https://vit
 - **Browser Tests**: Run in headless Chromium with 5-second timeout
 - **E2E Tests**: Run against `http://localhost:8787` (Wrangler preview) with retry logic in CI
 - **CI Integration**: Tests run in GitHub Actions with proper browser installation and artifact management
+- **Vitest setup**: all vitest setup files defined in test folder
+- **Page Objects setup**: all page object adapters are defined in test folder
 
 For detailed commands, see the [Testing Scripts](#testing) section.
 
@@ -130,6 +132,19 @@ The CI workflow includes the following jobs:
 - **build**: Creates production build and uploads artifacts.
 - **e2e**: Downloads build artifacts and runs Playwright E2E tests.
 - **deploy**: Automatically deploys to Cloudflare using Wrangler after successful builds.
+
+### Dependabot
+
+This repository uses [Dependabot](https://docs.github.com/en/code-security/dependabot) to keep dependencies secure and up to date. Dependabot automatically creates pull requests for:
+
+- JavaScript/TypeScript dependencies managed by Bun
+- GitHub Actions workflows
+
+These pull requests ensure that the project remains secure and compatible with the latest stable versions of its dependencies. Configuration for Dependabot is stored in `.github/dependabot.yml`.
+
+### Code Owners
+
+A `.github/CODEOWNERS` file is included to define responsibility for reviewing and approving changes. Pull requests affecting specific parts of the repository automatically request reviews from designated owners.
 
 ## Scripts
 

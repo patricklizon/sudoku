@@ -1,9 +1,6 @@
-import {
-	createEmptyGrid,
-	fillDiagonalGridBoxesWithValues,
-	solve,
-} from "#src/lib/domain/puzzle/grid";
-import type { PuzzleSolution } from "#src/lib/domain/puzzle/types";
+import { createEmptyGrid, fillDiagonalGridBoxesWithValues } from "#lib/domain/puzzle/grid/grid";
+import { solve } from "#lib/domain/puzzle/grid/solve";
+import type { PuzzleSolution } from "#lib/domain/puzzle/types";
 
 /**
  * Creates a fully solved Sudoku puzzle.

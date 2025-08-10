@@ -1,5 +1,5 @@
-import { GRID_SIZE } from "../constants";
-import { ValueOutOfRangeError } from "../errors";
+import { GRID_SIZE } from "#lib/domain/puzzle/grid/constants";
+import { ValueOutOfRangeError } from "#lib/domain/puzzle/grid/errors";
 
 /**
  * @throws {ValueOutOfRangeError} when number is out of allowed range.
