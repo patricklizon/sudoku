@@ -1,5 +1,5 @@
-import type { GameId } from "#lib/domain/id/types";
-import type { TimeISOString, TimeSecond } from "#lib/domain/time/types";
+import type { GameId } from "#src/lib/domain/id/types";
+import type { TimeISOString, TimeSecond } from "#src/lib/domain/time/types";
 
 export type GameTimer = {
 	gameId: GameId;

@@ -1,6 +1,6 @@
 import { describe, test, expect } from "vitest";
-import { GRID_SIZE } from "#lib/domain/puzzle/grid/constants";
-import { ValueOutOfRangeError } from "#lib/domain/puzzle/grid/errors";
+import { GRID_SIZE } from "#src/lib/domain/puzzle/grid/constants";
+import { ValueOutOfRangeError } from "#src/lib/domain/puzzle/grid/errors";
 import { assertGridCellCoordinateIsWithinRange } from "./assert-grid-cell-coordinates-is-within-range";
 
 describe("#" + assertGridCellCoordinateIsWithinRange.name, () => {

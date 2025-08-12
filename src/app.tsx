@@ -4,6 +4,7 @@ import { FileRoutes } from "@solidjs/start/router";
 import { type JSX, Suspense } from "solid-js";
 import { AppProviders } from "#src/app-providers";
 import { DeploymentInfo } from "#src/features/deployment-info";
+import { Anchor } from "#src/ui/primitives/anchor";
 import "#src/app.css";
 
 export default function App(): JSX.Element {
@@ -12,8 +13,8 @@ export default function App(): JSX.Element {
 			root={(props) => (
 				<AppProviders>
 					<Title>Sudoku</Title>
-					<a href="/">Index</a>
-					<a href="/about">About</a>
+					<Anchor href="/">Index</Anchor>
+					<Anchor href="/about">About</Anchor>
 					<Suspense fallback={<div class="news-list-nav">Loading...</div>}>
 						{props.children}
 						<DeploymentInfo />

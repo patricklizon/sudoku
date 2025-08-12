@@ -1,7 +1,7 @@
 import { describe, expect, test } from "vitest";
-import { GRID_CELL_COUNT, GRID_SIZE } from "#lib/domain/puzzle/grid/constants";
-import { isGridCellValueCorrectAt } from "#lib/domain/puzzle/grid/grid";
-import { createPuzzleSolution } from "#lib/domain/puzzle/solution/create-puzzle-solution";
+import { GRID_CELL_COUNT, GRID_SIZE } from "#src/lib/domain/puzzle/grid/constants";
+import { isGridCellValueCorrectAt } from "#src/lib/domain/puzzle/grid/grid";
+import { createPuzzleSolution } from "#src/lib/domain/puzzle/solution/create-puzzle-solution";
 
 describe("#" + createPuzzleSolution.name, () => {
 	test("generates correct puzzle", () => {

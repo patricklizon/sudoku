@@ -1,8 +1,8 @@
 import { describe, expect, test } from "vitest";
-import { DIFFICULTY_LEVEL } from "#lib/domain/puzzle/difficulty/constants";
-import { encodePuzzle } from "#lib/domain/puzzle/encoder";
-import { createEmptyGridCell } from "#lib/domain/puzzle/grid/grid";
-import type { PuzzleEncoded, PuzzleProblem, PuzzleSolution } from "#lib/domain/puzzle/types";
+import { DIFFICULTY_LEVEL } from "#src/lib/domain/puzzle/difficulty/constants";
+import { encodePuzzle } from "#src/lib/domain/puzzle/encoder";
+import { createEmptyGridCell } from "#src/lib/domain/puzzle/grid/grid";
+import type { PuzzleEncoded, PuzzleProblem, PuzzleSolution } from "#src/lib/domain/puzzle/types";
 
 describe("#" + encodePuzzle.name, () => {
 	const _ = createEmptyGridCell();

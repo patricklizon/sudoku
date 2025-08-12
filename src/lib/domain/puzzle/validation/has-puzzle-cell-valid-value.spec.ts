@@ -1,5 +1,5 @@
 import { expect, describe, test } from "vitest";
-import type { GridFilled, GridCellCoordinates } from "#lib/domain/puzzle/grid/types";
+import type { GridFilled, GridCellCoordinates } from "#src/lib/domain/puzzle/grid/types";
 import { hasPuzzleCellValidValue } from "./has-puzzle-cell-valid-value";
 
 describe("#" + hasPuzzleCellValidValue.name, () => {

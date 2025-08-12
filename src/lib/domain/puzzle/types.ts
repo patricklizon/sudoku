@@ -1,5 +1,5 @@
-import type { Grid, GridFilled } from "#lib/domain/puzzle/grid/types";
-import type { TimeISOString } from "#lib/domain/time/types";
+import type { Grid, GridFilled } from "#src/lib/domain/puzzle/grid/types";
+import type { TimeISOString } from "#src/lib/domain/time/types";
 
 export type PuzzleDifficultyLevel = Opaque<"difficulty-level", number>;
 

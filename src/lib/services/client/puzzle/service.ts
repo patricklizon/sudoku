@@ -1,5 +1,5 @@
-import { createRandomStringId } from "#lib/domain/id/create-random-id";
-import type { Puzzle } from "#lib/domain/puzzle/types";
+import type { Puzzle } from "#src/lib/domain/puzzle/types";
+import { getRandomStringId } from "#src/lib/utils/get-random-string-id";
 import type { CreatePuzzleWorkerRequest, CreatePuzzleWorkerResponse } from "./types";
 
 export class PuzzleService {
@@ -42,7 +42,7 @@ export class PuzzleService {
 
 				this.worker.postMessage({
 					payload: { difficulty },
-					requestId: createRandomStringId(),
+					requestId: getRandomStringId(),
 					type: "@sudoku/request/puzzle/create/one",
 				} satisfies CreatePuzzleWorkerRequest);
 			});

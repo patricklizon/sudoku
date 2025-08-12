@@ -1,6 +1,6 @@
 import { renderHook } from "@solidjs/testing-library";
 import { test, expect, vi } from "vitest";
-import { DeploymentCtxProvider, type DeploymentCtxProviderProps } from "#src/context/deployment";
+import { DeploymentProvider, type DeploymentCtxProviderProps } from "#src/context/deployment";
 import { useDeploymentInfo } from "./use-deployment-info";
 
 type RequestEvent = NonNullable<
@@ -30,9 +30,7 @@ test("returns full set of deployment entries", () => {
 
 	const { result, cleanup } = renderHook(useDeploymentInfo, {
 		wrapper: (props) => (
-			<DeploymentCtxProvider _getRequestEvent={getRequestEventFn}>
-				{props.children}
-			</DeploymentCtxProvider>
+			<DeploymentProvider _getRequestEvent={getRequestEventFn}>{props.children}</DeploymentProvider>
 		),
 	});
 
@@ -81,9 +79,7 @@ test("returns partial set of deployment entries", () => {
 
 	const { result, cleanup } = renderHook(useDeploymentInfo, {
 		wrapper: (props) => (
-			<DeploymentCtxProvider _getRequestEvent={getRequestEventFn}>
-				{props.children}
-			</DeploymentCtxProvider>
+			<DeploymentProvider _getRequestEvent={getRequestEventFn}>{props.children}</DeploymentProvider>
 		),
 	});
 

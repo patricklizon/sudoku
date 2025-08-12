@@ -1,6 +1,6 @@
 import { test, expect } from "vitest";
-import { ValueOutOfRangeError } from "#lib/domain/puzzle/grid/errors";
-import type { GridCellCoordinates } from "#lib/domain/puzzle/grid/types";
+import { ValueOutOfRangeError } from "#src/lib/domain/puzzle/grid/errors";
+import type { GridCellCoordinates } from "#src/lib/domain/puzzle/grid/types";
 import { mapGridCellIndexToCoordinates } from "./map-grid-cell-index-to-coordinates";
 
 test.each<[index: number, coordinates: GridCellCoordinates][]>([

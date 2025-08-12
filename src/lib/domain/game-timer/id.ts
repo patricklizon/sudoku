@@ -1,6 +1,6 @@
-import type { GameHistoryEntry } from "#lib/domain/game-history/types";
-import { createRandomStringId } from "#lib/domain/id/create-random-id";
+import type { GameHistoryEntry } from "#src/lib/domain/game-history/types";
+import { getRandomStringId } from "#src/lib/utils/get-random-string-id";
 
-export function createGameHistoryEnId(): GameHistoryEntry["id"] {
-	return createRandomStringId();
+export function createGameHistoryEntryId(): GameHistoryEntry["id"] {
+	return getRandomStringId();
 }

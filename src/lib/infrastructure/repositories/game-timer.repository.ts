@@ -3,14 +3,14 @@
 /* eslint-disable */
 // @ts-nocheck
 //
-import type { GameTimer, DBGameTimer } from "#lib/domain/game-timer";
-import { createRandomStringId } from "#lib/domain/id";
-import { mapDateToTimeISOString, mapNumberToTimeSecond } from "#lib/domain/time";
-import type { DB } from "#lib/infrastructure/persistence";
-import { gameTimerTbl } from "#lib/infrastructure/persistence/db/tables/game-timer";
-import { isDefined } from "#lib/utils/is-defined";
-import { isNil } from "#lib/utils/is-nil";
-import { noop } from "#lib/utils/noop";
+import type { GameTimer, DBGameTimer } from "#src/lib/domain/game-timer";
+import { createRandomStringId } from "#src/lib/domain/id";
+import { mapDateToTimeISOString, mapNumberToTimeSecond } from "#src/lib/domain/time";
+import type { DB } from "#src/lib/infrastructure/persistence";
+import { gameTimerTbl } from "#src/lib/infrastructure/persistence/db/tables/game-timer";
+import { isDefined } from "#src/lib/utils/is-defined";
+import { isNil } from "#src/lib/utils/is-nil";
+import { noop } from "#src/lib/utils/noop";
 
 export class GameTimerRepository {
 	constructor(db: DB) {

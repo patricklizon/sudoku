@@ -1,6 +1,6 @@
 import { MetaProvider } from "@solidjs/meta";
 import type { JSX } from "solid-js";
-import { DeploymentCtxProvider } from "./context/deployment";
+import { DeploymentProvider } from "./context/deployment";
 
 export type ProvidersProps = ComponentCommonProps<{
 	children?: JSX.Element;
@@ -8,8 +8,8 @@ export type ProvidersProps = ComponentCommonProps<{
 
 export function AppProviders(props: ProvidersProps): JSX.Element {
 	return (
-		<DeploymentCtxProvider>
+		<DeploymentProvider>
 			<MetaProvider>{props.children}</MetaProvider>
-		</DeploymentCtxProvider>
+		</DeploymentProvider>
 	);
 }

@@ -1,5 +1,5 @@
-import { assertGridCellIndexIsWithinRange } from "#lib/domain/puzzle/grid/assertions/assert-grid-cell-index-is-within-range";
-import { GRID_SIZE } from "#lib/domain/puzzle/grid/constants";
+import { assertGridCellIndexIsWithinRange } from "#src/lib/domain/puzzle/grid/assertions/assert-grid-cell-index-is-within-range";
+import { GRID_SIZE } from "#src/lib/domain/puzzle/grid/constants";
 
 export function mapGridCellIndexToRowIndex(idx: number): number {
 	assertGridCellIndexIsWithinRange(idx);
