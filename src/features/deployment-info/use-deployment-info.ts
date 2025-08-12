@@ -1,7 +1,7 @@
 import { type Accessor, createMemo, createSignal, onMount, useContext } from "solid-js";
-import { isEmpty } from "#lib/utils/is-empty";
-import { isNil } from "#lib/utils/is-nil";
-import { DeploymentCtx } from "#src/context/deployment";
+import { DeploymentContext } from "#src/context/deployment";
+import { isEmpty } from "#src/lib/utils/is-empty";
+import { isNil } from "#src/lib/utils/is-nil";
 import type { DeploymentInfoEntry } from "./types";
 
 /**
@@ -12,7 +12,7 @@ import type { DeploymentInfoEntry } from "./types";
  * @throws {Error} When is called outside of a `DeploymentCtx.Provider`.
  */
 export function useDeploymentInfo(): Accessor<DeploymentInfoEntry[]> {
-	const ctx = useContext(DeploymentCtx);
+	const ctx = useContext(DeploymentContext);
 	if (isNil(ctx)) throw new Error("Must be called inside DeploymentCtx.Provider");
 
 	const [formattedTimestamp, setFormattedTimestamp] = createSignal<Option<string>>();

@@ -2,12 +2,12 @@ import {
 	TOTAL_GIVEN_CELLS_RANGE_BY_DIFFICULTY_LEVEL,
 	INDEX_TRAVERSING_ORDER_BY_DIFFICULTY_LEVEL,
 	MINIMUM_GIVEN_CELLS_COUNT_IN_LINE_BY_DIFFICULTY_LEVEL,
-} from "#lib/domain/puzzle/difficulty/constants";
-import { removeGridCells } from "#lib/domain/puzzle/grid/remove-cells";
-import type { GridFilled, Grid } from "#lib/domain/puzzle/grid/types";
-import type { PuzzleDifficultyLevel } from "#lib/domain/puzzle/types";
-import { getRandomInt } from "#lib/utils/get-random-int";
-import { isNil } from "#lib/utils/is-nil";
+} from "#src/lib/domain/puzzle/difficulty/constants";
+import { removeGridCells } from "#src/lib/domain/puzzle/grid/remove-cells";
+import type { GridFilled, Grid } from "#src/lib/domain/puzzle/grid/types";
+import type { PuzzleDifficultyLevel } from "#src/lib/domain/puzzle/types";
+import { getRandomInt } from "#src/lib/utils/get-random-int";
+import { isNil } from "#src/lib/utils/is-nil";
 
 /**
  * Creates unsolved sudoku puzzle with unique solution.

@@ -1,4 +1,4 @@
-import type { Range } from "#lib/utils/types/range";
+import type { Range } from "#src/lib/utils/types/range";
 import { gridDebugFormatter } from "./debug-formatter";
 import type { Grid, GridWithPossibleValues } from "./types";
 

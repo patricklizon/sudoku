@@ -3,14 +3,14 @@ import { type JSX, createSignal, createResource, For, Show, onMount, Index } fro
 import {
 	DIFFICULTY_LEVEL,
 	DIFFICULTY_LEVEL_BY_NAME,
-} from "#lib/domain/puzzle/difficulty/constants";
-import type { PuzzleDifficultyLevel } from "#lib/domain/puzzle/types";
-import { PuzzleService } from "#lib/services/client/puzzle";
-import { Button } from "#ui/button";
+} from "#src/lib/domain/puzzle/difficulty/constants";
+import type { PuzzleDifficultyLevel } from "#src/lib/domain/puzzle/types";
+import { PuzzleService } from "#src/lib/services/client/puzzle";
+import { Button } from "#src/ui/primitives/button";
 
 let puzzleService: PuzzleService;
 
-export default function Home(): JSX.Element {
+export default function Page(): JSX.Element {
 	onMount(() => {
 		puzzleService = new PuzzleService();
 	});

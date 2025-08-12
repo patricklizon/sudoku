@@ -1,6 +1,6 @@
 import { describe, test, expect } from "vitest";
-import { GRID_CELL_COUNT } from "#lib/domain/puzzle/grid/constants";
-import { ValueOutOfRangeError } from "#lib/domain/puzzle/grid/errors";
+import { GRID_CELL_COUNT } from "#src/lib/domain/puzzle/grid/constants";
+import { ValueOutOfRangeError } from "#src/lib/domain/puzzle/grid/errors";
 import { assertGridCellIndexIsWithinRange } from "./assert-grid-cell-index-is-within-range";
 
 describe("#" + assertGridCellIndexIsWithinRange.name, () => {

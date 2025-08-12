@@ -1,12 +1,12 @@
-import { ENCODED_EMPTY_FIELD_CODE_POINT_OFFSET } from "#lib/domain/puzzle/constants";
-import { isGridCellFilled } from "#lib/domain/puzzle/grid/predicates/is-grid-cell-filled";
+import { ENCODED_EMPTY_FIELD_CODE_POINT_OFFSET } from "#src/lib/domain/puzzle/constants";
+import { isGridCellFilled } from "#src/lib/domain/puzzle/grid/predicates/is-grid-cell-filled";
 import type {
 	PuzzleDifficultyLevel,
 	PuzzleEncoded,
 	PuzzleProblem,
 	PuzzleSolution,
-} from "#lib/domain/puzzle/types";
-import { isNil } from "#lib/utils/is-nil";
+} from "#src/lib/domain/puzzle/types";
+import { isNil } from "#src/lib/utils/is-nil";
 
 /**
  * Encodes a solvable puzzle into a string format

@@ -3,7 +3,7 @@ import { Router } from "@solidjs/router";
 import { render } from "@solidjs/testing-library";
 import { page } from "@vitest/browser/context";
 import { test, expect, vi } from "vitest";
-import { DeploymentCtxProvider, type DeploymentCtxProviderProps } from "#src/context/deployment";
+import { DeploymentProvider, type DeploymentCtxProviderProps } from "#src/context/deployment";
 import { VitestBrowserAdapter } from "#test/test-po-vitest-adapter";
 import { DeploymentInfo } from "./deployment-info";
 import { DeploymentInfoPO } from "./deployment-info.po";
@@ -40,9 +40,9 @@ test("renders deployment info entries", async () => {
 	render(() => (
 		<Router
 			root={() => (
-				<DeploymentCtxProvider _getRequestEvent={getRequestEventFn}>
+				<DeploymentProvider _getRequestEvent={getRequestEventFn}>
 					<DeploymentInfo />
-				</DeploymentCtxProvider>
+				</DeploymentProvider>
 			)}
 		/>
 	));
@@ -90,9 +90,9 @@ test("handles non-URL values as plain text", async () => {
 	render(() => (
 		<Router
 			root={() => (
-				<DeploymentCtxProvider _getRequestEvent={getRequestEventFn}>
+				<DeploymentProvider _getRequestEvent={getRequestEventFn}>
 					<DeploymentInfo />
-				</DeploymentCtxProvider>
+				</DeploymentProvider>
 			)}
 		/>
 	));
@@ -125,9 +125,9 @@ test("does not render optional values", async () => {
 	render(() => (
 		<Router
 			root={() => (
-				<DeploymentCtxProvider _getRequestEvent={getRequestEventFn}>
+				<DeploymentProvider _getRequestEvent={getRequestEventFn}>
 					<DeploymentInfo />
-				</DeploymentCtxProvider>
+				</DeploymentProvider>
 			)}
 		/>
 	));

@@ -31,8 +31,6 @@
 		"noImplicitReturns": true,
 		"paths": {
 			"#src/*": ["./src/*"],
-			"#lib/*": ["./src/lib/*"],
-			"#ui/*": ["./src/ui/*"],
 			"#test/*": ["./test/*"]
 		}
 	},

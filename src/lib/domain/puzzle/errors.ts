@@ -1,5 +1,5 @@
-import { gridDebugFormatter } from "#lib/domain/puzzle/grid/debug-formatter";
-import type { Grid } from "#lib/domain/puzzle/grid/types";
+import { gridDebugFormatter } from "#src/lib/domain/puzzle/grid/debug-formatter";
+import type { Grid } from "#src/lib/domain/puzzle/grid/types";
 
 export class PuzzleGenerationError extends Error {
 	constructor(grid: Grid, record: AnyRecord, removedCount: number) {

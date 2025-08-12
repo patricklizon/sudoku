@@ -5,10 +5,10 @@
  * Different ways of removing cells from {@link PuzzleSolution}.
  */
 
-import { isEven } from "#lib/utils/is-even";
-import { isNil } from "#lib/utils/is-nil";
-import { toShuffledArray } from "#lib/utils/to-shuffled-array";
-import type { Range } from "#lib/utils/types/range";
+import { isEven } from "#src/lib/utils/is-even";
+import { isNil } from "#src/lib/utils/is-nil";
+import { toShuffledArray } from "#src/lib/utils/to-shuffled-array";
+import type { Range } from "#src/lib/utils/types/range";
 import { GRID_CELL_COUNT, GRID_CELL_INDEXES, GRID_SIZE, GRID_SIZE_INDEXES } from "./constants";
 import { readGridRowCellsAt, readGridColumnAt } from "./grid";
 import { mapGridCellIndexToCoordinates } from "./mappers/map-grid-cell-index-to-coordinates";

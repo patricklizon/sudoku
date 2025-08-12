@@ -1,5 +1,5 @@
-import { isDefined } from "#lib/utils/is-defined";
-import { isNil } from "#lib/utils/is-nil";
+import { isDefined } from "#src/lib/utils/is-defined";
+import { isNil } from "#src/lib/utils/is-nil";
 import type { PageObjectTestAdapter } from "./test-adapter-interface";
 
 /**

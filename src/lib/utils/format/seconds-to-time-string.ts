@@ -1,4 +1,4 @@
-import { TIME_HOUR_IN_SECONDS, TIME_MINUTE_IN_SECONDS } from "#lib/domain/time/constants";
+import { TIME_HOUR_IN_SECONDS, TIME_MINUTE_IN_SECONDS } from "#src/lib/domain/time/constants";
 
 const DELIMITER = ":";
 

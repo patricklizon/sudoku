@@ -16,9 +16,12 @@ import {
 	pickIndexOrderLeftToRightThenTopToBottom,
 	pickIndexOrderRandomly,
 	pickIndexOrderWanderingAlongS,
-} from "#lib/domain/puzzle/grid/remove-cells";
-import type { PuzzleDifficultyLevelName, PuzzleDifficultyLevel } from "#lib/domain/puzzle/types";
-import type { Range } from "#lib/utils/types/range";
+} from "#src/lib/domain/puzzle/grid/remove-cells";
+import type {
+	PuzzleDifficultyLevelName,
+	PuzzleDifficultyLevel,
+} from "#src/lib/domain/puzzle/types";
+import type { Range } from "#src/lib/utils/types/range";
 
 export const DIFFICULTY_LEVEL = {
 	[1]: 1 as PuzzleDifficultyLevel,

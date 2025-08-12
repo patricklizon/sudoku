@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
-import { createPuzzle } from "#lib/domain/puzzle/create/create-puzzle";
-import { DIFFICULTY_LEVEL } from "#lib/domain/puzzle/difficulty/constants";
+import { createPuzzle } from "#src/lib/domain/puzzle/create/create-puzzle";
+import { DIFFICULTY_LEVEL } from "#src/lib/domain/puzzle/difficulty/constants";
 
 describe("#" + createPuzzle.name, () => {
 	// TODO: enable all

@@ -1,9 +1,9 @@
 import { createMemo, Index, Show, type JSX } from "solid-js";
-import type { DeploymentInfo } from "#lib/domain/deployment/types";
-import { isEmpty } from "#lib/utils/is-empty";
-import { isValidUrl } from "#lib/utils/is-valid-url";
+import type { DeploymentInfo } from "#src/lib/domain/deployment/types";
+import { isEmpty } from "#src/lib/utils/is-empty";
 import { isNil } from "#src/lib/utils/is-nil";
-import { Anchor } from "#ui/anchor";
+import { isValidUrl } from "#src/lib/utils/is-valid-url";
+import { Anchor } from "#src/ui/primitives/anchor";
 import { DeploymentInfoTestId } from "./deployment-info.testid";
 import type { DeploymentInfoEntry } from "./types";
 import { useDeploymentInfo } from "./use-deployment-info";

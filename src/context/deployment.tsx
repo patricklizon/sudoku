@@ -5,22 +5,22 @@
 
 import { createContext, createResource, type ParentComponent } from "solid-js";
 import { getRequestEvent } from "solid-js/web";
-import type { DeploymentInfo } from "#lib/domain/deployment/types";
-import { isEmpty } from "#lib/utils/is-empty";
-import { isNil } from "#lib/utils/is-nil";
+import type { DeploymentInfo } from "#src/lib/domain/deployment/types";
+import { isEmpty } from "#src/lib/utils/is-empty";
+import { isNil } from "#src/lib/utils/is-nil";
 
-export type TDeploymentCtx = {
+export type DeploymentCtx = {
 	id: Option<DeploymentInfo["id"]>;
 	timestamp: Option<DeploymentInfo["timestamp"]>;
 	pullRequestURL: Option<DeploymentInfo["pullRequestURL"]>;
 };
 
-export const DeploymentCtx = createContext<Option<TDeploymentCtx>>();
+export const DeploymentContext = createContext<Option<DeploymentCtx>>();
 
 function loadDeployment(
 	/** exposed for tests */
 	_getRequestEvent?: typeof getRequestEvent,
-): TDeploymentCtx {
+): DeploymentCtx {
 	"use server";
 	const event = (_getRequestEvent ?? getRequestEvent)();
 	if (isNil(event)) throw new Error("No request context");
@@ -43,10 +43,10 @@ export type DeploymentCtxProviderProps = {
 /**
  * The deployment information loaded from server-side environment variables.
  */
-export const DeploymentCtxProvider: ParentComponent<DeploymentCtxProviderProps> = (props) => {
+export const DeploymentProvider: ParentComponent<DeploymentCtxProviderProps> = (props) => {
 	const [info] = createResource(() => loadDeployment(props._getRequestEvent), {
 		deferStream: false,
 	});
 
-	return <DeploymentCtx.Provider value={info()}>{props.children}</DeploymentCtx.Provider>;
+	return <DeploymentContext.Provider value={info()}>{props.children}</DeploymentContext.Provider>;
 };

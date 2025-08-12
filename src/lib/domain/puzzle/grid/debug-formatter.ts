@@ -1,4 +1,4 @@
-import { isNil } from "#lib/utils/is-nil";
+import { isNil } from "#src/lib/utils/is-nil";
 import { GRID_BOX_CELLS_COUNT, GRID_BOX_SIZE, GRID_SIZE } from "./constants";
 import { isGridCellFilled } from "./predicates/is-grid-cell-filled";
 import type { Grid, GridBox, GridWithPossibleValues } from "./types";
