@@ -148,26 +148,3 @@ Solid context and hooks with providers.
 ### `src/app*.tsx`, `src/entry-*`
 
 Application shell, providers, and runtime bootstrapping.
-
----
-
-## Handling Interdependent Types
-
-Place shared types in a common domain location:
-
-```
-lib/domain/
-├── shared/
-│   ├── types.ts
-│   ├── events.ts
-│   └── contracts.ts
-├── game/
-└── user/
-```
-
-Use TypeScript's type-only imports to avoid runtime circular dependencies.
-
-```typescript
-import type { GameId } from "#src/lib/domain/game";
-import type { UserPreferences } from "#src/lib/domain/user";
-```
