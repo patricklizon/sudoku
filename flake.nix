@@ -9,9 +9,11 @@
   outputs = { self, nixpkgs, flake-utils }:
     flake-utils.lib.eachDefaultSystem (system:
       let
-        pkgs = nixpkgs.legacyPackages.${system};
         bunVersionFileName = ".bun-version";
         nodeVersionFileName = ".node-version";
+
+        pkgs = nixpkgs.legacyPackages.${system};
+        d2 = pkgs.d2;
         bunjs = pkgs.bun;
         nixd = pkgs.nixd;
         nodejs = pkgs.nodejs_24;
@@ -20,7 +22,7 @@
         formatter = pkgs.nixfmt;
 
         devShells.default = pkgs.mkShell {
-          buildInputs = [ bunjs nixd nodejs ];
+          buildInputs = [ bunjs nixd nodejs d2 ];
 
           shellHook = ''
             # --- Bun Version Management ---

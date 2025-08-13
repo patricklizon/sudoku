@@ -1,0 +1,201 @@
+direction: right
+
+vars: {
+  d2-config: {
+    layout-engine: elk
+    center: false
+  }
+}
+
+
+
+lib: {
+  label: "lib"
+  style.stroke-dash: 6
+
+  domain: {
+    label: "domain"
+    style.stroke-dash: 2
+
+    module: {
+      label: "Domain Module"
+      style.multiple: true
+
+      types: "Types"
+      constants: "Constants"
+      mappers: "Mappers"
+      encoders: "Encoders"
+      decoders: "Decoders"
+      validators: "Validators"
+      utils: "Utils"
+    }
+  }
+
+  services: {
+    label: "services"
+    style.stroke-dash: 2
+
+    client: {
+      label: "Client Services"
+      style.multiple: true
+    }
+
+    server: {
+      label: "Server Services"
+      style.multiple: true
+    }
+  }
+
+  infrastructure: {
+    label: "infrastructure"
+    style.stroke-dash: 2
+
+    persistence: {
+      label: "persistence"
+      style.stroke-dash: 6
+
+      server: "DB"
+      orm: "ORM"
+      client: "IndexedDB / Local storage"
+    }
+
+    repositories: {
+      label: "repositories"
+      style.stroke-dash: 6
+
+      server: {
+        label: "Server Repository"
+        style.multiple: true
+      }
+
+      client: {
+        label: "Client Repository"
+        style.multiple: true
+      }
+    }
+  }
+
+  application: {
+    label: "application"
+    style.stroke-dash: 2
+
+    module: {
+      label: "Domain Module"
+      style.multiple: true
+
+      queries: "'use server' Queries"
+      commands: "'use server' Commands"
+      policies: "Policies"
+    }
+  }
+}
+
+ui: {
+  label: "ui"
+  style.stroke-dash: 6
+
+  tokens: {
+    label: "Tokens"
+    style.stroke-dash: 2
+
+    primitives: "Primitives"
+    functional: "Functional"
+  }
+
+  primitives: {
+    label: "Primitive UI Elements"
+    style.stroke-dash: 2
+
+    component: {
+      label: "Component"
+      style.multiple: true
+
+      tokens: "Tokens"
+      ui: "UI"
+    }
+  }
+
+  components: {
+    label: "Components"
+    style.stroke-dash: 2
+
+    ui: {
+      label: "UI"
+      style.multiple: true
+    }
+  }
+}
+
+features: {
+  label: "features"
+  style.stroke-dash: 6
+
+  feature: {
+    label: "feature"
+    style.multiple: true
+    resources: "Resources"
+    actions: "Actions"
+
+    component: {
+      label: "Smart Component"
+      style.multiple: true
+    }
+  }
+}
+
+routes: {
+  label: "routes"
+  style.stroke-dash: 6
+
+  page: {
+    label: "Page"
+    style.multiple: true
+  }
+}
+
+context: {
+  label: "context"
+  style.multiple: true
+}
+
+app: "App"
+
+global: {
+  label: "globals"
+  utils: "lib/utils"
+  types: "lib/domain/module/types"
+}
+
+# DOMAIN & INFRASTRUCTURE
+lib.infrastructure.persistence.server -> lib.infrastructure.persistence.orm -> lib.infrastructure.repositories.server
+lib.infrastructure.persistence.client -> lib.infrastructure.repositories.client
+lib.infrastructure.repositories.server -> lib.application
+lib.domain -> lib.application
+lib.domain -> lib.infrastructure
+lib.domain -> lib.services
+lib.infrastructure -> lib.services
+lib.services -> features
+
+# APPLICATION TO FEATURES
+lib.application.module.queries -> features.feature.resources
+lib.application.module.commands -> features.feature.actions
+lib.application.module.policies -> features.feature.actions
+
+# UI FLOW (unidirectional)
+ui.tokens.primitives -> ui.tokens.functional
+ui.tokens.primitives -> ui.primitives.component.tokens
+ui.tokens.functional -> ui.primitives.component.tokens
+ui.primitives.component.tokens -> ui.primitives.component.ui
+ui.primitives.component -> ui.components.ui
+ui.primitives.component -> features.feature.component
+ui.components.ui -> features.feature.component
+
+# FEATURES FLOW
+features.feature.resources -> features.feature.component
+features.feature.actions -> features.feature.component
+features.feature.component -> routes.page
+
+# APP FLOW
+context -> features: consumer
+context -> app: provider
+routes.page -> app

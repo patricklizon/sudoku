@@ -2,15 +2,20 @@
 
 Web app based on SolidStart, Solid.js, and Vinxi, powered by a Nix-based development environment.
 
+---
+
 ## Table of content
 
 - [Prerequisites](#prerequisites)
 - [Setup](#setup)
 - [Stack](#stack)
+- [Architecture](#architecture)
 - [Testing](#testing)
 - [CI](#ci)
 - [Scripts](#scripts)
 - [Deployment](#deployment)
+
+---
 
 ## Prerequisites
 
@@ -25,7 +30,7 @@ On macOS and Linux, install Nix using the recommended multi-user installer.
 For the most up-to-date and detailed instructions, refer to the [official Nix installation guide](https://nixos.org/download/).
 
 ```sh
-sh <(curl -L https://nixos.org/nix/install) --daemon
+sh <(curl -L https://nixos.org/nix/install) ---daemon
 ```
 
 Follow the on-screen prompts to complete the installation.
@@ -91,6 +96,18 @@ bun run dev
 - [Oxlint](https://oxc-project.github.io/docs/guide/oxlint/what_is_oxlint.html) - A fast Rust-based linter.
 - [Prettier](https://prettier.io) - An opinionated code formatter.
 - [Wrangler](https://developers.cloudflare.com/workers/wrangler/) - Cloudflare's CLI tool for developing and deploying Workers and Pages.
+- [d2](https://d2lang.com) - Declarative Diagramming for turning text into diagrams.
+
+---
+
+## Architecture
+
+This project follows a layered architecture pattern with clear separation of concerns and unidirectional dependency flow.
+The architecture is designed to be framework-agnostic at the core, with framework-specific concerns isolated to outer layers.
+
+For detailed overview see [Architecture Documentation](docs/architecture.md).
+
+---
 
 ## Testing
 
@@ -113,6 +130,8 @@ This project employs a comprehensive testing strategy using [Vitest](https://vit
 - **Page Objects setup**: all page object adapters are defined in test folder
 
 For detailed commands, see the [Testing Scripts](#testing) section.
+
+---
 
 ## CI
 
@@ -146,36 +165,33 @@ These pull requests ensure that the project remains secure and compatible with t
 
 A `.github/CODEOWNERS` file is included to define responsibility for reviewing and approving changes. Pull requests affecting specific parts of the repository automatically request reviews from designated owners.
 
+---
+
 ## Scripts
 
 Summary of `bun run` scripts defined in `package.json`.
 
 ### Development & Build
 
-| Script      | Description                                              |
-| :---------- | :------------------------------------------------------- |
-| `build`     | Builds the application for production deployment.        |
-| `dev`       | Starts the development server with hot module reloading. |
-| `start`     | Serves the built production application locally.         |
-| `start:dev` | Starts Vite development server.                          |
-| `preview`   | Previews the production build locally using Wrangler.    |
-| `deploy`    | Placeholder for deployment logic.                        |
-| `dev:cf`    | Starts a local Cloudflare Workers development server.    |
+| Script    | Description                                              |
+| :-------- | :------------------------------------------------------- |
+| `build`   | Builds the application for production deployment.        |
+| `dev`     | Starts the development server with hot module reloading. |
+| `start`   | Serves the built production application locally.         |
+| `preview` | Previews the production build locally using Wrangler.    |
 
 ### Testing
 
-| Script                  | Description                                         |
-| :---------------------- | :-------------------------------------------------- |
-| `test:unit`             | Runs unit tests in watch mode using Vitest.         |
-| `test:unit:run`         | Runs unit tests once using Vitest.                  |
-| `test:browser`          | Runs browser-based component tests via Vitest.      |
-| `test:browser:run`      | Runs browser-based component tests once.            |
-| `test:e2e`              | Runs Playwright E2E tests against preview server.   |
-| `test:e2e:ui`           | Opens Playwright UI for interactive E2E testing.    |
-| `test:e2e:dev`          | Runs E2E tests against development server.          |
-| `test:e2e:dev:ui`       | Opens Playwright UI with development configuration. |
-| `test:install:browsers` | Installs Playwright browser binaries (Chromium).    |
-| `test:install:deps`     | Installs OS dependencies for Playwright browsers.   |
+| Script                  | Description                                        |
+| :---------------------- | :------------------------------------------------- |
+| `test:unit`             | Runs unit tests in watch mode using Vitest.        |
+| `test:unit:run`         | Runs unit tests once using Vitest.                 |
+| `test:browser`          | Runs browser-based component tests via Vitest.     |
+| `test:browser:run`      | Runs browser-based component tests once.           |
+| `test:e2e`              | Runs Playwright E2E tests against preview server.  |
+| `test:e2e:dev`          | Runs E2E tests with UI against development server. |
+| `test:install:browsers` | Installs Playwright browser binaries (Chromium).   |
+| `test:install:deps`     | Installs OS dependencies for Playwright browsers.  |
 
 ### Code Quality & Formatting
 
@@ -185,21 +201,29 @@ Summary of `bun run` scripts defined in `package.json`.
 | `fix:format`      | Automatically fixes formatting issues with Prettier. |
 | `check:lint`      | Runs all linters (ESLint and Oxlint).                |
 | `fix:lint`        | Automatically fixes linting issues.                  |
-| `fix:lint:eslint` | Automatically fixes issues (used by `fix:lint`).     |
-| `fix:lint:oxlint` | Automatically fixes issues (used by `fix:lint`).     |
-| `lint:eslint`     | Lints files with ESLint (used by `check:lint`).      |
-| `lint:oxlint`     | Lints files with Oxlint (used by `check:lint`).      |
+| `fix:lint:eslint` | Automatically fixes ESLint issues.                   |
+| `fix:lint:oxlint` | Automatically fixes Oxlint issues.                   |
+| `lint:eslint`     | Lints TypeScript files with ESLint.                  |
+| `lint:oxlint`     | Lints files with Oxlint.                             |
 | `check:types`     | Validates TypeScript types across the project.       |
+| `check:cf-types`  | Verifies Cloudflare types are up-to-date.            |
 | `lighthouse`      | Runs Lighthouse performance audits.                  |
 
-### Cloudflare & Type Generation
+### Code generation
 
-| Script           | Description                                              |
-| :--------------- | :------------------------------------------------------- |
-| `cf-typegen`     | Generates TypeScript types for Cloudflare configuration. |
-| `check:typegen`  | Verifies Cloudflare types are up-to-date.                |
-| `postcf-typegen` | Post-generation check for outdated types.                |
-| `wrangler`       | Direct access to Wrangler CLI.                           |
+| Script                  | Description                                              |
+| :---------------------- | :------------------------------------------------------- |
+| `generate:diagrams`     | Generates D2 diagrams from source                        |
+| `generate:cf-types`     | Generates TypeScript types for Cloudflare configuration. |
+| `postgenerate:cf-types` | Post-generation check for outdated types in CI.          |
+
+### Tools
+
+| Script     | Description                    |
+| :--------- | :----------------------------- |
+| `wrangler` | Direct access to Wrangler CLI. |
+
+---
 
 ## Deployment
 
