@@ -141,11 +141,7 @@ The CI workflow includes the following jobs:
 
 - **install-dependencies**: Installs project dependencies using Bun.
 - **install-browsers**: Installs Playwright browser binaries for E2E testing.
-- **quality-checks**: A matrix job running parallel checks:
-  - `check:format`: Verifies code formatting with Prettier.
-  - `check:types`: Validates TypeScript types.
-  - `check:lint`: Runs ESLint and Oxlint static analysis.
-  - `check:typegen`: Ensures Cloudflare worker types are up-to-date.
+- **quality-checks**: A matrix job running parallel quality checks.
 - **test-unit**: Executes unit tests using Bun.
 - **test-browser**: Runs browser-based component tests using Vitest.
 - **build**: Creates production build and uploads artifacts.
