@@ -19,17 +19,18 @@ export const makeCsp =
 			["object-src", "'none'"],
 			["script-src", [`'nonce-${nonce}'`, "'strict-dynamic'"].join(" ")],
 			["style-src", ["'self'", `'nonce-${nonce}'`].join(" ")],
-			["trusted-types", "'default'"],
 			["upgrade-insecure-requests", ""],
 			["worker-src", "'self'"],
-			// TODO: explore rule require-trusted-types-for - https://content-security-policy.com/require-trusted-types-for/
-			// TODO: explore rule report-to - https://content-security-policy.com/report-to/
+			// TODO: explore rule 'trusted-types' - https://content-security-policy.com/trusted-types/
+			// TODO: explore rule 'require-trusted-types-for' - https://content-security-policy.com/require-trusted-types-for/
+			// TODO: explore rule 'report-to' - https://content-security-policy.com/report-to/
 		]);
 
 		if (o.isDev) {
 			rule.set(
 				"connect-src",
 				(rule.get("connect-src") ?? "") +
+					" " +
 					[
 						"ws://localhost:*",
 						"wss://localhost:*",
@@ -49,5 +50,6 @@ export const makeCsp =
 		let result = "";
 		for (const [key, value] of rule.entries()) result += key + " " + value + ";";
 
-		event.response.headers.set("Content-Security-Policy", result.replaceAll(/\s+/g, " "));
+		const headerContent = result.replaceAll(/\s+/g, " ").trim();
+		event.response.headers.set("Content-Security-Policy", headerContent);
 	};
