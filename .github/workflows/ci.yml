@@ -37,7 +37,7 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        check: [check:format, check:types, check:lint, check:typegen]
+        check: [check:format, check:types, check:lint, check:cf-types]
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup-environment

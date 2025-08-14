@@ -6,9 +6,10 @@
 node_modules
 
 # output
+.output/
+!docs/diagrams/.output/
 .wrangler/
 .vinxi/
-.output/
 out/
 dist/
 build/
