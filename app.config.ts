@@ -13,6 +13,7 @@ const isDev = process.env.NODE_ENV === "dev";
 dotenv.config({ path: new URL("./.dev.vars", import.meta.url).pathname });
 
 export default defineConfig({
+	middleware: "src/middleware/index.ts",
 	server: {
 		preset: "cloudflare_module",
 		compatibilityDate: "2025-07-30",
