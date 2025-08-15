@@ -39,7 +39,7 @@
 		"@playwright/test": "^1.54.2",
 		"@solidjs/testing-library": "^0.8.10",
 		"@tsconfig/node22": "^22.0.2",
-		"@types/bun": "^1.2.19",
+		"@types/bun": "^1.2.20",
 		"@types/jsdom": "^21.1.7",
 		"@types/node": "^24.2.1",
 		"@vitest/browser": "^3.2.4",
