@@ -9,7 +9,6 @@ updates:
       timezone: "Europe/Zurich"
     commit-message:
       prefix: "deps:"
-      include: "scope"
     pull-request-branch-name:
       separator: "-"
     open-pull-requests-limit: 8
