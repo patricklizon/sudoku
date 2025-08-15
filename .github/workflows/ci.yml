@@ -58,7 +58,7 @@ jobs:
         run: npm run test:unit:run
 
   test-browser:
-    needs: [install-dependencies, install-dependencies, install-browsers, test-unit]
+    needs: [install-dependencies, install-browsers, test-unit]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -102,6 +102,7 @@ jobs:
           retention-days: 30
 
   deploy:
+    if: github.actor != 'dependabot[bot]'
     needs: [install-dependencies, build, e2e]
     runs-on: ubuntu-latest
     steps:
