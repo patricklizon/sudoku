@@ -5,10 +5,12 @@ updates:
     schedule:
       interval: weekly
       day: "monday"
+      time: "09:00"
       timezone: "Europe/Zurich"
     commit-message:
       prefix: "deps:"
+      include: "scope"
     pull-request-branch-name:
       separator: "-"
-    open-pull-requests-limit: 10
+    open-pull-requests-limit: 8
     rebase-strategy: "auto"
