@@ -1,15 +1,15 @@
 version: 2
 updates:
-  - package-ecosystem: "bun"
-    directory: "/"
+  - package-ecosystem: bun
+    directory: /
     schedule:
       interval: weekly
-      day: "monday"
+      day: monday
       time: "09:00"
-      timezone: "Europe/Zurich"
+      timezone: Europe/Zurich
+    open-pull-requests-limit: 8
+    rebase-strategy: auto
     commit-message:
       prefix: "deps:"
     pull-request-branch-name:
       separator: "-"
-    open-pull-requests-limit: 8
-    rebase-strategy: "auto"
