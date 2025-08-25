@@ -46,7 +46,7 @@
 		"@vitest/eslint-plugin": "^1.1.28",
 		"@vitest/ui": "3.2.4",
 		"dotenv": "^17.2.1",
-		"eslint": "^9.33.0",
+		"eslint": "^9.34.0",
 		"eslint-config-prettier": "^10.1.8",
 		"eslint-plugin-import": "^2.31.0",
 		"eslint-plugin-jsx-a11y": "^6.10.2",
